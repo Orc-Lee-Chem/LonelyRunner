@@ -1,0 +1,54 @@
+PUBLIC REDACTED EXCERPT, NOT THE ORIGINAL OR COMPLETE AUDIT LOG
+
+Source original FinalAudit.log SHA256: d4914598611d87b3a893052c22767c029d8f478c97dfd1fc6f07c138a5a7ae7b
+Source original FinalSourceHashes.tsv SHA256: 281eae9938a99acdbae9c6ede451f20a6f620997f9437bbefcf65ed124872e2b
+
+This excerpt omits local absolute paths, old warning/retry output and manuscript
+diffs. It preserves the actual theorem/axiom output below. Full private originals
+remain on the author's machine. This excerpt does not claim third-party reproduction.
+
+Audit date: 2026-10-17, original computer, newly created rebuild directory.
+Lean v4.34.1, commit 5045d0056413266e57c625dcd7c365b10e377c52.
+Mathlib revision d13f23b723b8a846827a245b89c10fc7d3f11612.
+Only fixed Mathlib/transitive dependency caches were reused.
+609 Tablet and 71 LonelyRunner modules were rebuilt from source, together with
+an audit-only all-module import driver, root LonelyRunner and Test targets.
+
+Rebuild command (working directory: [FROZEN_REBUILD]):
+lake --no-cache --no-ansi build +Tablet.FinalAuditAll LonelyRunner Test
+Build completed successfully (9608 jobs).
+Command exit code (rebuild): 0
+
+Semantic command (working directory: [FROZEN_REBUILD]):
+lake env lean SemanticCheck.lean
+Command exit code (semantic): 0
+
+Actual complete declaration/axiom output (pp.proofs=false hides proof bodies):
+theorem LonelyRunner.mainTheorem : ∀ (κ : ℝ),
+  0 < κ →
+    ∃ N,
+      2 ≤ N ∧
+        ∀ (V : Finset ℕ),
+          (∀ v ∈ V, 0 < v) →
+            N ≤ V.card → ∃ t, ∀ v ∈ V, 1 / (2 * ↑V.card) + 1 / (2 * ↑V.card ^ (3 / 2 + κ)) ≤ dist (v • t) 0 :=
+⋯
+theorem LonelyRunner.mainTheorem_real : ∀ (κ : ℝ),
+  0 < κ →
+    ∃ N,
+      2 ≤ N ∧
+        ∀ (V : Finset ℕ),
+          (∀ v ∈ V, 0 < v) →
+            N ≤ V.card →
+              ∃ t ∈ Set.Ico 0 1,
+                ∀ v ∈ V, ∀ (k : ℤ), 1 / (2 * ↑V.card) + 1 / (2 * ↑V.card ^ (3 / 2 + κ)) ≤ |↑v * t - ↑k| :=
+⋯
+'LonelyRunner.mainTheorem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LonelyRunner.semantic_circle_representative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LonelyRunner.semantic_circle_dist_le_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LonelyRunner.mainTheorem_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Frozen snapshot SHA256 records verified: 5024; mismatches: 0.
+Original Lean/configuration mismatches: 0.
+A later edit of the original Chinese manuscript was recorded and not overwritten;
+it is outside the frozen build. No existing Lean proof was changed during audit.
+Original log final audit exit code: 0.

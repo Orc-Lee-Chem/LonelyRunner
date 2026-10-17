@@ -1,0 +1,1305 @@
+% !TeX program = pdflatex
+% Compile this complete file twice with pdfLaTeX.
+\documentclass[12pt,leqno]{article}
+\pagestyle{plain}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,mathtools}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+pdftitle={Short Integer Relations and Near-Covering Structure in the Lonely Runner Problem},
+pdfauthor={Cheng Li},
+pdfkeywords={Lonely Runner Conjecture, Bohr sets, short integer relations, GCD sums}
+}
+\setlength{\topmargin}{0cm}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\textwidth}{15.5truecm}
+\setlength{\textheight}{21truecm}
+\setlength{\emergencystretch}{2em}
+\allowdisplaybreaks[2]
+\numberwithin{equation}{section}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\LRtorus}{\mathbb T}
+\newcommand{\LRnatural}{\mathbb N}
+\newcommand{\LRinteger}{\mathbb Z}
+\newcommand{\LRreal}{\mathbb R}
+\newcommand{\LRindicator}{\mathbf 1}
+\newcommand{\LRloneliness}{\operatorname{ML}}
+\newcommand{\LRdifferential}{\,\mathrm d}
+\newcommand{\LRdimension}{\operatorname{dim}_2}
+\DeclareMathOperator{\LRlcm}{lcm}
+
+\title{Short Integer Relations and Near-Covering Structure\\
+in the Lonely Runner Problem}
+\author{Cheng Li\\
+\footnotesize School of Mathematical Sciences, Fudan University,\\
+\footnotesize Shanghai 200433, China\\
+\footnotesize E-mail: \texttt{24300180118@m.fudan.edu.cn}}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Let $V$ be a set of $m$ distinct positive integers. We prove that, for every fixed $\kappa>0$ and all sufficiently large $m$, there exists $t\in\mathbb R/\mathbb Z$ such that every $v\in V$ satisfies
+\[
+\|vt\|\ge \frac1{2m}+\frac1{2m^{3/2+\kappa}}.
+\]
+The proof starts from a covering of the circle for which the sum of the measures of the covering sets is close to $1$. A point-line incidence estimate controls short integer relations, and factorial-moment inequalities for the covering multiplicity yield large blocks with common factors. Small overlap gives polynomial control of the relative scales of blocks containing most of the speeds. Translations along prime grids then control a common denominator for the normalized nonexceptional speeds, giving a bound at the square-root scale, up to a logarithmic factor, for the $2$-dissociated dimension. We conclude by constructing a model of low height through scaling modulo a prime and finding a suitable time on a prime grid. We give proofs of the required weak GCD-sum bound, the small-height estimate, and the model construction, using finite Poisson products, finite sieve weights, and induction on the height with an explicit error budget. The scope of the Lean formalization and the verification results recorded in the project logs are described in the appendix.
+\end{abstract}
+\noindent\textbf{Keywords:} Lonely Runner Conjecture; Bohr set; short integer relation; point-line incidence; GCD sum; $2$-dissociated dimension.\vskip 1cm
+
+\section{Introduction and main results}
+On the circle $\LRtorus=\LRreal/\LRinteger$, let $\|x\|$ denote the distance from $x$ to zero, or equivalently the distance from a real representative to the nearest integer. For a nonempty finite set $V$ of positive integers, define its maximum loneliness by
+\[
+\LRloneliness(V)=\max_{t\in\LRtorus}\min_{v\in V}\|vt\|.
+\]
+The integer-speed form of the Lonely Runner Conjecture asserts that $\LRloneliness(V)\ge1/(m+1)$ whenever $|V|=m$. The elementary measure argument gives $1/(2m)$. We study a uniform improvement of this basic bound.
+
+Tao~\cite{Tao} obtained a logarithmic improvement of the basic bound using Bohr sets and additive structure. Bedert~\cite{Bedert} used Riesz products and low-dimensional models to obtain a correction term of order $m^{-5/3-o(1)}$. An online joint note of Bedert and Hu~\cite{BH} states a further improvement to $m^{-13/8-o(1)}$. We cite that note as related work and do not use its result.
+
+\begin{theorem}\label{thm:main}
+For every $\kappa>0$, there exists an integer $m_0(\kappa)\ge2$ such that every set $V$ of $m\ge m_0(\kappa)$ distinct positive integers admits a time $t\in\LRtorus$ for which, simultaneously for all $v\in V$,
+\begin{equation}\label{eq:main}
+\|vt\|\ge\frac1{2m}+\frac1{2m^{3/2+\kappa}}.
+\end{equation}
+In particular, the same lower bound holds for $\LRloneliness(V)$.
+\end{theorem}
+
+The integer $m_0(\kappa)$ depends only on $\kappa$, not on the sizes of the speeds. Throughout the paper, $\LRnatural=\{1,2,\ldots\}$ denotes the positive integers, $[Y]=\{1,\ldots,\lfloor Y\rfloor\}$ for $Y\ge0$, and $\log$ denotes the natural logarithm. Unless otherwise stated, integrals and measures on the circle are taken with respect to normalized Haar measure. The notation $A\ll_\eta B$ means $A\le C_\eta B$, where $C_\eta$ depends only on $\eta$.
+
+To explain the argument, fix $0<\delta<1/2$ and set
+\begin{equation}\label{eq:bohr}
+B_v(\delta)=\{t:\|vt\|\le\delta\},\qquad
+X(t)=\sum_{v\in V}\LRindicator_{B_v(\delta)}(t).
+\end{equation}
+The condition $\LRloneliness(V)\le\delta$ is equivalent to these closed sets covering every point of the circle, that is, $X\ge1$. Since $|B_v(\delta)|=2\delta$, a covering requires $2m\delta\ge1$. Improving the basic bound therefore leads to the following question: if
+\[
+2m\delta=1+\varepsilon,\qquad \varepsilon\text{ is small},
+\]
+what arithmetic structure must such a covering have?
+
+We first bound triple intersections, separating the contributions of short relations and common factors. A pair-intersection estimate gives a fixed positive lower bound for the second factorial moment of the covering multiplicity. Since the integrated excess multiplicity is only $\varepsilon$, Cauchy--Schwarz forces a large third factorial moment. When short relations cannot account for this contribution, the common-factor term produces large blocks $I\subset g[m^3]$. Merging sufficiently many blocks yields a common factor and a controlled normalized height for at least half of the speeds.
+
+We next reduce to an irreducible covering with $\gcd(V)=1$. Under the near-covering condition $0<\varepsilon\le m^{-1/2-\kappa}$, points missed by suitable proper subfamilies, together with prime-grid translations, control a common denominator for the normalized nonexceptional speeds. Counting subset sums of a largest $2$-dissociated subset then gives
+\begin{equation}\label{eq:intro-dim}
+\LRdimension(V)\ll_\kappa \sqrt m\log(2m).
+\end{equation}
+Here a set $D$ is called $2$-dissociated if $\sum_{d\in D}c_dd=0$ with $c_d\in\{-2,-1,0,1,2\}$ implies that all $c_d$ vanish, and $\LRdimension(V)$ is the largest cardinality of such a subset of $V$. The final model construction transfers the covering to a set of the same cardinality with $\log T\ll_\kappa\sqrt m(\log(2m))^2$, increasing the covering radius by at most $m^{-100}$. The resulting improvement over $1/(2m)$ exceeds $(\delta-1/(2m))+m^{-100}$, contradicting the transferred covering.
+
+The paper follows this order. Section 2 proves the required weak GCD-sum bound. Sections 3 and 4 treat short relations and analysis on the circle. Sections 5 and 6 derive low-dimensional structure from a near covering. Sections 7 and 8 give the model construction and the small-height estimate, and Section 9 completes the proof. The model construction follows Bedert's idea of scaling modulo a prime, but transfers pointwise coverings directly and gives explicit bounds suited to our argument. We also give a self-contained proof of the small-height conclusion of Bedert~\cite[Proposition 2.5]{Bedert} in the range $\log T\le m^{3/4}$, which suffices here.
+
+\section{Preliminaries on the circle and GCD sums}
+\subsection{Haar measure and coverings}
+\begin{lemma}[Basic facts on the circle]\label{lem:circle}
+Let $v\in\LRnatural$. The map $t\mapsto vt$ is a continuous surjection of $\LRtorus$ and preserves normalized Haar measure. If $f$ is integrable, then
+\begin{equation}\label{eq:dilationintegral}
+\int_{\LRtorus}f(vt)\LRdifferential t=\int_{\LRtorus}f(t)\LRdifferential t.
+\end{equation}
+For every nonempty finite set $V\subset\LRnatural$, the function $t\mapsto\min_{v\in V}\|vt\|$ attains its maximum.
+\end{lemma}
+\begin{proof}
+View a function on the circle as a $1$-periodic function. Divide $[0,1)$ into $v$ half-open intervals and use $x=vt-j$ on the $j$th interval. Then
+\[
+\int_0^1f(vt)\LRdifferential t
+=\sum_{j=0}^{v-1}\frac1v\int_0^1f(x)\LRdifferential x
+=\int_0^1f(x)\LRdifferential x.
+\]
+Applying this identity to indicator functions proves preservation of measure. Every circle point $x$ has a preimage obtained by dividing a real representative by $v$, so the map is surjective. The distance function is continuous, and a finite minimum of continuous functions is continuous. Compactness of the circle gives attainment of the maximum. In particular, $B_v(\delta)$ is closed and measurable, and $|B_v(\delta)|=2\delta$ for $0<\delta<1/2$. Thus the covering formulation and the maximum-loneliness formulation are equivalent pointwise.
+\end{proof}
+
+
+\subsection{A weak bound from finite Poisson products}
+For a finite set $W$ of positive integers, write
+\begin{equation}\label{eq:gcds}
+S_2(W)=\sum_{a,b\in W}\frac{\gcd(a,b)}{\max(a,b)},\qquad
+G_3(W)=\sum_{\substack{a,b,c\in W\\a<b<c}}\frac{\gcd(a,b,c)}c.
+\end{equation}
+The refined GCD-sum estimate of Bondarenko and Seip~\cite{BS} implies the following weaker power bound. We give a finite-product proof of the precise strength needed here, without proving their refined exponential estimate.
+
+\begin{proposition}[A weak power bound for GCD sums]\label{prop:gcdweak}
+For every $\eta>0$, there exists $C_\eta>0$, depending only on $\eta$, such that every finite set $W$ of positive integers satisfies
+\begin{equation}\label{eq:gcdsum}
+S_2(W)\le C_\eta|W|^{1+\eta}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+First suppose that $s=|W|\ge1$, and for $\sigma>1/2$ define
+\[
+K_\sigma(a,b)=\left(\frac{\gcd(a,b)^2}{ab}\right)^\sigma.
+\]
+Writing $\nu_p(a)$ for the $p$-adic valuation of $a$, we have
+\begin{equation}\label{eq:gcd-product}
+K_\sigma(a,b)=\prod_p p^{-\sigma|\nu_p(a)-\nu_p(b)|}.
+\end{equation}
+For fixed $a,b$, only finitely many factors differ from $1$.
+
+Write $\mathrm e(t)=e^{2\pi i t}$. For an integrable function on the circle, we use the Fourier coefficient convention
+\[
+\widehat f(k)=\int_{\LRtorus}f(t)\mathrm e(-kt)\LRdifferential t\qquad(k\in\LRinteger).
+\]
+The Poisson kernel is
+\[
+P_r(t)=\frac{1-r^2}{1-2r\cos(2\pi t)+r^2},\qquad 0\le r<1.
+\]
+Its denominator is strictly positive. Multiplying two geometric series gives the absolutely and uniformly convergent expansion
+\[
+P_r(t)=\sum_{k\in\LRinteger}r^{|k|}\mathrm e(kt),\qquad
+\int P_r=1,\qquad \widehat P_r(k)=r^{|k|}.
+\]
+For each integer $k\ge2$, there exists $C_k$, depending only on $k$, such that
+\begin{equation}\label{eq:poisson-moment}
+\int P_r(t)^k\LRdifferential t\le1+C_kr^2\qquad(0\le r\le3/4).
+\end{equation}
+To see the quadratic error, put $u=P_r-1$. The lower bound $(1-r)^2$ for the denominator gives $|u|\le64r$ and $0\le P_r\le49$. For $x\in[0,49]$, a polynomial expansion about $x=1$, or the second-order Taylor remainder, gives
+\[
+x^k\le1+k(x-1)+C_k'(x-1)^2.
+\]
+Substitute $x=P_r$ and integrate. Since $\int u=0$, the linear term vanishes, proving \eqref{eq:poisson-moment}. For example, one may take $C_k=4096\cdot50^k$.
+
+Let $F$ be the finite set of prime factors of the speeds in $W$. On the probability space $\LRtorus^F$, define
+\[
+Z(t)=\prod_{p\in F}P_{p^{-\sigma}}(t_p),\qquad
+\chi_a(t)=\mathrm e\left(\sum_{p\in F}\nu_p(a)t_p\right),\qquad
+D(t)=\sum_{a\in W}\chi_a(t).
+\]
+The speed $1$ corresponds to the constant character $1$. Distinct positive integers have distinct vectors of prime exponents, so the corresponding characters are orthogonal. Hence
+\begin{equation}\label{eq:poisson-representation}
+|D|\le s,\qquad \int |D|^2=s,\qquad
+\int Z|D|^2=\sum_{a,b\in W}K_\sigma(a,b).
+\end{equation}
+For the last identity, expand $D\overline D$ pairwise and integrate one coordinate at a time, using \eqref{eq:gcd-product}. All coordinate products and character sums are finite.
+
+Since $p^{-\sigma}\le2^{-1/2}<3/4$, \eqref{eq:poisson-moment} and the product measure give
+\begin{equation}\label{eq:uniform-poisson-moment}
+\int Z^k=\prod_{p\in F}\int P_{p^{-\sigma}}^k
+\le\exp\left(C_k\sum_{n\ge1}n^{-2\sigma}\right)=:B_{\sigma,k}<\infty.
+\end{equation}
+This constant is independent of $F$ and of the heights of the speeds. We only need uniform control of finite products, not an infinite random product.
+
+For any $A>0$, use $Z\le A$ on $\{Z\le A\}$ and $Z\le A^{1-k}Z^k$ on $\{Z>A\}$. It follows that
+\[
+\int Z|D|^2\le As+A^{1-k}s^2B_{\sigma,k}.
+\]
+Taking $A=s^{1/k}$ in the preceding inequality and using \eqref{eq:poisson-representation}, we obtain
+\begin{equation}\label{eq:sigma-sum}
+\sum_{a,b\in W}K_\sigma(a,b)\le(1+B_{\sigma,k})s^{1+1/k}.
+\end{equation}
+
+We must still return to the critical half-power kernel; we cannot simply set $\sigma=1/2$ in \eqref{eq:uniform-poisson-moment}. If $x\ge0$ and $\alpha>1$, separating the cases $x\le1/s$ and $x>1/s$ gives
+\[
+x\le\frac1s+s^{\alpha-1}x^\alpha.
+\]
+Set $x=K_{1/2}(a,b)$ and $\alpha=2\sigma$, sum over all pairs, and apply \eqref{eq:sigma-sum}. This yields
+\[
+\sum_{a,b\in W}K_{1/2}(a,b)
+\le s+(1+B_{\sigma,k})s^{2\sigma+1/k}.
+\]
+Finally, take $\sigma=1/2+\eta/8$ and choose an integer $k\ge2$ with $1/k\le\eta/4$. Since
+\[
+\frac{\gcd(a,b)}{\max(a,b)}\le\frac{\gcd(a,b)}{\sqrt{ab}}=K_{1/2}(a,b),
+\]
+we obtain \eqref{eq:gcdsum}. For the empty set, both sides vanish.
+\end{proof}
+
+We shall also use the elementary divisor bound $\tau(n)\ll_\eta n^\eta$, where $\tau(n)$ is the number of positive divisors of $n$. Separate the primes into $p<2^{1/\eta}$ and $p\ge2^{1/\eta}$. For the latter, $a+1\le2^a\le p^{\eta a}$. There are only finitely many primes in the first group, and the factors $\sup_{a\ge0}(a+1)p^{-\eta a}$ can be absorbed into the constant. This includes $n=1$.
+
+\section{Counting short integer relations}
+We encode short integer relations among three speeds as point-line incidences in the plane. The main issue is to control the number of speeds associated with a line, rather than merely the number of intercepts.
+\begin{lemma}[Weighted incidence bound]\label{lem:weighted}
+Let $P\subset\LRreal^2$ consist of $n$ points, and let $\mathcal L$ be a finite set of distinct lines with positive integer weights $w_\ell$. The weighted incidence count is zero when $\mathcal L$ is empty, and in that case we set $w_*=0$. Write
+$Q=\sum_\ell w_\ell^2$, $W_1=\sum_\ell w_\ell$, and $w_*=\max_\ell w_\ell$. Then
+\begin{equation}\label{eq:weighted}
+\sum_{\ell\in\mathcal L}w_\ell|P\cap\ell|
+\ll n^{2/3}Q^{2/3}+nw_*+W_1.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The Szemer\'edi--Trotter theorem~\cite{ST} gives $I(P,\mathcal L_0)\ll n^{2/3}|\mathcal L_0|^{2/3}+n+|\mathcal L_0|$. Group the lines according to $2^j\le w_\ell<2^{j+1}$, and denote the $j$th group by $\mathcal L_j$. Since $|\mathcal L_j|\le2^{-2j}Q$, the sum of the main terms is at most $Cn^{2/3}Q^{2/3}\sum_{j\ge0}2^{-j/3}$. The point terms sum to at most $Cn\sum_{2^j\le w_*}2^j\ll nw_*$. The line terms sum to at most $C\sum_j2^j|\mathcal L_j|\le CW_1$. Combining these bounds proves the result.
+\end{proof}
+
+For positive integers $a<b<c$, define
+\begin{equation}\label{eq:lambda}
+\lambda(a,b,c)=\min\left\{\max(|x|,|y|,|z|):
+(x,y,z)\in\LRinteger^3\setminus\{0\},\ ax+by+cz=0\right\}.
+\end{equation}
+
+
+The set of relations is nonempty: for example, $(b/\gcd(a,b),-a/\gcd(a,b),0)$ is a relation. The $\ell^\infty$-norm of a nonzero integer vector is a positive integer, so the minimum in \eqref{eq:lambda} exists. For each triple $a<b<c$, consider the relations of $\ell^\infty$-norm exactly $\lambda(a,b,c)$, normalize their first nonzero coefficient to be positive, and choose one. The candidate set is finite and nonempty, so this can be done for all triples. We always count triples, using only this chosen relation for each triple.
+
+
+\begin{proposition}[Counting short relations]\label{prop:relationcount}
+Let $N(H)$ be the number of triples $a<b<c$, with $a,b,c\in V$, for which $\lambda(a,b,c)\le H$. For every $\eta>0$, if $m=|V|\ge1$ and $H$ is an integer with $1\le H\le m$, then
+\begin{equation}\label{eq:NH}
+N(H)\ll_\eta m^{2+\eta}H^2.
+\end{equation}
+\end{proposition}
+\begin{proof}
+If a coefficient of the chosen relation is zero, the other two coefficients are nonzero. The reduced numerator and denominator of the ratio of the corresponding speeds are both at most $H$. Once one speed is fixed, there are $O(H^2)$ possible ratios, each determining the other speed uniquely. The third speed has at most $m$ choices. Summing over the three possible positions of the zero coefficient gives $O(m^2H^2)$ triples.
+
+Write each remaining chosen relation as $\alpha a+\beta b+\gamma c=0$, where $\alpha>0$ and all three coefficients are nonzero. Put $d=\gcd(\alpha,|\beta|)$, $\alpha=dp$, and $\beta=dq$. Then $p>0$, $q\ne0$, and $\gcd(p,|q|)=1$. Group the directions dyadically, with $M=1,2,4,\ldots$ and $M\le\max(p,|q|)<2M$. Since the coefficients have absolute value at most $H$, we have $M\le H$ and $d\le D:=\lfloor H/M\rfloor$.
+
+Fix a primitive direction $(p,q)$. Let the intercept set be generated by $r=-\gamma c/d$, where $c\in V$, $0<|\gamma|\le H$, and $1\le d\le D$, and define
+\[
+C_r=\{c\in V:r/c=\gamma/d\text{ for some }0<|\gamma|\le H,\ 1\le d\le D\},
+\qquad w(r)=|C_r|.
+\]
+The allowed numerators are symmetric in sign, so this definition agrees with the negative sign in the intercept formula. All intercepts are nonzero. Each chosen triple is mapped to the data
+\[
+((p,q),r,(a,b),c),\qquad (a,b)\in V\times V,\quad p a+q b=r,\quad c\in C_r.
+\]
+This map is injective because the data retain $a,b,c$. For a line and an incident point, there are $w(r)$ possible values of $c$. They need not all satisfy $a<b<c$, but this only increases the upper bound. Under the normalization $p>0$, distinct primitive directions cannot define the same line. We may therefore apply Lemma~\ref{lem:weighted} to all the distinct lines in the group at once.
+
+We now estimate the sum of squared weights for a fixed direction. For each $c\in C_r$, choose one of the finitely many representations $r/c=\gamma/d$. Each $(r,c,c')$ then determines a unique chosen tuple $(c,c',\gamma,d,\gamma',d')$. This correspondence is injective, since $r=\gamma c/d$ can be recovered from the tuple. Put $U=HD\le m^2$. The equality $\gamma c/d=\gamma'c'/d'$ forces the numerators to have the same sign. Set
+\[
+u=|\gamma|d',\qquad v=|\gamma'|d.
+\]
+Then $1\le u,v\le U$ and $uc=vc'$. For fixed $(c,c',u,v)$, a factorization of $u$ determines $|\gamma|,d'$, and a factorization of $v$ determines $|\gamma'|,d$. Including the common sign, the fiber has size at most $2\tau(u)\tau(v)$. The original size restrictions and the choice of representations can only reduce this number. Thus, for every fixed $\theta>0$, the divisor bound gives
+\begin{align}\label{eq:energy}
+\sum_rw(r)^2
+&\le 2\sum_{c,c'\in V}\sum_{\substack{1\le u,v\le U\\uc=vc'}}\tau(u)\tau(v)\notag\\
+&\ll_\theta m^{4\theta}\sum_{c,c'\in V}
+\left\lfloor\frac{U\gcd(c,c')}{\max(c,c')}\right\rfloor
+\ll_\theta m^{1+5\theta}HD.
+\end{align}
+The counting identity in the middle is elementary. Write $c=g a_0$, $c'=g b_0$, with $\gcd(a_0,b_0)=1$. Then $uc=vc'$ is equivalent to $u=b_0j$, $v=a_0j$, with exactly $\lfloor U/\max(a_0,b_0)\rfloor$ positive choices for $j$. The last step uses \eqref{eq:gcdsum}, whose constant is independent of the heights of $c,c'$.
+
+There are $O(M^2)$ primitive directions in the group. For a fixed nonzero intercept $r$, a pair $(\gamma,d)$ determines at most one speed $c=rd/\gamma$, so $w(r)\le2HD$. Also, $\sum_rw(r)\le2mHD$. Since $D\le H/M$, the parameters of the full line family satisfy
+\[
+Q\ll_\theta m^{1+5\theta}H^2M,\qquad
+w_*\ll H^2/M,\qquad W_1\ll mH^2M.
+\]
+Taking $n=m^2$, Lemma~\ref{lem:weighted} bounds this group by
+\[
+C_\theta\bigl(m^{2+(10/3)\theta}H^{4/3}M^{2/3}
++m^2H^2/M+mH^2M\bigr).
+\]
+The dyadic sums satisfy
+\[
+\sum_{M\le H}M^{2/3}\ll H^{2/3},\qquad
+\sum_{M\le H}M^{-1}\le2,\qquad
+\sum_{M\le H}M\le2H.
+\]
+Adding the zero-coefficient contribution gives $N(H)\ll_\theta m^{2+(10/3)\theta}H^2+mH^3$. Take $\theta=\eta/10$ and use $H\le m$ to obtain \eqref{eq:NH}.
+\end{proof}
+
+\begin{lemma}[Sum over short relations]\label{lem:relations}
+For every $\eta>0$ and every set $V\subset\LRnatural$ of cardinality $m$,
+\begin{equation}\label{eq:relations}
+\sum_{\substack{a,b,c\in V\\a<b<c}}\frac1{\lambda(a,b,c)}
+\ll_\eta m^{5/2+\eta}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The assertion is immediate when $m=0$, so assume $m\ge1$. For real $u\ge1$, interpret $N(u)$ as $N(\lfloor u\rfloor)$. Since there are only finitely many triples, termwise integration gives
+\[
+\sum_{a<b<c}\lambda(a,b,c)^{-1}
+=\int_1^\infty\frac{N(u)}{u^2}\LRdifferential u.
+\]
+Split the integral at $\sqrt m$. Use \eqref{eq:NH} below this point and $N(u)\le m^3$ above it. Then
+\[
+\sum_{a<b<c}\lambda(a,b,c)^{-1}
+\ll_\eta m^{2+\eta}\sqrt m+m^3/\sqrt m.
+\]
+Thus, for each $\eta>0$, there is a constant $C_\eta$, depending only on $\eta$, for which \eqref{eq:relations} holds for every finite set of positive integers.
+
+\end{proof}
+
+\section{Relation lattices and intersections on the circle}
+\subsection{An integer basis and lattice-point counting}
+We first express the zero-frequency condition in a finite Fourier expansion as a lattice-point problem. We then prove the uniform smoothing estimate needed to merge blocks.
+\begin{lemma}[An integer basis and the covolume]\label{lem:latticebasis}
+Let $a,b,c$ be positive integers, $g=\gcd(a,b,c)$, and $n=(a,b,c)/g$. The lattice
+\[
+\Lambda=\{(x,y,z)\in\LRinteger^3:ax+by+cz=0\}
+\]
+has rank two in $n^\perp$ and covolume $|n|_2$. Every shortest nonzero vector in the Euclidean norm extends to an integer basis of the lattice.
+\end{lemma}
+\begin{proof}
+Write $n=(A,B,C)$, $d=\gcd(A,B)$, $A'=A/d$, and $B'=B/d$. Primitivity gives $\gcd(d,C)=1$. By B\'ezout's identity, there are integers $r,s$ with $rA+sB=d$. Define
+\[
+u_0=(B',-A',0),\qquad v_0=(-rC,-sC,d).
+\]
+Both vectors belong to $\Lambda$ and are linearly independent. If $(x,y,z)\in\Lambda$, then $d\mid Cz$, hence $d\mid z$. Write $z=dt$ and subtract $t v_0$. The remaining vector has third coordinate zero, and its first two coordinates satisfy $A'x'+B'y'=0$. Since $\gcd(A',B')=1$, we have $(x',y')=(B'j,-A'j)$. Every lattice point therefore has a unique representation $j u_0+t v_0$, proving the rank assertion.
+
+A direct calculation gives $u_0\times v_0=-(A,B,C)$, since $rA'+sB'=1$. The area of the basis parallelogram is the Euclidean norm of its cross product, so $\det\Lambda=|n|_2$. Any other integer basis is obtained by a matrix of determinant $\pm1$, which preserves this area.
+
+The squared Euclidean norm of a nonzero lattice point is a positive integer. Since the lattice contains a nonzero point, a shortest nonzero vector exists. Write it as $u=k u_0+\ell v_0$. If $\gcd(k,\ell)>1$, division by this common factor gives a shorter nonzero lattice point, a contradiction. Thus $\gcd(k,\ell)=1$, and there are integers $\alpha,\beta$ with $k\beta-\ell\alpha=1$. Taking $v=\alpha u_0+\beta v_0$ gives an integer basis $(u,v)$.
+\end{proof}
+
+\begin{lemma}[Counting lattice points by rows]\label{lem:latticecount}
+Let $a<b<c$ be positive integers, $h=c/\gcd(a,b,c)$, and $\lambda=\lambda(a,b,c)$. For every $R\ge1$,
+\begin{equation}\label{eq:lattice}
+\#(\Lambda\cap[-R,R]^3)\le12\left(1+\frac R\lambda+\frac{R^2}h\right).
+\end{equation}
+The constant $12$ is independent of $a,b,c,R$.
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:latticebasis}, choose a shortest nonzero vector $u$ and extend it to a basis $(u,v)$. Subtract a suitable integer multiple of $u$ from $v$ so that its component along $u$ is $\alpha$, with $|\alpha|\le|u|_2/2$. Let $\beta>0$ be the length of its perpendicular component. The minimality of $u$ gives
+\[
+|u|_2^2\le |v|_2^2=\alpha^2+\beta^2,
+\qquad \beta\ge\sqrt3|u|_2/2.
+\]
+If $ju+kv\in[-R,R]^3$, its Euclidean norm is at most $\sqrt3R$. Its perpendicular projection is $k\beta$, so there are at most $1+2\sqrt3R/\beta$ possible integers $k$. For each fixed $k$, the parallel projection is $j|u|_2+k\alpha$, leaving at most $1+2\sqrt3R/|u|_2$ possible integers $j$. The lattice-point count is bounded by the product of these two quantities. Since $\beta\gg|u|_2$, expansion gives
+\[
+\#(\Lambda\cap[-R,R]^3)
+\ll1+R/|u|_2+R^2/(\beta|u|_2).
+\]
+Every nonzero lattice point has $\ell^\infty$-norm at least $\lambda$, so $|u|_2\ge\lambda$. Moreover,
+$\beta|u|_2=\det\Lambda=|(a,b,c)/g|_2$ lies between $h$ and $\sqrt3h$. More explicitly, the product of the two counting bounds is at most
+\[
+1+(2\sqrt3+4)R/|u|_2+12R^2/(\beta|u|_2).
+\]
+Thus the constant $12$ suffices in \eqref{eq:lattice}.
+\end{proof}
+
+\subsection{Finite Fourier expansions and triple intersections}
+We use the Fourier convention from Section 2. Orthogonality of integer frequencies gives
+\begin{equation}\label{eq:orthogonality}
+\int_{\LRtorus}\mathrm e(kt)\LRdifferential t=
+\begin{cases}1,&k=0,\\0,&k\ne0\end{cases}.
+\end{equation}
+For $k\ne0$, this follows by integrating the exponential on $[0,1]$; the zero-frequency case follows from normalization of the measure.
+
+\begin{lemma}[The Fej\'er kernel and interval majorization]\label{lem:fejer}
+For each integer $N\ge1$, the function
+\[
+F_N(t)=\frac1N\left|\sum_{j=0}^{N-1}\mathrm e(jt)\right|^2
+=\sum_{|k|<N}\left(1-\frac{|k|}N\right)\mathrm e(kt)
+\]
+is nonnegative and has integral $1$. If $0<\delta\le1/4$ and $N=\lfloor(2\delta)^{-1}\rfloor$, then
+$g_\delta=(\pi^2/(4N))F_N$ satisfies
+\[
+g_\delta(t)\ge\LRindicator_{\{\|t\|\le\delta\}},\qquad
+0\le\widehat g_\delta(k)\le C\delta,\qquad
+\widehat g_\delta(k)=0\quad(|k|\ge N).
+\]
+\end{lemma}
+\begin{proof}
+Expand the squared modulus of the finite sum. There are $N-|k|$ index pairs with difference $k$, giving the second expression. The first expression gives nonnegativity, and \eqref{eq:orthogonality} shows that the integral is the constant coefficient $1$. At $t=0$, $F_N(0)=N\ge4N/\pi^2$. For $0<|t|\le\delta$, choose the representative in $[-1/2,1/2]$. The geometric sum gives
+\[
+F_N(t)=\frac{\sin^2(\pi Nt)}{N\sin^2(\pi t)}.
+\]
+Since $N|t|\le1/2$, we have $|\sin(\pi Nt)|\ge2N|t|$ and $|\sin(\pi t)|\le\pi|t|$. Thus $F_N(t)\ge4N/\pi^2$. Nonnegativity treats points outside the interval. Finally, $1/(4\delta)\le N\le1/(2\delta)$, so the coefficient bound follows directly from the finite expansion.
+\end{proof}
+
+\begin{lemma}[Triple intersections]\label{lem:triple}
+Let $a<b<c$ be positive integers, $0<\delta\le1/4$, and $h=c/\gcd(a,b,c)$. Then
+\begin{equation}\label{eq:triple}
+|B_a(\delta)\cap B_b(\delta)\cap B_c(\delta)|
+\le12\pi^6\left(\delta^3+\frac{\delta^2}{\lambda(a,b,c)}+\frac\delta h\right).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Use $g_\delta$ from Lemma~\ref{lem:fejer}. The three factors are nonnegative and majorize the respective indicators. The triple intersection therefore has measure at most $\int g_\delta(at)g_\delta(bt)g_\delta(ct)$. Multiply the finite Fourier expansions and apply \eqref{eq:orthogonality} term by term to obtain
+\[
+\int_{\LRtorus}g_\delta(at)g_\delta(bt)g_\delta(ct)\LRdifferential t
+=\sum_{\substack{|k_1|,|k_2|,|k_3|<N\\ak_1+bk_2+ck_3=0}}
+\widehat g_\delta(k_1)\widehat g_\delta(k_2)\widehat g_\delta(k_3).
+\]
+Each summand is nonnegative and at most $\pi^6\delta^3$, since $\widehat g_\delta(k)\le\pi^2\delta$. Lemma~\ref{lem:latticecount} bounds the number of relations by $12(1+N/\lambda+N^2/h)$. Using $N\le(2\delta)^{-1}$ gives \eqref{eq:triple} with constant $12\pi^6$. All frequency sums are finite; no interchange with an infinite series is needed.
+\end{proof}
+
+\subsection{Smoothing, pair intersections, and frequency separation}
+\begin{lemma}[A uniform Fej\'er smoothing bound]\label{lem:smoothing}
+Let $A\subset\LRtorus$ be a union of at most $L$ circle intervals, and let $R\ge2$ be an integer. Define
+$f(t)=\int_{\LRtorus}\LRindicator_A(t-u)F_R(u)\LRdifferential u$. Then
+$0\le f\le1$, $\int f=|A|$, and $f$ is a trigonometric polynomial with Fourier support in $|k|<R$. There is an absolute constant $C$ such that every such $A,L,R$ satisfies
+\begin{equation}\label{eq:smoothing}
+\|f-\LRindicator_A\|_1\le CL\frac{\log(2R)}R.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Nonnegativity and normalization of the kernel give $0\le f\le1$. Fubini's theorem and translation invariance preserve the mean; the integrands are bounded, so all these integrals exist. Substituting the finite expansion of $F_R$ also gives
+\[
+f(t)=\sum_{|k|<R}(1-|k|/R)\widehat{\LRindicator_A}(k)\mathrm e(kt).
+\]
+The symmetric difference of a circle interval and its translate by $u$ is contained in the arcs swept out by its two endpoints, and has measure at most $2\|u\|$. For overlapping intervals, a change in the indicator of the union requires a change in at least one of the original indicators. Hence
+\[
+\|\LRindicator_A(\cdot-u)-\LRindicator_A\|_1\le2L\|u\|.
+\]
+The finite-sum and sine expressions for the kernel give $F_R(u)\le R$ and
+$F_R(u)\le1/(4R\|u\|^2)$ for $u\ne0$, respectively. Consequently,
+\begin{align*}
+\int_{\LRtorus}\|u\|F_R(u)\LRdifferential u
+&\le2R\int_0^{1/R}x\LRdifferential x
++\frac1{2R}\int_{1/R}^{1/2}\frac{\LRdifferential x}x\\
+&\le C\log(2R)/R.
+\end{align*}
+Apply the integral triangle inequality to the convolution difference, followed by Tonelli's theorem and the translation bound above. This proves \eqref{eq:smoothing}. The constant is independent of interval lengths, endpoints, and any height parameters used later.
+\end{proof}
+
+\begin{lemma}[The tent function and pair intersections]\label{lem:pair}
+For $0<\delta\le1/2$, set $\tau_\delta(t)=(1-\|t\|/\delta)_+$. Then
+\begin{equation}\label{eq:tentcoeff}
+\widehat\tau_\delta(k)=
+\begin{cases}
+\delta,&k=0,\\
+\displaystyle\frac{\sin^2(\pi k\delta)}{\delta\pi^2k^2},&k\ne0
+\end{cases}.
+\end{equation}
+Its Fourier series converges absolutely and uniformly to $\tau_\delta$. Consequently, for all positive integers $a,b$,
+\begin{equation}\label{eq:pair}
+|B_a(\delta)\cap B_b(\delta)|\ge\delta^2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Let $u=\LRindicator_{[-\delta/2,\delta/2]}$ be the indicator of a circle interval. Computing the overlap length gives $u*u=\delta\tau_\delta$. Direct integration yields $\widehat u(0)=\delta$ and $\widehat u(k)=\sin(\pi k\delta)/(\pi k)$ for $k\ne0$. Since the convolution integrands are bounded, Fubini's theorem gives $\widehat{u*u}(k)=\widehat u(k)^2$, proving \eqref{eq:tentcoeff}.
+
+The nonzero Fourier coefficients have absolute value at most $1/(\delta\pi^2k^2)$, so the corresponding series converges absolutely and uniformly. To identify its sum with the original function, we may use the same Fej\'er kernels without assuming an additional inversion result. For a continuous circle function $h$, uniform continuity and normalization of the kernel give, for $0<r<1/2$,
+\[
+\|h*F_R-h\|_\infty
+\le\sup_{\|u\|\le r}\|h(\cdot-u)-h\|_\infty
++2\|h\|_\infty\int_{\|u\|>r}F_R(u)\LRdifferential u.
+\]
+The tail integral is at most $C/(Rr)$. First let $R\to\infty$, and then let $r\to0$. This proves uniform convergence to $h$. For $h=\tau_\delta$, the Fej\'er means are finite weighted sums of its Fourier coefficients. Absolute summability of the coefficients also makes these means converge uniformly to the full series. The two limits therefore agree.
+
+Denote the coefficients in \eqref{eq:tentcoeff} by $c_k\ge0$. Absolute uniform convergence permits multiplication of the two series and termwise integration, giving
+\[
+\int_{\LRtorus}\tau_\delta(at)\tau_\delta(bt)\LRdifferential t
+=\sum_{ka+\ell b=0}c_kc_\ell\ge c_0^2=\delta^2.
+\]
+Since $0\le\tau_\delta\le\LRindicator_{\{\|t\|\le\delta\}}$, this proves \eqref{eq:pair}.
+\end{proof}
+
+\begin{lemma}[Separation of finite frequency sets]\label{lem:separation}
+Let $R\ge1$ be an integer, let $g,h$ be positive integers, and write $h/g=a/b$ in lowest terms. Let $P,Q$ be trigonometric polynomials with Fourier support in $|k|<R$. If $\max(a,b)\ge R$, then
+\begin{equation}\label{eq:separation}
+\int_{\LRtorus}P(gt)Q(ht)\LRdifferential t
+=\widehat P(0)\widehat Q(0).
+\end{equation}
+Moreover, if $G,v$ are positive integers, $0<\delta<1/2$, $f$ is a trigonometric polynomial with Fourier support in $|k|<R$, and $v>RG$, then
+\begin{equation}\label{eq:highseparation}
+\int_{\LRtorus}f(Gt)\LRindicator_{B_v(\delta)}(t)\LRdifferential t
+=2\delta\widehat f(0).
+\end{equation}
+\end{lemma}
+\begin{proof}
+In the first identity, the total frequency is $kg+\ell h$. If it vanishes, then $bk+a\ell=0$. Coprimality gives $k=aj$, $\ell=-bj$ for some $j\in\LRinteger$. If $j\ne0$, at least one frequency has absolute value at least $R$, so only $k=\ell=0$ survives in the finite expansion.
+
+For the second identity, the indicator of $B_v(\delta)$ is invariant under translation by $1/v$. If its $n$th Fourier coefficient is $z$, translation gives $z=\mathrm e(-n/v)z$. The coefficient therefore vanishes unless $v\mid n$. The nonzero frequencies of $f(Gt)$ are $kG$, with $0<|k|<R$. Their absolute values are smaller than $v$, so none is divisible by $v$. Integrating the finite expansion term by term leaves only the mean, proving \eqref{eq:highseparation}. No pointwise convergence of the indicator's Fourier series is required.
+\end{proof}
+
+\section{Near coverings and blocks of common multiples}
+\begin{lemma}[An inverse bound for the common-factor term]\label{lem:inverse}
+Let $W$ be a finite set of positive integers with $|W|\le m$, let $Y\ge2$, and put $K_W(Y)=\max_{g\in\LRnatural}|W\cap g[Y]|$. Then
+\begin{equation}\label{eq:inverse}
+G_3(W)\ll K_W(Y)S_2(W)\log(2Y)+m^3/Y.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The triples in $G_3(W)$ with $c/\gcd(a,b,c)>Y$ contribute at most $m^3/Y$. For the remaining triples, fix $a<c$, put $D=\gcd(a,c)$ and $q=c/D$, and, for each intermediate speed $b$, set $d=D/\gcd(D,b)$. Then $d\mid D$, $qd\le Y$, and the summand is $1/(qd)$. The speed $b$ belongs to $(D/d)[qd]$, so for fixed $d$ there are at most $K_W(Y)$ choices. Thus the contribution for fixed $a,c$ is at most
+\[
+\frac{K_W(Y)}q\sum_{1\le d\le Y/q}\frac1d
+\ll K_W(Y)\log(2Y)\frac{\gcd(a,c)}c.
+\]
+Summing over $a<c$ proves the result.
+\end{proof}
+
+
+In this section we assume that \eqref{eq:bohr} gives a covering and write
+\begin{equation}\label{eq:epsilon}
+\delta=\frac{1+\varepsilon}{2m},\qquad
+0\le\varepsilon\le\frac12,\qquad
+\int_\LRtorus(X-1)\LRdifferential t=\varepsilon.
+\end{equation}
+For $W\subset V$, set
+\[
+Y_W=\sum_{v\in W}\LRindicator_{B_v(\delta)},\qquad
+e_W=\int_\LRtorus(Y_W-1)_+\LRdifferential t,
+\qquad A_j(W)=\int_\LRtorus(Y_W)_j\LRdifferential t\quad(j=2,3),
+\]
+where $(y)_j=y(y-1)\cdots(y-j+1)$. The pointwise identity $Y_W=(Y_W-1)_++\LRindicator_{\{Y_W>0\}}$ also gives $|\bigcup_{v\in W}B_v|=2\delta|W|-e_W$. Since $X\ge1$, we have $e_W\le\varepsilon$. If $W_1,\ldots,W_s$ are pairwise disjoint, pointwise summation gives
+\begin{equation}\label{eq:hereditary}
+\sum_{i=1}^s e_{W_i}\le\varepsilon.
+\end{equation}
+To verify \eqref{eq:hereditary}, fix $t$ and let $r$ count the indices for which $Y_{W_i}(t)>0$. If $r=0$, then $\sum_i(Y_{W_i}(t)-1)_+=0$. Otherwise,
+$\sum_i(Y_{W_i}-1)_+=\sum_iY_{W_i}-r\le X-1$. The single-subset assertion follows in the same way. These bounds use the covering by all speeds, not a covering by the subsets themselves.
+
+\begin{lemma}[Moment estimates]\label{lem:moments}
+Under the assumptions of \eqref{eq:epsilon},
+\begin{equation}\label{eq:moment}
+A_2(W)^2\le e_W\bigl(A_3(W)+2A_2(W)\bigr).
+\end{equation}
+If $m$ is sufficiently large and $|W|\ge m/4$, then $A_2(W)\ge c$. Moreover, $\varepsilon\ge c/m$, and, for every fixed $\eta>0$ and every $W\subset V$,
+\begin{equation}\label{eq:A3upper}
+A_3(W)\ll_\eta m^{1/2+\eta}+G_3(W)/m.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Only finite sums of indicator functions occur, so all integrands are bounded and measurable. For every nonnegative integer $y$,
+\[
+y(y-1)=y(y-1)_+,\qquad
+y^2(y-1)_+=y(y-1)(y-2)+2y(y-1).
+\]
+Both sides vanish for $y=0,1$, and direct expansion proves the identities for $y\ge2$. Apply the integral Cauchy--Schwarz inequality to
+$\sqrt{(Y_W-1)_+}$ and $Y_W\sqrt{(Y_W-1)_+}$. The integrals of their squares are $e_W$ and $A_3(W)+2A_2(W)$, respectively, proving \eqref{eq:moment}.
+
+Expanding the second falling factorial and applying Lemma~\ref{lem:pair}, we obtain
+\[
+A_2(W)=\sum_{\substack{a,b\in W\\a\ne b}}|B_a\cap B_b|
+\ge |W|(|W|-1)\delta^2.
+\]
+If $m\ge8$ and $|W|\ge m/4$, then $|W|-1\ge m/8$. Since $\delta\ge1/(2m)$, we may take $A_2(W)\ge1/128$. Similarly, $A_2(V)\ge1/8$ for $m\ge2$. The covering gives $1\le X\le m$, hence $X(X-1)\le m(X-1)$ pointwise. Therefore
+\begin{equation}\label{eq:epslower}
+\varepsilon\ge1/(8m).
+\end{equation}
+
+The third falling factorial counts each of the six permutations of a triple, so
+$A_3(W)=6\sum_{a<b<c\in W}|B_a\cap B_b\cap B_c|$.
+For sufficiently large $m$, we have $\delta\le3/(4m)\le1/4$. Lemmas~\ref{lem:triple} and \ref{lem:relations} therefore give
+\[
+A_3(W)\le C\bigl(m^3\delta^3
++C_\eta\delta^2m^{5/2+\eta}+\delta G_3(W)\bigr).
+\]
+We may consequently take the absolute constant $C_*=72\pi^6$ and a constant $C_\eta'$ depending only on $\eta$ such that
+\begin{equation}\label{eq:A3constants}
+A_3(W)\le C_\eta' m^{1/2+\eta}+C_*G_3(W)/m.
+\end{equation}
+This proves \eqref{eq:A3upper} and makes clear that the coefficient of the common-factor term is independent of $\eta$. The subset $W$ need not itself cover the circle.
+\end{proof}
+
+\begin{lemma}[Block extraction]\label{lem:extract}
+Fix $0<\kappa<1/4$ and $0<\eta<\kappa$. If
+\begin{equation}\label{eq:smallcover}
+0<\varepsilon\le m^{-1/2-\kappa},
+\end{equation}
+then, for all sufficiently large $m$, there are pairwise disjoint subsets $I_1,\ldots,I_s\subset V$ and positive integers $g_1,\ldots,g_s$ such that
+\begin{equation}\label{eq:blocks}
+\left|\bigcup_{j=1}^s I_j\right|>3m/4,\qquad
+I_j\subset g_j[m^3],\qquad
+|I_j|\ge K:=\frac{c_\eta}{\varepsilon m^\eta},\qquad
+s\ll_\eta m\varepsilon m^\eta.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Take any $W\subset V$ with $|W|\ge m/4$, and set $c_1=1/128$. By Lemma~\ref{lem:moments}, $A_2(W)\ge c_1$ and
+$A_3(W)\ge A_2(W)^2/\varepsilon-2A_2(W)$.
+If $\varepsilon\le c_1/4$, the function $y^2/\varepsilon-2y$ is increasing for $y\ge c_1$, and hence
+$A_3(W)\ge c_1^2/(2\varepsilon)$. Use \eqref{eq:A3constants} with parameter $\kappa/2$. Since
+\[
+\varepsilon m^{1/2+\kappa/2}\le m^{-\kappa/2}\longrightarrow0,
+\]
+we may choose a lower bound on $m$, depending only on $\kappa$, for which $C_{\kappa/2}'m^{1/2+\kappa/2}\le c_1^2/(4\varepsilon)$. Thus
+\begin{equation}\label{eq:G3large}
+G_3(W)\ge c_2m/\varepsilon,\qquad c_2=c_1^2/(4C_*)>0.
+\end{equation}
+Here $c_2$ is absolute, and the lower bound on $m$ is independent of $W$ and of the heights of the speeds.
+
+Take $Y=m^3$ in Lemma~\ref{lem:inverse}. Use \eqref{eq:gcdsum} with parameter $\eta/2$ and the bound $\log(2m^3)\ll_\eta m^{\eta/2}$ to obtain
+$G_3(W)\le C_\eta K_W(m^3)m^{1+\eta}+C$.
+By \eqref{eq:G3large}, once $m$ is large enough in terms of $\kappa,\eta$, the final constant can be absorbed, giving $K_W(m^3)\ge c_\eta/(\varepsilon m^\eta)$. This maximum is attained: whenever $W\cap g[m^3]$ is nonempty, $g$ divides a speed in $W$, leaving only finitely many possible $g$.
+
+Start with the remaining set $W=V$, choose a full block $I=W\cap g[m^3]$ with $|I|\ge K$, and remove it. As long as at least $m/4$ speeds remain, repeat with the same constants. Every step removes at least one speed, so the process terminates; formally, this is strong induction on the cardinality of the remaining set. At termination fewer than $m/4$ speeds remain. The blocks are pairwise disjoint and each has size at least $K$. Thus $sK\le m$ and $s\le m/K$. The remaining set is never required to cover the circle. Only the hereditary moment estimates from the original covering are used.
+\end{proof}
+
+We next merge the blocks using Lemmas~\ref{lem:smoothing} and \ref{lem:separation} under the covering assumption.
+
+\begin{lemma}[Merging blocks]\label{lem:merge}
+Under the assumptions of Lemma~\ref{lem:extract}, suppose further that $\eta<\kappa/4$. Then there exist $C\subset V$, $G\in\LRnatural$, and $T\ge1$ such that
+\begin{equation}\label{eq:core}
+|C|\ge m/2,\qquad C\subset G[T],\qquad
+\log T\ll_\eta (m\varepsilon m^\eta+1)\log(2m).
+\end{equation}
+Here $T$ may be taken to be a positive integer, and we may require $G=\gcd(C)$.
+\end{lemma}
+\begin{proof}
+Use the blocks in \eqref{eq:blocks}, and write $U_j=\bigcup_{v\in I_j}B_v(\delta)$, $\alpha_j=|U_j|$, and $e_j=e_{I_j}$. Then
+\begin{equation}\label{eq:mass}
+\alpha_j=2\delta|I_j|-e_j,\qquad \sum_je_j\le\varepsilon.
+\end{equation}
+Fix the first block. Since the speed sets of different blocks are disjoint, we have pointwise
+$\LRindicator_{U_1}\sum_{j\ne1}\LRindicator_{U_j}\le X-1$, and hence
+\begin{equation}\label{eq:cross}
+\sum_{j\ne1}|U_1\cap U_j|\le\varepsilon.
+\end{equation}
+Since $|I_1|/m\ge K/m$ and $m\varepsilon^2m^\eta\to0$, \eqref{eq:mass} gives
+\begin{equation}\label{eq:pivotmass}
+\alpha_1\ge |I_1|/(2m)\ge K/(2m)
+\end{equation}
+for sufficiently large $m$. Indeed, $\alpha_1\ge|I_1|/m-\varepsilon$ shows that it suffices to have $2m\varepsilon^2m^\eta\le c_\eta$. The left-hand side is at most $2m^{-2\kappa+\eta}$, so the required lower bound depends only on $\kappa,\eta$.
+
+Write $U_j=\{t:g_jt\in A_j\}$. The set $A_j$ is a union of intervals associated with the normalized speeds $v/g_j\le m^3$. The total number of these intervals is at most $m^4$. Take $R=m^{12}$, let $f_j=\LRindicator_{A_j}*F_R$ as in Lemma~\ref{lem:smoothing}, and put $\widetilde f_j(t)=f_j(g_jt)$. Since dilation preserves Haar measure, the corresponding $L^1$ error can be written as
+\[
+\rho_j:=\|f_j-\LRindicator_{A_j}\|_1
+=\|\widetilde f_j-\LRindicator_{U_j}\|_1.
+\]
+It follows that
+\[
+\sum_j\rho_j\ll m^4\log(2R)/R.
+\]
+Write $g_j/g_1=a_j/b_j$ in lowest terms. If $\max(a_j,b_j)>R$, the equation $kg_1+\ell g_j=0$ has only the zero solution for $|k|,|\ell|<R$, by Lemma~\ref{lem:separation}. Therefore
+\[
+\int_\LRtorus\widetilde f_1\widetilde f_j\LRdifferential t=\alpha_1\alpha_j,
+\qquad \bigl||U_1\cap U_j|-\alpha_1\alpha_j\bigr|\le\rho_1+\rho_j.
+\]
+Since $0\le\widetilde f_j\le1$, the $L^1$ difference of the products is at most $\rho_1+\rho_j$, with no additional constant. Call such a block distant. Since $s\le m$, the sum of all errors is at most
+$O(m^5\log(2R)/R)=o(\varepsilon)$. For the last assertion use \eqref{eq:epslower}: the error divided by $\varepsilon$ is at most $C\log(2m)/m^6$, and hence is uniformly at most $1$ for large $m$. Together with \eqref{eq:cross}, this gives $\alpha_1\sum_{j\text{ distant}}\alpha_j\le2\varepsilon$. By \eqref{eq:mass} and \eqref{eq:pivotmass}, the total number of speeds in distant blocks is at most
+\begin{equation}\label{eq:farcount}
+\frac1{2\delta}\left(\frac{2\varepsilon}{\alpha_1}+\varepsilon\right)
+\ll_\eta m^2\varepsilon^2m^\eta=o(m).
+\end{equation}
+More explicitly, if $N_{\rm far}$ denotes this number, then
+\[
+N_{\rm far}\le m\left(\frac{2\varepsilon}{\alpha_1}+\varepsilon\right)
+\le\frac4{c_\eta}m^2\varepsilon^2m^\eta+m\varepsilon.
+\]
+The last term can also be absorbed into the first using $\varepsilon\ge1/(8m)$. Dividing \eqref{eq:farcount} by $m$ gives an upper bound $C_\eta m^{-2\kappa+\eta}$. Since $\eta<\kappa/4$, a lower bound on $m$ depending only on $\kappa,\eta$ ensures that at most $m/4$ speeds lie in distant blocks. The original blocks contain more than $3m/4$ speeds, so the retained set $C$ has at least $m/2$ elements. The first block is retained because its scale ratio is $1$.
+
+For every retained block, $a_j,b_j\le R$. Since $g_j=a_jg_1/b_j\in\LRnatural$ and $a_j,b_j$ are coprime, $b_j\mid g_1$. Put $Q_0=\LRlcm_j b_j$. Then $Q_0\mid g_1$ and $Q_0\le R^s$. Taking $G_0=g_1/Q_0$, each retained speed is a positive integer multiple of $G_0$, with multiplier $(v/g_j)a_jQ_0/b_j\le m^3RQ_0$. We may therefore take $T=m^3RQ_0$, for which
+\[
+\log T\le3\log m+(s+1)\log R
+\ll_\eta(m\varepsilon m^\eta+1)\log(2m).
+\]
+Replacing $G_0$ by $\gcd(C)$ only decreases the normalized height and preserves the conclusion.
+\end{proof}
+
+\section{Common denominators and additive dimension}
+
+
+\begin{lemma}[Interval counting on a circle grid]\label{lem:gridcount}
+Let $q\ge1$ be an integer, $x\in\LRtorus$, and let $J$ be a closed circle interval of length $0\le\ell<1$. Then
+\begin{equation}\label{eq:gridcount}
+q\ell-1\le\#\{0\le a<q:x+a/q\in J\}\le q\ell+1.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Lift $J$ to a closed real interval of length $\ell$. All lifts of the grid form $x+q^{-1}\LRinteger$, where $x$ now denotes a real representative. Since $\ell<1$, the lifts in this interval correspond bijectively to the circle grid points being counted. Multiplication by $q$ reduces the problem to counting integers in a closed real interval of length $q\ell$. Their number lies between $q\ell-1$ and $q\ell+1$: for endpoints $a,b$, the nonempty count is $\lfloor b\rfloor-\lceil a\rceil+1$. If the count is zero, the length is less than $1$, so the lower bound still holds. This includes grid points at the endpoints.
+\end{proof}
+
+
+\begin{lemma}[Exceptional speeds outside a majority block]\label{lem:exceptions}
+Under the covering assumptions of \eqref{eq:epsilon}, let $G,T$ be positive integers and $C\subset V\cap G[T]$ with $|C|\ge m/2$. For sufficiently large $m$, there is a set $E\subset V\setminus C$ with $e:=|E|\ll m\varepsilon$ such that every $v\in V\setminus E$ satisfies
+\begin{equation}\label{eq:nonexceptions}
+q_v:=\frac G{\gcd(G,v)}\le\frac1\delta\le2m,\qquad
+\frac vG\le R_1:=(mT)^4.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Put $U=\bigcup_{v\in C}B_v(\delta)$ and $\alpha=|U|$. By \eqref{eq:hereditary} and $|C|\ge m/2$,
+$\alpha\ge2\delta|C|-\varepsilon\ge(1-\varepsilon)/2\ge1/4$. The same pointwise counting as in \eqref{eq:cross} gives
+\begin{equation}\label{eq:outsideoverlap}
+\sum_{v\notin C}|U\cap B_v(\delta)|\le\varepsilon.
+\end{equation}
+The set $U$ is invariant under translation by $a/G$. Translation invariance of Haar measure therefore gives
+\[
+|U\cap B_v|=\int_U\frac1G\sum_{a=0}^{G-1}
+\LRindicator_{B_v}(t+a/G)\LRdifferential t.
+\]
+Write $d=\gcd(G,v)$, $G=dq_v$, and $v=dv'$, with $\gcd(v',q_v)=1$. As $a$ varies, $v'a\pmod{q_v}$ runs through every residue class, each $d$ times. The preceding average is thus an average over a $q_v$-point grid. By Lemma~\ref{lem:gridcount}, a circle interval of length $2\delta$ occupies at least the proportion $2\delta-1/q_v$ of this grid. Hence
+\begin{equation}\label{eq:grid}
+|U\cap B_v(\delta)|\ge\alpha(2\delta-1/q_v).
+\end{equation}
+If $q_v>1/\delta$, the right-hand side exceeds $\alpha\delta$. By \eqref{eq:outsideoverlap}, there are at most $\varepsilon/(\alpha\delta)\le8m\varepsilon$ such speeds.
+
+On the other hand, write $U=\{t:Gt\in A\}$, where $A$ is a union of at most $mT$ intervals. Fej\'er smoothing of degree less than $R_1$ gives $f=\LRindicator_A*F_{R_1}$. By \eqref{eq:smoothing}, its error satisfies
+\[
+\|f-\LRindicator_A\|_1\ll \frac{mT\log(2R_1)}{R_1}
+\ll\frac{\log(2m)}{m^3}=o(1/m).
+\]
+To check uniformity, put $x=mT\ge m$, so $R_1=x^4$. The error is at most $C\log(2x)/x^3$. This function is decreasing for $x\ge1$, giving the stated bound in terms of $m$ alone. If $v>R_1G$, the nonzero Fourier frequencies of $f(Gt)$ cannot match those of the indicator of $B_v(\delta)$. Lemma~\ref{lem:separation} gives
+\[
+\int_\LRtorus f(Gt)\LRindicator_{B_v(\delta)}(t)\LRdifferential t=2\delta\alpha.
+\]
+Choose an absolute lower bound on $m$ so that $C\log(2m)/m^3\le1/(8m)\le\alpha\delta$. The actual intersection then has measure at least $\alpha\delta$, so there are at most $8m\varepsilon$ such speeds as well. Let $E$ be the union of the two exceptional sets. We may take $e\le16m\varepsilon$. Speeds in the core satisfy $q_v=1$ and $v/G\le T\le R_1$, so none is removed.
+\end{proof}
+
+A covering $\{B_v(\delta):v\in V\}$ is called \emph{irreducible} if no proper subfamily covers $\LRtorus$. Below, irreducibility provides a common base point for a prime translation grid.
+
+\begin{lemma}[Prime translations and a common denominator]\label{lem:denominator}
+In addition to the assumptions of Lemma~\ref{lem:exceptions}, suppose that $\gcd(V)=1$ and the covering is irreducible. Put
+\[
+Q=\LRlcm_{v\in V\setminus E}q_v.
+\]
+Then $Q\mid G$ and
+\begin{equation}\label{eq:Qbound}
+\log Q\le(8e+9\sqrt m)\log(2m).
+\end{equation}
+\end{lemma}
+\begin{proof}
+For each prime $p\mid G$, let $r_p=|\{v\in V:p\nmid v\}|$. Since $\gcd(V)=1$ and $|C|\ge m/2$, we have $1\le r_p\le m/2$. Irreducibility gives $t_0\in\LRtorus$ with $\|vt_0\|>\delta$ for every speed divisible by $p$. Indeed, these speeds form a proper subfamily, so that subfamily misses a point. No assertion about a unique uncovered point for any one speed is needed. The inequalities persist at $t_0+a/p$, $0\le a<p$. For each remaining speed $v$, the points $vt_0+va/p$ form a $p$-point grid. By Lemma~\ref{lem:gridcount}, at most $2\delta p+1$ lie in $[-\delta,\delta]$. All speeds together must cover the $p$ times, so
+\begin{equation}\label{eq:prime}
+r_p(2\delta+1/p)\ge1.
+\end{equation}
+Substituting $r_p\le m/2$ and $2m\delta=1+\varepsilon$ gives
+$p\le m/(1-\varepsilon)\le2m$. Using \eqref{eq:prime} once more, we get
+$r_p\ge p/(1+2\delta p)\ge p/4$.
+
+Write $b_p=\nu_p(Q)$. Since every $q_v$ divides $G$, we have $Q\mid G$. Since $b_p=\max_{v\in V\setminus E}\nu_p(q_v)$ and each $q_v\le2m$, we have
+\begin{equation}\label{eq:localvaluation}
+b_p\log p\le\log(2m)\quad(p\mid Q).
+\end{equation}
+If $p>8e$, at least $p/4-e\ge p/8$ nonexceptional speeds are not divisible by $p$. Each satisfies $\nu_p(q_v)=\nu_p(G)$, so $b_p=\nu_p(G)$. Let $S_p=\{v\in V\setminus E:p\nmid v\}$. Then $|S_p|\ge p/8$ and $\nu_p(q_v)=b_p$ for every $v\in S_p$. All prime sets involved are finite. Interchanging the two finite sums gives
+\[
+\sum_{\substack{p\mid Q\\p>8e}}p b_p\log p
+\le8\sum_{\substack{p\mid Q\\p>8e}}\sum_{v\in S_p}b_p\log p
+\le8\sum_{v\notin E}\sum_{p\mid q_v}\nu_p(q_v)\log p.
+\]
+The innermost sum is exactly $\log q_v$. Thus
+\begin{equation}\label{eq:charge}
+\sum_{\substack{p\mid Q\\p>8e}}p b_p\log p
+\le8\sum_{v\notin E}\log q_v\le8m\log(2m).
+\end{equation}
+By \eqref{eq:localvaluation}, primes $p\le8e$ contribute at most $8e\log(2m)$ to $\log Q$. Split the remaining primes at $\sqrt m$. The smaller ones contribute at most $\sqrt m\log(2m)$, and \eqref{eq:charge} bounds the larger ones by $8\sqrt m\log(2m)$. Adding these bounds proves \eqref{eq:Qbound}.
+\end{proof}
+
+\begin{proposition}[Low-dimensional structure of a near covering]\label{prop:dimension}
+Fix $0<\kappa<1/4$. Suppose that $V$ gives an irreducible covering, $\gcd(V)=1$, and \eqref{eq:epsilon} and \eqref{eq:smallcover} hold. For sufficiently large $m$,
+\begin{equation}\label{eq:dimension}
+\LRdimension(V)\ll_\kappa\sqrt m\log(2m).
+\end{equation}
+\end{proposition}
+\begin{proof}
+Take $\eta=\kappa/10$ in Lemma~\ref{lem:merge} to obtain a core $C\subset G[T]$. Apply Lemmas~\ref{lem:exceptions} and \ref{lem:denominator}, and put $H=G/Q\in\LRnatural$. For $v\in V\setminus E$, the divisibilities $q_v\mid Q\mid G$ imply $H\mid G/q_v=\gcd(G,v)$, so $v/H$ is a positive integer. Also, $v/H=(v/G)Q\le R_1Q$.
+
+If $D\subset V$ is $2$-dissociated, the ordinary subset sums of $(D\setminus E)/H$ are distinct. Equality of two subset sums gives a relation among the original speeds with coefficients in $\{-1,0,1\}$, and $2$-dissociation forces the subsets to coincide. The normalized speeds are positive integers at most $R_1Q$, so all subset sums lie in $[0,mR_1Q]$, which contains $1+mR_1Q$ integers. Thus $2^{|D\setminus E|}\le1+mR_1Q$, and consequently
+\begin{align}\label{eq:subsetcount}
+|D|&\le e+\log_2(1+mR_1Q)\notag\\
+&\le e+\frac{\log(1+mR_1)+(8e+9\sqrt m)\log(2m)}{\log2}\notag\\
+&\ll\log T+(e+\sqrt m)\log(2m).
+\end{align}
+For the second step, use $Q\ge1$ to write $1+mR_1Q\le Q(1+mR_1)$. Since $m,T$ are positive integers, we may take $R_1=(mT)^4$, giving
+\[
+\log(1+mR_1)\le\log2+5\log m+4\log T.
+\]
+Together with \eqref{eq:Qbound}, this gives the stated upper bound.
+
+By \eqref{eq:core} and \eqref{eq:smallcover},
+$\log T\ll_\kappa(m^{1/2-\kappa+\eta}+1)\log(2m)=o(\sqrt m)$, while $e\ll m\varepsilon\le m^{1/2-\kappa}$. Substitution in \eqref{eq:subsetcount} and maximization over $D$ prove \eqref{eq:dimension}. Common denominators are taken only over nonexceptional speeds; exceptional speeds are not included in the GCD of the core.
+\end{proof}
+
+
+\section{Low-height models of low-dimensional sets}
+We express Bedert's scaling modulo a prime and transfer of representatives~\cite[Section 5, Lemmas 5.1--5.2]{Bedert} in terms of pointwise coverings, and control the iteration by an explicit error budget. The resulting proposition suffices for the main theorem. An upper bound on the maximum $2$-dissociated dimension is preserved throughout.
+
+\begin{proposition}[A low-height model for a covering]\label{prop:model}
+Let $V$ be a set of $m\ge2$ distinct positive integers. Let $d$ be a positive integer with $1\le d\le m$ and $\LRdimension(V)\le d$, and let $\delta\ge0$. If
+\[
+\forall t\in\LRtorus\quad\exists v\in V:\ \|vt\|\le\delta,
+\]
+then there exist a positive integer $T$ and a set $W\subset[T]$ with $|W|=m$, $\LRdimension(W)\le d$, and
+\begin{equation}\label{eq:model}
+\log T\le2048d\log(2m),\qquad
+\forall t\in\LRtorus\quad\exists w\in W:\ \|wt\|\le\delta+m^{-100}.
+\end{equation}
+The model $W$ is constructed from the given covering. We do not require one model to work for all $\delta$ simultaneously.
+\end{proposition}
+
+\subsection{Maximal dissociated sets and simultaneous compression}
+In an arbitrary abelian group, define $2$-dissociation using integer coefficients $-2,-1,0,1,2$. For a finite set $D$, write
+\[
+\operatorname{Span}_2(D)=\left\{\sum_{x\in D}c_xx:c_x\in\{-2,-1,0,1,2\}\right\}.
+\]
+This is the set of bounded-coefficient sums over $D$; it need not be the subgroup generated by $D$.
+
+\begin{lemma}\label{lem:spanhalf}
+Let $p$ be an odd prime, $B\subset\mathbb Z/p\mathbb Z$, and let $D_0\subset B$ be an inclusion-maximal $2$-dissociated subset. Put
+\[
+D=D_0\cup\{x/2:x\in D_0\}.
+\]
+Then $|D|\le2|D_0|$ and $B\subset\operatorname{Span}_2(D)$.
+\end{lemma}
+\begin{proof}
+It suffices to consider $b\in B\setminus D_0$. Maximality gives a nontrivial bounded-coefficient relation on $D_0\cup\{b\}$,
+\[
+s+c_bb=0,\qquad s=\sum_{x\in D_0}c_xx.
+\]
+If $c_b=0$, dissociation forces all remaining coefficients to vanish, a contradiction. Thus $c_b\in\{-2,-1,1,2\}$. If $c_b=\pm1$, then $b=\mp s$; if $c_b=\pm2$, then $b=\mp s/2$. In the latter case, replace each $x$ in the expression for $s$ by $x/2$. The coefficients remain in $[-2,2]$, proving the assertion. The same argument includes the case $D_0=\varnothing$.
+\end{proof}
+
+\begin{lemma}[Simultaneous compression]\label{lem:simcompress}
+Let $p$ be prime, let $D\subset\mathbb Z/p\mathbb Z$, and let $L\ge1$ be an integer with $L^{|D|}<p$. There is an integer $\lambda$ with $p\nmid\lambda$ such that, for each $x\in D$, there is an integer $z_x$ satisfying
+\[
+z_x\equiv\lambda x\pmod p,\qquad |z_x|<p/L.
+\]
+For the same $\lambda$ and each $b\in\operatorname{Span}_2(D)$, there is an integer $z_b\equiv\lambda b\pmod p$ with $|z_b|\le2|D|p/L$.
+\end{lemma}
+\begin{proof}
+For each integer $a\in\{0,\ldots,p-1\}$, divide the standard representatives $[ax]_p\in\{0,\ldots,p-1\}$ into bins, giving the encoding
+\[
+a\longmapsto\left(\left\lfloor\frac{L[ax]_p}{p}\right\rfloor\right)_{x\in D}.
+\]
+Each coordinate has only $L$ possible values, so there are at most $L^{|D|}<p$ encodings. Two distinct integers $a,b$ therefore have the same encoding. Take $\lambda=a-b$. Then $0<|\lambda|<p$, so $p\nmid\lambda$. Set $z_x=[ax]_p-[bx]_p$. Membership in the same bin gives $|z_x|<p/L$. For a bounded-coefficient expression $b=\sum c_xx$, take $z_b=\sum c_xz_x$ and apply the triangle inequality. No distinctness or nonvanishing assumption on these representatives is needed.
+\end{proof}
+
+\subsection{Preserving cardinality, dimension, and coverings}
+\begin{lemma}[Transfer through representatives]\label{lem:modeltransfer}
+Let $M,Q$ be positive integers, $V\subset[M]$, $|V|=m\ge1$, and let $p>2M$ be prime. Let $\lambda$ be an integer with $p\nmid\lambda$. For each $v\in V$, choose an integer $z_v$ such that
+\[
+z_v\equiv\lambda v\pmod p,\qquad |z_v|\le Q,\qquad 2mQ<p.
+\]
+Then $W=\{|z_v|:v\in V\}$ consists of $m$ distinct positive integers, $W\subset[Q]$, and $\LRdimension(W)\le\LRdimension(V)$. If $V$ has a pointwise distance covering bound $\delta$, then $W$ has such a bound $\delta+Q/p$.
+\end{lemma}
+\begin{proof}
+Since $0<v<p$ and $p\nmid\lambda$, the representative $z_v$ is nonzero. If $|z_a|=|z_b|$, then $z_a=z_b$ or $z_a=-z_b$. In the first case, reduction modulo $p$ and cancellation of $\lambda$ give $a=b$. In the second, $p\mid a+b$, contrary to $0<a+b\le2M<p$. Taking absolute values therefore does not merge speeds.
+
+To compare dimensions, pull back any $2$-dissociated subset of $W$ to $S\subset V$. If $\sum_{v\in S}c_vv=0$, with $c_v\in\{-2,-1,0,1,2\}$, then $\sum c_vz_v$ vanishes modulo $p$ and
+\[
+\left|\sum_{v\in S}c_vz_v\right|\le2|S|Q\le2mQ<p.
+\]
+It must therefore vanish as an integer. Write $z_v=\epsilon_v|z_v|$ with $\epsilon_v\in\{-1,1\}$. This gives a bounded-coefficient relation in $W$ with coefficients $c_v\epsilon_v$. Dissociation forces all $c_v=0$, so $S$ is $2$-dissociated. Taking the largest cardinality gives the dimension bound. The required direction is that dissociated subsets of the new model remain dissociated when pulled back.
+
+At a grid point $j/p$, the congruence and invariance under sign changes give
+\[
+\bigl\||z_v|j/p\bigr\|=\|v\lambda j/p\|.
+\]
+The original covering thus gives a covering at the grid points for the new set. Every $t\in\LRtorus$ is within $1/p$ of some $j/p$; for example, take $j=\lfloor pt\rfloor$ after choosing a real lift. Multiplication by a positive integer $w$ is $w$-Lipschitz on the circle. The corresponding new speed therefore satisfies
+\[
+\|wt\|\le\|wj/p\|+w\|t-j/p\|\le\delta+Q/p.
+\]
+This is a pointwise covering transfer, with no replacement by an almost-everywhere assertion.
+\end{proof}
+
+\begin{lemma}[One compression step]\label{lem:compressstep}
+Let $M,d$ be positive integers, $V\subset[M]$, $m=|V|\ge2$, and $\LRdimension(V)\le d$. Suppose that a positive integer $L$ satisfies
+\[
+16md\le L,\qquad L^{2d}<2M.
+\]
+Then there exist a positive integer $Q$ and a model $W\subset[Q]$ of the same cardinality, with $2$-dissociated dimension at most $d$, such that
+\[
+0<Q\le\frac{16dM}{L}\le\frac M2.
+\]
+A distance covering bound $\delta$ for $V$ transfers to $\delta+4d/L$ for $W$.
+\end{lemma}
+\begin{proof}
+By Bertrand's postulate, choose a prime $2M<p\le4M$. Reduction modulo $p$ is injective on $V$, and its image $B$ has $2$-dissociated dimension at most $d$: a dissociated subset in the modular group pulls back to a dissociated integer subset, since an integer zero relation remains zero modulo $p$.
+
+Choose a $2$-dissociated subset $D_0\subset B$ of largest cardinality. It is inclusion-maximal. Since $p>2M\ge4$, the prime $p$ is odd. Lemma~\ref{lem:spanhalf} gives a set $D$ with $|D|\le2d$ and $B\subset\operatorname{Span}_2(D)$. Since $L^{|D|}\le L^{2d}<p$, Lemma~\ref{lem:simcompress} gives integer representatives with $|z_v|\le4dp/L$ for one integer $\lambda$ satisfying $p\nmid\lambda$. Take
+\[
+Q=\left\lfloor\frac{4dp}{L}\right\rfloor.
+\]
+Since the absolute values are integers, $|z_v|\le Q$. Choose any $v\in V$. Its representative is nonzero because $0<v<p$ and $p\nmid\lambda$, so $Q\ge|z_v|\ge1$. Since $L\ge16md$,
+\[
+2mQ\le\frac{8mdp}{L}\le p/2<p,
+\qquad Q/p\le4d/L.
+\]
+Also, $p\le4M$ and $m\ge2$ give $Q\le16dM/L\le M/2$. Lemma~\ref{lem:modeltransfer} now gives all the transfer assertions.
+\end{proof}
+
+\subsection{Controlling the accumulated error}
+\begin{proof}[Proof of Proposition~\ref{prop:model}]
+Fix
+\[
+H=(32md)^{204d},\qquad s=\frac1{2d},\qquad F(x)=32d^2x^{-s}\quad(x>0).
+\]
+With $m,d$ fixed, use strong induction on the positive integer height $M$, simultaneously for all nonnegative covering radii. We prove that each admissible covering by $V\subset[M]$ transfers to a model of the same cardinality and height at most $2H$, without increasing the dimension, and with added radius at most
+\begin{equation}\label{eq:modelbudget}
+F(H)-F(\max\{M,H\}).
+\end{equation}
+If $M\le2H$, keep the original set. Since $F$ is decreasing, \eqref{eq:modelbudget} is nonnegative.
+
+Suppose now that $M>2H$ and take $L=\lfloor M^s\rfloor$. Since $H\ge(32md)^{2d}$, we have $M^s\ge32md$, so $L\ge16md$. Also, $L^{2d}\le M<2M$. Lemma~\ref{lem:compressstep} gives a model of height $Q\le M/2$. Since $L\ge M^s/2$, the error in this step is at most
+\[
+4d/L\le8dM^{-s}.
+\]
+Put $N=\max\{Q,H\}$. Then $H\le N\le M/2<M$, so the induction hypothesis applies to the new set at height $N$. The induction is simultaneous over all nonnegative radii and hence applies to the enlarged radius from this step.
+
+The increase in the potential pays for the error in one step. The inequalities $\log2>1/2$ and $e^x\ge1+x$ give $2^s-1\ge s/2$. Therefore
+\[
+F(N)-F(M)\ge32d^2\bigl((M/2)^{-s}-M^{-s}\bigr)
+\ge32d^2M^{-s}\frac{s}{2}=8dM^{-s}.
+\]
+The compression adds at most $F(N)-F(M)$ to the radius. The induction hypothesis contributes an additional error of at most $F(H)-F(N)$. The sum of these two error bounds is exactly $F(H)-F(M)$, as required by \eqref{eq:modelbudget}, independently of the number of compression steps. This completes the strong induction.
+
+Start at the largest speed of the original set. Since $F\ge0$, the total error is at most $F(H)$, and
+\[
+F(H)=32d^2(32md)^{-102}\le m^{-100}.
+\]
+Finally, take $T=2H$. Since $1\le d\le m$,
+\begin{align*}
+\log T&=\log2+204d\log(32md)\\
+&\le\log2+1020d\log(2m)
+\le2048d\log(2m).
+\end{align*}
+This proves all the assertions.
+\end{proof}
+
+\section{Prime grids and a small-height lower bound}
+We give a self-contained version of Bedert's small-height argument~\cite[Proposition 2.5 and the end of Section 5]{Bedert} in the range needed here. The only prime estimates used are an elementary Chebyshev lower bound and an upper bound for primes in intervals that is uniform in the starting point. We obtain the latter from finite Selberg weights.
+
+\begin{proposition}[A small-height lower bound in the required range]\label{prop:smallheight}
+There are an absolute constant $b>0$ and an integer $M_0$ such that, whenever $m\ge M_0$, $T\ge2$, and $\log T\le m^{3/4}$, every set $V\subset[T]$ of $m$ distinct positive integers admits a time $t$ satisfying
+\begin{equation}\label{eq:height}
+\forall v\in V,\qquad \|vt\|\ge\frac1{2m}+\frac b{m\log T}.
+\end{equation}
+One may take $b=1/36864$. The proposition concerns only the stated height range.
+\end{proposition}
+
+\subsection{A prime interval bound uniform in the starting point}
+\begin{lemma}[A finite sieve bound]\label{lem:primeinterval}
+Let $\pi(x,y)$ count the primes in $(x,x+y]$. For every nonnegative integer $x$ and every integer $y\ge2$,
+\begin{equation}\label{eq:primeinterval}
+\pi(x,y)\le20\frac y{\log y}.
+\end{equation}
+The constant is independent of $x$.
+\end{lemma}
+\begin{proof}
+For an integer $z\ge1$, let $P=\prod_{p\le z}p$ and write
+\[
+S(z)=\sum_{\substack{1\le l\le z\\l\ {\rm squarefree}}}\frac1l,
+\qquad G(z)=\sum_{\substack{1\le l\le z\\l\ {\rm squarefree}}}\frac1{\varphi(l)}.
+\]
+Every positive integer has a unique decomposition $n=lb^2$ with $l$ squarefree. Hence
+\[
+\log(z+1)\le\sum_{n\le z}\frac1n
+\le S(z)\sum_{b\le z}\frac1{b^2}\le2S(z)\le2G(z).
+\]
+The reciprocal-square bound follows by summing $1/b^2\le1/(b-1)-1/b$ for $b\ge2$. In particular, $G(z)>0$.
+
+For $l\mid P$, take
+\[
+y_l=\begin{cases}\mu(l)/(\varphi(l)G(z)),&l\le z,\\0,&l>z,\end{cases}
+\qquad
+w_d=d\sum_{\substack{l\mid P\\d\mid l}}\mu(l/d)y_l\quad(d\mid P).
+\]
+Here $\mu$ is the M\"obius function. Finite M\"obius inversion gives
+\[
+\sum_{\substack{d\mid P\\l\mid d}}\frac{w_d}{d}=y_l.
+\]
+All divisors of $P$ are squarefree, and the squarefree positive integers $l\le z$ are exactly the divisors of $P$ in that range. Consequently,
+\[
+w_1=1,\qquad d>z\Longrightarrow w_d=0,\qquad
+|w_d|\le d\sum_{l\mid P}|y_l|=d,
+\qquad \sum_{d\mid P}|w_d|\le z^2.
+\]
+Using $\gcd(d,e)=\sum_{l\mid d,\ l\mid e}\varphi(l)$, we diagonalize the quadratic form exactly:
+\begin{align*}
+\sum_{d,e\mid P}\frac{w_dw_e}{\operatorname{lcm}(d,e)}
+&=\sum_{l\mid P}\varphi(l)
+\left(\sum_{\substack{d\mid P\\l\mid d}}\frac{w_d}{d}\right)^2\\
+&=\sum_{l\mid P}\varphi(l)y_l^2=\frac1{G(z)}.
+\end{align*}
+
+If $\gcd(n,P)=1$, then $\sum_{d\mid\gcd(n,P)}w_d=w_1=1$. Thus the number of integers in the interval coprime to $P$ is at most
+\[
+\sum_{x<n\le x+y}\left(\sum_{\substack{d\mid P\\d\mid n}}w_d\right)^2.
+\]
+For each positive integer $h$, the number of its multiples in the interval is exactly
+\[
+\left\lfloor\frac{x+y}{h}\right\rfloor-\left\lfloor\frac{x}{h}\right\rfloor
+=\frac yh+O(1),\qquad |O(1)|\le1.
+\]
+Expanding the square and using the quadratic identity bounds the sifted count by
+\[
+\frac y{G(z)}+\left(\sum_{d\mid P}|w_d|\right)^2\le\frac y{G(z)}+z^4.
+\]
+Every prime $p>z$ is coprime to $P$, and there are at most $z$ remaining primes. Therefore
+\begin{equation}\label{eq:finitesieve}
+\pi(x,y)\le y/G(z)+z^4+z.
+\end{equation}
+Take $z=\lfloor y^{1/8}\rfloor\ge1$. Since $z+1>y^{1/8}$, we have $G(z)\ge\log y/16$. Also, $z^4+z\le2\sqrt y\le4y/\log y$. Substitution proves \eqref{eq:primeinterval}.
+\end{proof}
+
+\subsection{Good-residue primes: logarithmic mass and nondivisibility}
+Fix $c=1/4096$. For positive integers $m,X$, define
+\[
+\mathcal P_c(m,X)=\{p\le X:p\text{ is prime},\quad
+2\le p\bmod 2m\le(1-c)2m\}.
+\]
+The upper bound on the residue is a real inequality; the residue itself is an integer in $\{0,\ldots,2m-1\}$.
+
+\begin{lemma}\label{lem:goodmass}
+There is an absolute positive integer $m_1$ such that, for all positive integers $m,X$ with $m\ge m_1$ and $2m\le X\le m^2$,
+\begin{equation}\label{eq:goodmass}
+\sum_{p\in\mathcal P_c(m,X)}\log p\ge X/4.
+\end{equation}
+\end{lemma}
+\begin{proof}
+We first establish the elementary lower bound for primes that we need. Write
+\[
+\psi(X)=\sum_{\substack{p\text{ prime},\ a\ge1\\p^a\le X}}\log p,
+\qquad \vartheta(X)=\sum_{p\le X}\log p.
+\]
+Put $k=\lfloor X/2\rfloor$. The central binomial coefficient is the largest in row $X$, whose entries sum to $2^X$. Hence
+\[
+\binom Xk\ge\frac{2^X}{X+1}.
+\]
+For every prime $p$, the valuation formula for factorials gives
+\[
+\nu_p\binom Xk
+=\sum_{a\ge1}\left(
+\left\lfloor\frac X{p^a}\right\rfloor
+-\left\lfloor\frac k{p^a}\right\rfloor
+-\left\lfloor\frac{X-k}{p^a}\right\rfloor\right).
+\]
+Since $X=k+(X-k)$, each summand is $0$ or $1$, and it vanishes when $p^a>X$. Thus
+$\nu_p\binom Xk\le\lfloor\log_pX\rfloor$, and consequently
+\[
+\psi(X)\ge\log\binom Xk\ge X\log2-\log(X+1).
+\]
+The contribution of higher prime powers satisfies
+\[
+\psi(X)-\vartheta(X)
+=\sum_{p\le\sqrt X}\bigl(\lfloor\log_pX\rfloor-1\bigr)\log p
+\le\sqrt X\log X.
+\]
+Therefore $\vartheta(X)\ge X\log2-\log(X+1)-\sqrt X\log X$. Since $\log2>1/2$, this is at least $X/2$ for all sufficiently large $X$.
+
+The bad residues are $0,1$, and those larger than $(1-c)2m$. Primes with these residues lie in short intervals near multiples of $2m$. More precisely, put
+\[
+L=\lceil2cm\rceil,\quad \ell=L+2,\quad
+x_j=\max\{2mj-L,0\},\quad j=0,\ldots,\lfloor X/(2m)\rfloor+1.
+\]
+For residues $0,1$, use the current multiple; for bad residues at the upper end, use the next multiple. The intervals $(x_j,x_j+\ell]$ contain all bad primes, including the truncated cases at the endpoints.
+
+For sufficiently large $m$,
+\[
+2\le\ell\le4cm,\quad \log\ell\ge\tfrac12\log m,
+\quad J:=\lfloor X/(2m)\rfloor+2\le2X/m.
+\]
+Since $X\le m^2$, we also have $\log X/\log\ell\le4$. Apply Lemma~\ref{lem:primeinterval} to each interval and bound each prime weight by $\log X$. Then
+\[
+\sum_{\substack{p\le X,\ p\text{ prime}\\p\notin\mathcal P_c(m,X)}}\log p
+\le J\frac{20\ell}{\log\ell}\log X\le640cX\le X/4.
+\]
+Subtracting this from the logarithmic mass of all primes proves \eqref{eq:goodmass}. All required lower bounds on $m$ depend only on the fixed constant $c$. Since $X\ge2m$, one absolute integer $m_1$ suffices.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:smallheight}]
+Since the positive integers in $V\subset[T]$ are distinct, $m\le T$. Take
+\[
+X=\lceil8m\log T\rceil.
+\]
+For all sufficiently large $m$, the assumption $\log T\le m^{3/4}$ ensures that
+\[
+2m\le X\le m^2,\qquad 8m\log T\le X\le9m\log T.
+\]
+For example, $m\ge9^4$ gives $9m^{3/4}\le m$, which suffices for the upper bound $X\le m^2$.
+
+There must be a prime $p\in\mathcal P_c(m,X)$ dividing no speed in $V$. Otherwise every good prime divides at least one speed. Since the primes are distinct, their product divides $\prod_{v\in V}v$, and hence
+\[
+X/4\le\sum_{p\in\mathcal P_c(m,X)}\log p
+\le\sum_{v\in V}\log v\le m\log T.
+\]
+But $X/4\ge2m\log T>m\log T$, a contradiction.
+
+Now put
+\[
+k=\left\lceil\frac{p-1}{2m}\right\rceil.
+\]
+Among the nonzero residue classes $a\pmod p$, at most $2(k-1)$ satisfy $\|a/p\|<k/p$. They come from $1,\ldots,k-1$ and their negatives. For each $v\in V$, multiplication by $v$ permutes the nonzero residue classes because $p\nmid v$, so the same bound holds for its bad classes. Moreover,
+\[
+2m(k-1)<p-1.
+\]
+The bad classes for all speeds cannot cover the $p-1$ nonzero classes. Thus there is $1\le a<p$ with $\|va/p\|\ge k/p$ for every speed.
+
+Write $p=2mq+r$. The good-residue condition gives $2\le r\le(1-c)2m$, so $k=q+1$ and
+\[
+\frac kp=\frac1{2m}+\frac{1-r/(2m)}p
+\ge\frac1{2m}+\frac cp
+\ge\frac1{2m}+\frac{c/9}{m\log T}.
+\]
+Taking $t=a/p$ and $b=c/9$ completes the proof.
+\end{proof}
+
+\section{Proof of the main theorem and the scope of the estimates}
+\begin{lemma}[Powers dominate logarithms]\label{lem:asymptotic}
+For every fixed $r,s>0$, $(\log(2m))^r/m^s\to0$. In particular, with the parameters and constants fixed, a uniform lower bound on $m$ making the relevant comparisons valid can be chosen before the speed set is introduced.
+\end{lemma}
+\begin{proof}
+For $m\ge2$, $\log(2m)\le2\log m$. Put $x=\log m$ and choose an integer $k>r$. Since $e^{sx}\ge(sx)^k/k!$, we have $x^re^{-sx}\le(k!/s^k)x^{r-k}\to0$.
+\end{proof}
+
+\subsection{Excluding irreducible primitive near coverings}
+\begin{proposition}\label{prop:contradiction}
+Fix $0<\kappa<1/4$. For all sufficiently large $m$, depending only on $\kappa$, there is no irreducible pointwise covering with $\gcd(V)=1$ and
+\[
+0<\varepsilon:=2\delta m-1\le m^{-1/2-\kappa},\qquad 0<\delta<1/2,
+\qquad m=|V|.
+\]
+\end{proposition}
+\begin{proof}
+Proposition~\ref{prop:dimension} gives $d=\LRdimension(V)\le A_\kappa\sqrt m\log(2m)$. A singleton consisting of a positive speed is $2$-dissociated, so $1\le d\le m$. Apply Proposition~\ref{prop:model} to obtain a positive-speed model $W\subset[T]$ with $|W|=m$, covering radius $\delta+m^{-100}$, and
+\[
+\log T\le2048A_\kappa\sqrt m(\log(2m))^2.
+\]
+Since $|W|=m$, we have $T\ge m\ge2$. Lemma~\ref{lem:asymptotic} permits us to increase the lower bound on $m$ in terms of $\kappa$ alone so that $\log T\le m^{3/4}$. Proposition~\ref{prop:smallheight} gives one time $t$ at which all $w\in W$ satisfy
+\begin{equation}\label{eq:finalgain}
+\|wt\|\ge\frac1{2m}+\frac b{m\log T}
+\ge\frac1{2m}+\frac b{2048A_\kappa m^{3/2}(\log(2m))^2}.
+\end{equation}
+On the other hand, the original assumption gives
+\[
+\delta\le\frac1{2m}+\frac12m^{-3/2-\kappa}.
+\]
+Applying Lemma~\ref{lem:asymptotic} again, choose a larger lower bound on $m$ before introducing $V,\delta$, so that
+\[
+\frac12m^{-3/2-\kappa}+m^{-100}
+<\frac b{2048A_\kappa m^{3/2}(\log(2m))^2}.
+\]
+Equivalently, we require
+\[
+2048A_\kappa(\log(2m))^2
+\left(\tfrac12m^{-\kappa}+m^{-197/2}\right)<b.
+\]
+The left-hand side tends to zero. At the same time $t$, the model covering supplies some $w\in W$ with $\|wt\|\le\delta+m^{-100}$, contradicting \eqref{eq:finalgain}.
+\end{proof}
+
+\subsection{Irreducible reduction and all positive parameters}
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+First suppose $0<\kappa<1/4$. For $|V_0|=n$, put
+\[
+\delta_0=\frac{1+n^{-1/2-\kappa}}{2n}
+=\frac1{2n}+\frac1{2n^{3/2+\kappa}}.
+\]
+If $\{B_v(\delta_0):v\in V_0\}$ covers the circle, choose a subcover of smallest cardinality, with speed set $V_1$ and $|V_1|=m$. Comparing measures gives
+\[
+\frac{n}{1+n^{-1/2-\kappa}}\le m\le n,
+\qquad n/2\le m.
+\]
+Divide $V_1$ by its GCD $g$ to obtain $V$. This preserves cardinality and positivity and gives $\gcd(V)=1$. Since $t\mapsto gt$ is surjective, each subfamily covers before division if and only if it covers after division. The new covering is therefore still irreducible.
+
+Put $\varepsilon=2m\delta_0-1$. The covering gives $\varepsilon\ge0$, and $m\le n$ gives $\varepsilon\le n^{-1/2-\kappa}$. Take $n$ large enough that this upper bound is at most $1/2$. Lemma~\ref{lem:moments} then gives $\varepsilon\ge1/(8m)>0$. Hence
+\[
+0<\varepsilon\le n^{-1/2-\kappa}\le m^{-1/2-\kappa}.
+\]
+For sufficiently large $n$, $0<\delta_0<1/2$. Since $m\ge n/2$, it suffices to take the original lower bound on $n$ at least twice that required in Proposition~\ref{prop:contradiction}, yielding a contradiction. The original speed set therefore does not cover at radius $\delta_0$.
+
+Thus there is a time $t$ with $t\notin B_v(\delta_0)$ for every $v\in V_0$. As the Bohr sets are closed, this gives the strict inequality $\|vt\|>\delta_0$, and hence the required non-strict bound.
+
+Finally, for any $\kappa>0$, put $\kappa'=\min\{\kappa,1/8\}$. Then $0<\kappa'<1/4$ and $\kappa'\le\kappa$. For $n\ge2$, $n^{3/2+\kappa'}\le n^{3/2+\kappa}$, so the result for $\kappa'$ implies the result for $\kappa$. This completes the proof for all positive parameters.
+\end{proof}
+
+\subsection{The square-root scale and limitations of the method}
+The proof gives \eqref{eq:main} uniformly for each fixed positive parameter. This is sometimes abbreviated as a correction term $m^{-3/2-o(1)}$, understood in the quantified sense of the theorem. The fixed logarithmic denominator arising under the contradiction assumption does not by itself give a fixed logarithmic loss for all sets: block extraction and merging already use the fixed power margin $\kappa$.
+
+The exponent $5/2$ in the short-relation sum \eqref{eq:relations} cannot be decreased for arbitrary integer sets. Take $V=[m]$ and $L=\lceil2\sqrt m\rceil$. For each $a<b<c\le m$, map the $(L+1)^3$ triples $(x,y,z)\in\{0,\ldots,L\}^3$ to $ax+by+cz$. All values lie in $[0,3mL]$. For large $m$, there are more triples than possible values, so two distinct triples have the same image. Their difference gives a nonzero relation of $\ell^\infty$-norm at most $L$. Consequently,
+\begin{equation}\label{eq:sharp}
+\sum_{1\le a<b<c\le m}\lambda(a,b,c)^{-1}\gg m^{5/2}.
+\end{equation}
+This shows only the scale of the short-relation bound for arbitrary sets; it is not a counterexample to a loneliness lower bound.
+
+Block merging also encounters a square-root limitation. The proportion of speeds discarded in distant blocks is bounded by $O_\eta(m\varepsilon^2m^\eta)$. An attempted correction term $m^{-3/2+\sigma}$, for fixed $\sigma>0$, would lead to $\varepsilon\asymp m^{-1/2+\sigma}$ under the contradiction assumption. The displayed upper bound would no longer tend to zero, so it would not guarantee that only $o(m)$ speeds are discarded. Splitting the primes at $\sqrt m$ in the common-denominator argument also produces a square-root term. With these merging and denominator estimates, improving the short-relation sum alone does not directly yield a stronger exponent. Further progress requires better structural estimates; correlations between blocks or between primes imposed by the near-covering condition are one possible direction. Our conclusion remains \eqref{eq:main}, not a lower bound of the form $(1/2+c)/m$.
+
+\clearpage
+\appendix
+\section{Scope and verification of the Lean formalization}
+
+The main theorem has been formalized in Lean. On October 17, 2026, the project was rebuilt from a fixed source snapshot, and the theorem was checked in its formulation over the real numbers.
+
+The project uses Lean \texttt{v4.34.1} and Mathlib at commit
+\begin{center}
+\small
+\texttt{d13f23b723b8a846827a245b89c10fc7d3f11612}.
+\end{center}
+The circle is implemented as \texttt{AddCircle (1 : Real)}, and speed sets as
+\texttt{Finset Nat}, with an explicit positivity assumption on every speed.
+The closed-arc definition of the Bohr sets is proved equivalent to the distance-based definition $B_v(\delta)=\{t\in\LRtorus:\|vt\|\le\delta\}$ used in this paper.
+Coverings are pointwise, and $2$-dissociation uses integer coefficients in
+$\{-2,-1,0,1,2\}$.
+
+The quantifier order of \texttt{LonelyRunner.mainTheorem} agrees with
+Theorem~\ref{thm:main}: for each $\kappa>0$, first choose a lower cardinality bound depending only on
+$\kappa$, and then, for each admissible speed set, choose one time
+at which the conclusion holds for every speed. The final statement retains no structural, covering,
+height, or external-estimate hypotheses.
+
+The file \texttt{SemanticCheck.lean} checks the usual real-number meaning directly. Its theorem
+\texttt{LonelyRunner.mainTheorem\_real}
+applies the main theorem above and proves that, for every $\kappa>0$, there is an integer
+$N\ge2$ such that every set $V$ of $m\ge N$ distinct positive integers
+admits one time $t\in[0,1)$ satisfying
+\[
+\forall v\in V\quad\forall k\in\mathbb Z,\qquad
+|vt-k|\ge
+\frac1{2m}+\frac1{2m^{3/2+\kappa}}.
+\]
+The proof selects an actual representative of the circle point in $[0,1)$ and compares the circle
+distance with the distance to each integer, without adding any mathematical assumptions.
+
+The rebuild used a newly created directory and reused only the fixed Mathlib and transitive dependency
+caches. All 609 \texttt{Tablet} modules and
+71 \texttt{LonelyRunner} modules were rebuilt from source,
+together with an additional file importing all modules for the audit.
+The complete build succeeded with 9608 jobs and exit code zero;
+the subsequent real-number semantic check also exited with code zero.
+The commands, complete output, and retry records are saved in
+\texttt{FinalAudit.log}.
+The file \texttt{FinalSourceHashes.tsv} lists 5024 file records,
+and the log confirms that all hashes in the frozen snapshot remained unchanged.
+Later textual revisions of the paper are recorded separately and are not part of that frozen snapshot.
+
+The Szemer\'edi--Trotter formalization is taken from the project
+\texttt{crossing-\allowbreak consequences}~\cite{STLean} and has been ported for compatibility with the versions used here.
+The source release should retain the upstream attribution, licenses, and porting changes.
+The weak GCD-sum bound, low-height model, and small-height estimate in the restricted range used here
+have corresponding proofs. We do not claim a formalization of the refined
+Bondarenko--Seip exponential bound or of Bedert's small-height conclusion in its full original range.
+Nor do we claim corresponding Lean theorems for \eqref{eq:sharp} or
+the discussion of the method's limitations.
+
+The actual axiom checks for the main theorem, its real-number version, and the two auxiliary semantic-transfer theorems
+all return
+\begin{center}
+\small
+\texttt{[propext, Classical.choice, Quot.sound]}.
+\end{center}
+Neither \texttt{sorryAx} nor any custom axiom appears in these lists.
+The axiom checks and the real-number semantic check address foundational dependencies and the mathematical meaning
+of the conclusion, respectively; neither replaces the other.
+
+These results document a rebuild from source and semantic checks in a new directory on the original computer.
+They do not constitute independent reproduction by a third party in another environment or peer review,
+and they do not imply that every statement in the paper has been formalized.
+For reproducibility, the accompanying release should include the fixed source, \texttt{lean-toolchain},
+\texttt{lakefile.toml}, \texttt{lake-manifest.json}, 
+the semantic-check file, raw build logs, and hash inventory.
+
+\clearpage
+\section*{AI assistance}
+ChatGPT and Codex were used to assist with manuscript drafting
+and revision, English translation, Lean proof development, and
+verification workflows. The author is responsible for the final
+manuscript and code. Lean kernel checking applies to the formal
+statements in the released source; it does not by itself certify
+every statement in the manuscript.
+
+\begin{thebibliography}{9}
+\bibitem{ST}
+E. Szemer\'edi and W. T. Trotter, Jr.,
+\emph{Extremal problems in discrete geometry},
+Combinatorica \textbf{3} (1983), 381--392.
+\href{https://doi.org/10.1007/BF02579194}{doi:10.1007/BF02579194}.
+
+\bibitem{BS}
+A. Bondarenko and K. Seip,
+\emph{GCD sums and complete sets of square-free numbers},
+Bulletin of the London Mathematical Society \textbf{47} (2015), 29--41.
+\href{https://doi.org/10.1112/blms/bdu094}{doi:10.1112/blms/bdu094};
+\href{https://arxiv.org/abs/1402.0249v4}{arXiv:1402.0249v4}.
+
+\bibitem{Tao}
+T. Tao, \emph{Some remarks on the lonely runner conjecture},
+Contributions to Discrete Mathematics \textbf{13}, no. 2 (2018), 1--31.
+\href{https://arxiv.org/abs/1701.02048v4}{arXiv:1701.02048v4}.
+
+\bibitem{Bedert}
+B. Bedert, \emph{Riesz products and the Lonely Runner Conjecture:
+A wider gap of loneliness}, preprint, 2025.
+\href{https://arxiv.org/abs/2511.16636v1}{arXiv:2511.16636v1}.
+
+\bibitem{BH}
+B. Bedert and X. Hu, \emph{Phase-randomised Riesz products and a further
+improvement towards the lonely runner conjecture}, online joint note, 2026.
+\href{https://github.com/hxypqr/phase_riesz_products_lonely_runner}{Online note and source}.
+Accessed October 17, 2026; cited only as related work.
+
+\bibitem{STLean}
+The crossing-consequences contributors, \emph{crossing-consequences}, Lean source repository.
+\href{https://github.com/wpegden/crossing-consequences}{GitHub source}.
+The upstream commit recorded for this project is\newline
+\texttt{8769d142033fce042f502bf2857afb6b1375b5c3}.
+
+\bibitem{Mathlib}
+The Mathlib Community, \emph{Mathlib}, Lean mathematical library.
+\href{https://github.com/leanprover-community/mathlib4}{Project source}.
+The fixed commit used in the formalization is specified in the appendix.
+\end{thebibliography}
+\end{document}

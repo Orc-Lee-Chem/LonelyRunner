@@ -1,0 +1,14 @@
+LonelyRunner
+Copyright 2026 Cheng Li.
+
+Original LonelyRunner code and publication documentation are licensed under Apache-2.0.
+The English manuscript (paper/lonely_runner_en.tex and its compiled PDF) is licensed
+under CC-BY-4.0; attribution: Cheng Li, title as printed in the manuscript.
+
+Tablet/ is derived from wpegden/crossing-consequences, upstream commit
+8769d142033fce042f502bf2857afb6b1375b5c3, Copyright 2026 Wesley Pegden
+and upstream contributors, under Apache-2.0. Its original license is preserved
+verbatim in Tablet/LICENSE. Compatibility changes are documented in
+docs/STPortChanges.md; each modified Lean file carries a publication notice.
+Dependency licenses remain with their respective projects; dependencies are
+obtained from the pinned lake-manifest.json and are not vendored here.

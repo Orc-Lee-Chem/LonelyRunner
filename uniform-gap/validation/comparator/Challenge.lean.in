@@ -1,0 +1,24 @@
+import Mathlib.Analysis.SpecialFunctions.Exp
+import Mathlib.Data.Finset.Card
+
+set_option autoImplicit false
+namespace LonelyRunnerAcceptance
+
+-- Comparator-only trusted challenge template. Never imported by implementation.
+theorem explicit_gap (V : Finset ℕ)
+    (hpos : ∀ v ∈ V, 0 < v) (hn : 2 ≤ V.card) :
+    ∃ t : ℝ, 0 ≤ t ∧ t < 1 ∧
+      ∀ v ∈ V, ∀ k : ℤ,
+        |(v : ℝ) * t - (k : ℝ)| >
+          (1 + Real.exp (-6888 : ℝ)) / (2 * (V.card : ℝ)) := by
+  sorry
+
+theorem uniform_gap :
+    ∃ c : ℝ, 0 < c ∧
+      ∀ V : Finset ℕ, (∀ v ∈ V, 0 < v) → 2 ≤ V.card →
+        ∃ t : ℝ, 0 ≤ t ∧ t < 1 ∧
+          ∀ v ∈ V, ∀ k : ℤ,
+            |(v : ℝ) * t - (k : ℝ)| > (1 + c) / (2 * (V.card : ℝ)) := by
+  sorry
+
+end LonelyRunnerAcceptance

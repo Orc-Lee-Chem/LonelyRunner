@@ -1,0 +1,5 @@
+import LonelyRunnerNew.SpecificationAdapter
+import LonelyRunnerValidation.Policy
+
+#assert_axiom_whitelist LonelyRunnerNew.internalStatement_iff_frozen
+#assert_axiom_whitelist LonelyRunnerNew.frozen_uniform_of_explicit

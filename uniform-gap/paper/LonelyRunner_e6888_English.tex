@@ -1,0 +1,1101 @@
+% !TeX program = pdflatex
+% Compile twice with pdfLaTeX.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=27mm]{geometry}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,longtable,array}
+\usepackage[hidelinks,hypertexnames=false]{hyperref}
+\urlstyle{same}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\setlength{\emergencystretch}{2em}
+\allowdisplaybreaks[1]
+\title{An Explicit Uniform Gap for the Lonely Runner Problem}
+% Add the authors and affiliations before submission.
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+Let \(V\) be a set of \(n\ge2\) distinct positive integer speeds.
+We prove that there is a time \(t\) at which
+\(\min_{v\in V}\|vt\|>(1+e^{-6888})/(2n)\).
+The covering argument of Hu and Jing reduces the problem to a weighted
+greatest-common-divisor sum on separated speed sets.
+We control the distribution of prime valuations using a one-dimensional
+Green kernel, and combine a sieve for rough rational numbers with a dyadic
+decomposition to bound the sum. The finite numerical inequalities are
+certified by rational computations in a Lean formalization.
+\end{abstract}
+
+\section{Introduction}
+
+Write \(\|x\|=\min_{k\in\mathbb Z}|x-k|\) and
+\(\mathbb T=\mathbb R/\mathbb Z\). For a finite set \(V\) of positive
+integer speeds, define
+\[
+ \mathrm{ML}(V)=\max_{t\in\mathbb T}\min_{v\in V}\|vt\|.
+\]
+The lonely runner conjecture predicts that \(\mathrm{ML}(V)\ge 1/(n+1)\)
+when \(|V|=n\), corresponding to \(n\) moving runners and one stationary
+runner. Hu and Jing~\cite{HuJing} proved that there is an absolute
+constant \(c>0\) for which \(\mathrm{ML}(V)>(1+c)/(2n)\) for every
+\(n\ge2\). We establish an explicit value of \(c\).
+
+\begin{theorem}\label{thm:main}
+If \(V\subset\mathbb Z_{>0}\) is finite and \(n=|V|\ge2\), there exists
+\(t\in[0,1)\) such that
+\[
+ |vt-k|>\frac{1+e^{-6888}}{2n}
+ \qquad(v\in V,\ k\in\mathbb Z).
+\]
+\end{theorem}
+
+The reduction uses the covering multiplicities of Hu and Jing and the
+valuation-layer approach to large common divisors of Green and
+Walker~\cite{GreenWalker}. The rational certificates and their
+formalization are described in Appendix~\ref{sec:cert}.
+
+For \(0\le r\le 1/2\) let \(B_v(r)=\{t\in\mathbb T:\|vt\|\le r\}\).
+Its normalized measure is \(2r\). Set \(r_0=1/(2n)\).
+
+\section{Circle coverings and spillover}
+
+\subsection{Pairwise overlap}
+
+Following~\cite{HuJing}, we separate overlaps at a common center from
+those at distinct centers. Define \(H(u,v)=\max(u,v)/\gcd(u,v)\).
+For \(r<1/2\), the arcs forming \(B_v(r)\) have centers \(j/v\) and
+radius \(r/v\), and are disjoint. The \(\gcd(u,v)\) common centers
+contribute a total overlap \(2r/H(u,v)\). Set
+\[
+ Q_r(u,v)=|B_u(r)\cap B_v(r)|-\frac{2r}{H(u,v)}.
+\]
+
+\begin{lemma}\label{lem:pair}
+For \(0\le r<1/2\),
+\[
+ \max\{0,4r^2-4r/H(u,v)\}\le Q_r(u,v)\le4r^2.
+\]
+\end{lemma}
+
+\begin{proof}
+Write \(u=da\) and \(v=db\), where \(a\le b\) and \(\gcd(a,b)=1\).
+The map \(t\mapsto dt\) preserves normalized measure, so it suffices to
+use the speeds \(a,b\). The differences \(j/a-k/b\bmod 1\) run once
+through the grid of mesh \(1/(ab)\) by coprimality. On rescaling by
+\(ab\), the two radii become \(x=br\) and \(h=ar\). Summing over lifts
+to the real line, the total overlap multiplied by \(ab\) is
+\[
+ \sum_{\ell\in\mathbb Z}|[-x,x]\cap[\ell-h,\ell+h]|
+ =\int_{-h}^{h}\#\{\ell\in\mathbb Z:-x\le\ell+s\le x\}\,ds .
+\]
+For \(r>0\), the integrand equals
+\(\lfloor x-s\rfloor+\lfloor x+s\rfloor+1\) almost everywhere.
+Writing \(\{w\}=w-\lfloor w\rfloor\) and removing the contribution
+\(2h\) of the common center gives
+\[
+ Q_r(u,v)=4r^2-\frac2{ab}\int_{x-h}^{x+h}\{w\}\,dw.
+\]
+The bounds follow from \(0\le\{w\}<1\) and the nonnegativity of the
+overlap at distinct centers. At \(r=0\), all arcs are singletons and the overlap has measure zero.
+\end{proof}
+
+\subsection{Dilation of multiplicities}
+
+Let \(N_r=\sum_{v\in V}\mathbf1_{B_v(r)}\), and write
+\[
+ E_k(r)=\int_{\mathbb T}(N_r-k)_+,\qquad
+ g(V)=1-\left|\bigcup_{v\in V} B_v(r_0)\right|,
+ \qquad x_+=\max(x,0).
+\]
+Since \(\int_{\mathbb T}N_{r_0}=1\), we have \(E_1(r_0)=g(V)\).
+
+\begin{lemma}\label{lem:dilation}
+For a finite family of arcs dilated about their centers by \(s\ge1\),
+the integral of the positive part of the multiplicity minus \(k\)
+increases by at least a factor \(s\), provided the dilated arcs have
+length less than \(1\). In particular, \(E_k(sr)\ge sE_k(r)\) for every
+integer \(k\ge0\) when \(sr<1/2\).
+\end{lemma}
+
+\begin{proof}
+First consider intervals on the real line. With fixed radii \(\rho_i\),
+the length of the union of the intervals centered at \(uc_i\) is a
+continuous piecewise affine function of \(u>0\). On an affine piece,
+if the extreme endpoints of a component come from intervals \(i,j\),
+their extremality gives
+\[
+ u(c_i-c_j)\le \rho_i-\rho_j,\qquad
+ u(c_i-c_j)\le \rho_j-\rho_i.
+\]
+Thus the slope \(c_j-c_i\) of the component length is nonnegative.
+Rescaling the line shows that the union length divided by the dilation
+factor is nonincreasing when the radii are dilated at fixed centers.
+This applies to every subfamily.
+
+For \(k\ge1\), color the intervals in order of increasing left endpoint
+using \(k\) colors. Use an unused color if possible. Otherwise assign
+the color whose largest right endpoint so far is smallest. If a new
+interval and an earlier interval of the same color contain \(t\),
+each other color already has an interval reaching \(t\) from the left.
+Consequently the number of colors at a point of multiplicity \(N\)
+is \(\min(N,k)\). Any coloring has at most this many colors at a
+point. Therefore
+\[
+ \int(N-k)_+=\sum_i |I_i|-
+ \max_{\text{colorings}}\sum_{d=1}^k
+       \left|\bigcup_{\operatorname{color}(i)=d}I_i\right|.
+\]
+The first term grows linearly with dilation, while the second term
+divided by the dilation factor is nonincreasing. For \(k=0\), the
+integral is the sum of interval lengths.
+
+For the circle, choose one representative of each center in \([0,1)\)
+and retain the translates indexed by \(-M,\ldots,M\).
+The real-line integral differs from \(2M+1\) times the circle integral
+by a bounded endpoint error, since both the endpoint regions and the
+multiplicities there are uniformly bounded. Divide by \(2M+1\) and let
+\(M\to\infty\).
+\end{proof}
+
+\subsection{The spillover inequality}
+
+Sum over ordered pairs of distinct speeds and put
+\[
+ W(V)=\frac1{n^2}\sum_{u\ne v\in V}\min(1,2n/H(u,v)),\qquad
+ Q(r)=\sum_{u\ne v\in V}Q_r(u,v).
+\]
+The difference between \(\int N_r(N_r-1)\) and \(Q(r)\) is linear
+in \(r\). The identity
+\[
+ m(m-1)-2(m-1)_+=2\sum_{k=2}^{n-1}(m-k)_+\quad(0\le m\le n,\ m\in\mathbb Z)
+\]
+and Lemma~\ref{lem:dilation} therefore give the second-moment spillover
+inequality of Hu and Jing~\cite{HuJing}. For \(s\ge1\) and \(0\le r<1/(2s)\),
+\[
+ Q(sr)\ge sQ(r)+2(E_1(sr)-sE_1(r)).
+\]
+Lemma~\ref{lem:pair} gives \(Q(r_0)\ge1-1/n-W(V)\) and
+\(Q(sr_0)\le s^2(1-1/n)\). Also \(E_1(sr_0)\ge s-1\), since the
+sum of arc lengths is \(s\) and their union has measure at most \(1\).
+Substituting \(s=7/5\) and rearranging yields
+\begin{equation}
+ g(V)\ge\frac{3}{35}-\frac{W(V)}2+\frac1{5n}.\tag{C1}\label{eq:spill}
+\end{equation}
+
+\section{Reduction to separated speed sets}\label{sec:reduce}
+
+For \(P>0\), call a set \(P\)-separated if \(H(u,v)>P\) for every pair
+of distinct elements. Suppose \(W(S)\le\delta\) for all \(P\)-separated
+sets \(S\), with \(W(S)\) normalized by \(|S|\) as above.
+Keep \(r_0\) fixed and, for \(S\subset V\), put
+\[
+ E(S)=\sum_{v\in S}|B_v(r_0)|-
+           \left|\bigcup_{v\in S}B_v(r_0)\right|.
+\]
+If \(H(u,v)\le P\) for distinct \(u,v\in S\), deleting \(u\) decreases
+\(E(S)\) by at least the common-center overlap \(1/(nP)\).
+Since \(E(V)=g(V)\) and \(E(S)\ge0\), the nonempty separated set
+remaining at termination has \(1-z\le Pg(V)\), where \(z=|S|/n\).
+For pairs within \(S\),
+\(\min(1,2n/H)\le z^{-1}\min(1,2|S|/H)\). The remaining pairs
+contribute at most \(1-z^2\) to \(W(V)\). Since \(W(S)=0\) for a
+singleton, in all cases
+\begin{equation}
+ W(V)\le zW(S)+1-z^2\le\delta+2Pg(V).\tag{C2}\label{eq:delete}
+\end{equation}
+We will use \(P=e^{6880}\) and \(\delta=17/100\).
+
+\section{Stabilization of weighted graphs}\label{sec:stable}
+
+Set \(q=201/50=4(1+\sigma)\) and \(\sigma=1/200\). We use a
+bipartite graph with labeled positive integer vertices, with distinct
+values on each side, and with edge set \(E\). If the side sizes are
+\(m_1,m_2\), let \(m=m_1m_2\le n^2\). For scales \(a,b>0\), set
+\[
+ w(x,y)=\min\left(1,\frac{\gcd(x,y)}{\max(ax,by)}\right),\quad
+ \rho=\frac{\sum_{(x,y)\in E}w(x,y)}m,\quad
+ J=\rho^q mab(m/n^2)^\sigma.
+\]
+For the initial graph use two copies of \(V\), all ordered pairs of
+distinct values, and \(a=b=1/(2n)\). Then
+\(\rho=W(V)\) and \(J=W(V)^q/4\).
+
+Following the valuation-layer approach to GCD graphs~\cite{GreenWalker,HuJing},
+allow restriction to a nonempty subrectangle. Also allow restriction
+to fixed \(p\)-adic valuation layers \(i,j\) on the two sides, followed
+by division of their values by \(p^i,p^j\) and replacement of the
+scales by \((ap^{(i-j)_+},bp^{(j-i)_+})\).
+The latter operation preserves every retained weight and multiplies
+\(ab\) by \(p^{|i-j|}\). It also preserves same-side heights.
+An operation that strictly increases the score decreases the sum of
+all vertex values, by removing a vertex or reducing a value. Starting
+from positive edge mass, repeated improvement terminates at a state
+with score at least the initial score, in which no allowed operation
+increases the score.
+
+At such a state, let \(\alpha,\beta\) be the uniform vertex measures
+and let \(\mu\) be the normalized edge weight. For a restriction to
+\(I\times J'\), put \(v=\alpha(I)\beta(J')\). When \(v>0\), the score
+ratio is \(\mu(I\times J')^qv^{1+\sigma-q}\), so stability gives
+\begin{equation}
+ \mu(I\times J')\le[\alpha(I)\beta(J')]^{3/4}.\tag{L04}\label{eq:rect}
+\end{equation}
+The inequality is immediate when \(v=0\).
+For a valuation-layer restriction the ratio has the additional factor
+\(p^{|i-j|}\). Writing \(\alpha_i,\beta_j\) for the valuation marginals
+and \(\mu_p\) for the edge measure on valuation pairs, we obtain
+\begin{equation}
+ \mu_p(i,j)\le p^{-|i-j|/q}(\alpha_i\beta_j)^{3/4}.
+ \tag{L05}\label{eq:valuation}
+\end{equation}
+Stabilizing the fourth-power score \(\rho^4mab\) separately gives
+\eqref{eq:rect} and \eqref{eq:valuation} with \(4\) in place of \(q\)
+in the latter exponent, which is a stronger bound.
+
+\section{Bilinear bounds for the Green kernel}\label{sec:kernel}
+
+\subsection{The continuous estimate}
+
+Let \(f\) be a nonnegative step function supported on finitely many
+unit cells \([i,i+1)\), \(i\in\mathbb Z\). For \(a>0\), set
+\[
+ U(x)=\frac1{2a}\int_{\mathbb R}e^{-a|x-y|}f(y)\,dy .
+\]
+Splitting the integral at \(y=x\) shows that \(U\) is continuously
+differentiable and \(U''=a^2U-f\) between the jumps of \(f\).
+Both \(U\) and \(U'\) decay exponentially at infinity. Integration
+by parts, with cancellation of the terms at the jumps, gives
+\(E:=\int(U'^2+a^2U^2)=\int fU\).
+If \(f\) has positive integral, \(U\) attains a positive maximum \(M\).
+Writing \(L=\int U^4\), we have
+\[
+ E-\frac{a^2L}{M^2}\ge 2a\int |U'|U\sqrt{1-U^2/M^2}
+\]
+by the nonnegativity of the square of
+\(|U'|-aU\sqrt{1-U^2/M^2}\).
+On each side of a maximum point, the total variation of
+\(\Phi(U)\), where \(\Phi(u)=\int_0^u s\sqrt{1-s^2/M^2}\,ds\),
+is at least \(\Phi(M)=M^2/3\). Thus
+\[
+ E\ge a^2L/M^2+4aM^2/3\ge \frac{4a^{3/2}}{\sqrt3}\sqrt L.
+\]
+H\"older's inequality gives \(E\le\|f\|_{4/3}L^{1/4}\), whence
+\(E\le\sqrt3\,\|f\|_{4/3}^2/(4a^{3/2})\).
+For the potentials of \(f\) and \(g\), the same integration by parts gives
+\(\int(U_f'U_g'+a^2U_fU_g)=\int fU_g\).
+The double integral below is \(2a\int fU_g\). Cauchy--Schwarz for the
+mixed energy therefore gives
+\[
+ \iint e^{-a|x-y|}f(x)g(y)\,dx\,dy
+ \le \frac{\sqrt3}{2\sqrt a}\|f\|_{4/3}\|g\|_{4/3}.
+\]
+The bound holds also when either function vanishes almost everywhere.
+
+\subsection{Discretization and the diagonal term}
+
+Take \(\lambda=e^{-a}\). For sequences \(x_i,y_j\) with finite
+support, use step functions constant on the unit intervals
+\([i,i+1)\), \([j,j+1)\). The integral of the exponential kernel over
+an off-diagonal cell is \(A\lambda^{|i-j|}\) and over a diagonal
+cell is \(D_0\), where
+\[
+ A=\frac{(1-\lambda)^2}{\lambda a^2},\qquad
+ D_0=2\int_0^1(1-s)e^{-as}\,ds=\frac{2(a-1+\lambda)}{a^2}.
+\]
+In particular, \(A-D_0=2(\sinh a-a)/a^2>0\). The continuous
+estimate gives, for nonnegative sequences,
+\[
+ \sum_{i,j}\lambda^{|i-j|}x_i y_j
+ \le C(\lambda)\|x\|_{4/3}\|y\|_{4/3}
+             +d(\lambda)\sum_i x_i y_i,
+\]
+where
+\[
+ C(\lambda)=\frac{\sqrt3}{2}
+               \frac{\lambda a^{3/2}}{(1-\lambda)^2},
+ \qquad
+ d(\lambda)=1-\frac{2\lambda(a-1+\lambda)}{(1-\lambda)^2}.
+\]
+Since \(\sum_i x_i y_i\le\|x\|_{4/3}\|y\|_{4/3}\), the bilinear norm
+is bounded by \(\mathcal N(\lambda):=C(\lambda)+d(\lambda)\).
+For probability marginals \(\alpha_i,\beta_i\), the sequences
+\(\alpha_i^{3/4},\beta_i^{3/4}\) each have \(\ell^{4/3}\) norm \(1\).
+
+\section{Concentration at large primes}\label{sec:large}
+
+\subsection{Choosing the center and bootstrapping}
+
+Assume \eqref{eq:rect} and \eqref{eq:valuation}. Fix a prime \(p>142\)
+and put \(\lambda=p^{-1/q}\). Summing \eqref{eq:valuation} gives
+a lower bound of \(1\) for the bilinear kernel sum. Since \(p\ge149\)
+and \(\exp(62511/12500)<149\), we may replace \(\lambda\) in this sum
+by the larger value \(\lambda_0=e^{-311/250}\). For
+\(D=\sum_i(\alpha_i\beta_i)^{3/4}\), the diagonal estimate of
+Section~\ref{sec:kernel} and the rational bounds in
+Appendix~\ref{sec:cert} yield
+\[
+ 1\le C(\lambda_0)+d(\lambda_0)D,\qquad
+ C(\lambda_0)<0.68365,\quad 0<d(\lambda_0)<0.39442 .
+\]
+At \(D=401/500\), the rational upper bound on the right is
+\(1-629/25000000\), so \(D>401/500\). Let
+\(m_*=\max_i(\alpha_i+\beta_i)/2\). Termwise,
+\((\alpha_i\beta_i)^{3/4}\le\sqrt{m_*}\sqrt{\alpha_i\beta_i}\).
+Cauchy--Schwarz gives \(\sum_i\sqrt{\alpha_i\beta_i}\le1\), hence
+\(m_*\ge D^2\). Fix an index \(k\) attaining \(m_*\), and write
+\(z=1-(\alpha_k+\beta_k)/2\). Then \(z\le 89199/250000<0.357\).
+
+Return to the actual parameter \(\lambda\) while keeping \(k\) fixed.
+The center cell and the rectangle off both the center row and center
+column have masses at most \((1-z)^{3/2}\) and \(z^{3/2}\), respectively.
+For the remainder of the row and column, use H\"older's inequality
+with \(\sum_{i\ne k}\lambda^{4|i-k|}\le2\lambda^4/(1-\lambda^4)\).
+A second application to the two marginals, together with
+\(\alpha_k^3+\beta_k^3\le1+(1-2z)^3\), gives
+\[
+ z^{1/4}b(z)\le
+  \frac{2\lambda}{(1-\lambda^4)^{1/4}}[1+(1-2z)^3]^{1/4},
+ \qquad b(z)=\frac{1-(1-z)^{3/2}-z^{3/2}}{z}.
+\]
+The case \(z=0\) requires no further estimate.
+For \(0<z\le1/2\), let \(s=\sqrt z+\sqrt{1-z}\). Then
+\(b(z)=2(1-z)(s+2)/(s+1)^2\), so \(b(z)/[1+(1-2z)^3]^{1/4}\)
+is positive and nonincreasing. Indeed, \(s\) is increasing and
+\((s+2)/(s+1)^2\) is decreasing. For the other factor
+\((1-z)/[1+(1-2z)^3]^{1/4}\), its fourth power is increasing in
+\(t=1-2z\), as \(4+t^3-3t^2>0\). Thus if \(z\le S\le1/2\),
+\[
+ z\le \frac{16\lambda^4[1+(1-2S)^3]}{(1-\lambda^4)b(S)^4}.
+\]
+Using \(\lambda\le144004613283/500000000000\) and the endpoints in
+Table~\ref{tab:bootstrap} gives the successive upper bounds
+\[
+ 0.357,\quad 0.342,\quad 0.312,\quad 0.262,\quad
+ 0.201,\quad 0.150,\quad 0.121.
+\]
+
+\subsection{The exceptional edge mass at one prime}
+
+Let \(E_p\) be the mass of edges whose two valuations are both
+strictly below \(k\) or both strictly above \(k\). Let \(z_-,z_+\)
+be the averages, over the two marginals, of the masses strictly
+below and strictly above \(k\), so \(z=z_-+z_+\). For \(z>0\) put
+\(u=\min(z_-,z_+)/z\), and define
+\[
+ \begin{aligned}
+ f(u)&=u^{3/4}+(1-u)^{3/4},&
+ h_0(u)&=u^{3/2}+(1-u)^{3/2},\\
+ j(u)&=[u(1-u)]^{3/4},&
+ A_1&=(1-\lambda^4)^{-1/4}.
+ \end{aligned}
+\]
+By \eqref{eq:rect} and the arithmetic--geometric mean inequality,
+\(E_p\le z^{3/2}h_0(u)\). For tails on opposite sides of \(k\),
+the kernel factors into two geometric tails, each at distance at
+least one from \(k\). H\"older bounds their combined mass by
+\(A_1^2\lambda^2[(\alpha_-\beta_+)^{3/4}+(\alpha_+\beta_-)^{3/4}]\),
+where the subscripts denote the corresponding tails. This is at most
+\(4^{3/4}A_1^2\lambda^2(z_-z_+)^{3/4}\), by Cauchy--Schwarz and
+\(\sum t_i^{3/2}\le(\sum t_i)^{3/2}\) for nonnegative \(t_i\).
+The four center-to-tail rectangles similarly have total mass at most
+\(2^{3/4}A_1\lambda z^{3/4} f(u)[1+(1-2z)^3]^{1/4}\);
+here the last factor bounds \((\alpha_k^3+\beta_k^3)^{1/4}\).
+Adding the center cell accounts for all mass.
+
+Write
+\[
+ A(z)=\frac{1-(1-z)^{3/2}}z,\qquad C_*(z)=[1+(1-2z)^3]^{1/4},
+ \qquad h=h_0(u)+4^{3/4}A_1^2\lambda^2 j(u).
+\]
+The resulting inequality is
+\[
+ z^{1/4}[A(z)-h\sqrt z]\le 2^{3/4}A_1\lambda f(u)C_*(z).
+\]
+For \(0<z\le1/8\) and \(\lambda\le1/3\), one has
+\(1/\sqrt2\le h\le2\).
+The identity \(A(z)=\tfrac32\int_0^1\sqrt{1-tz}\,dt\) gives
+\(1\le A\le3/2\) and \(A'\le-3/8\).
+Thus \(A(z)-h\sqrt z>0\), its derivative is at most \(-11/8\),
+and its logarithmic derivative is at most \(-11/12\).
+Also \(C_*'/C_*\ge-3/4\), by \(2t^2\le1+t^3\) for \(0\le t\le1\).
+The ratio \([A(z)-h\sqrt z]/C_*(z)\) is therefore nonincreasing.
+For \(z\le S\le1/8\) define
+\[
+ B(S,\lambda,u)=
+ \frac{2^{3/4}A_1 f(u) C_*(S)}{A(S)-h\sqrt S}.
+\]
+We obtain
+\[
+ z\le\lambda^4 B(S,\lambda,u)^4,\qquad
+ E_p\le p^{-100/67}B(S,\lambda,u)^6 h_0(u),
+\]
+using \(6/q=100/67\). If \(z=0\) then \(E_p=0\).
+
+\subsection{Summing the exceptional masses}
+
+Starting at \(S=0.121\), partition \([0,1/2]\) into 256 intervals.
+On \([l,v]\), bound \(f(u),h_0(u),j(u)\) above by
+\(f(v),h_0(l),j(v)\), respectively, using their monotonicity on
+\([0,1/2]\). In each prime range, use a rational upper bound
+\(\lambda_{\mathrm U}\) for \(\lambda\) in \(B\) and retain the
+factor \(p^{-100/67}\) in the bound for \(E_p\).
+The certificate gives a positive lower bound \(d\) on the denominator,
+an upper bound \(b\) on the numerator, and verifies
+\[
+ b\le b_{\mathrm U}d,\qquad
+ b^6 h_{0,\mathrm U}\le e_{\mathrm U}d^6,\qquad
+ \lambda_{\mathrm U}^4 b_{\mathrm U}^4\le S_{\mathrm{next}}.
+\]
+Here \(h_{0,\mathrm U}\) bounds \(h_0\) on the cell. The rational
+enclosures of radicals are checked by integer powers. These tests
+give the next upper bound for \(z\) and the coefficient \(e_{\mathrm U}\)
+for the exceptional mass throughout the cell.
+
+The certified sums over \(142<p\le10^4\), \(10^4<p\le10^6\), and
+\(p>10^6\) are less than \(21/50\), \(23/1000\), and \(1/125\),
+respectively. The first two ranges use finite sieve tables in which
+each discarded integer is accompanied by a proper divisor. On the
+first range the powers are bounded individually; on the second,
+subinterval counts are multiplied by an upper bound for the summand
+on each subinterval. For the last range, primes are restricted to the
+eight reduced classes modulo \(30\), and each progression is bounded
+by its first term and an integral:
+\[
+ \sum_{j\ge0}(b+30j)^{-s}\le b^{-s}+\frac{b^{1-s}}{30(s-1)},
+ \qquad s=100/67.
+\]
+The rational data for these checks are given in~\cite{LeanCode}.
+
+The total is less than \(0.451<23/50\). Only finitely many primes
+occur among the vertex values; outside this set choose the center
+zero. By the union bound, a proportion at least \(r_*:=27/50\) of
+the edge weight has the center between its endpoint valuations at
+every prime \(p>142\). For a graph of \(142\)-rough integers, meaning
+integers with no prime divisor at most \(142\), use center zero
+also at all primes \(p\le142\).
+
+\section{Removing small prime factors}\label{sec:small}
+
+\subsection{A cut estimate and a median inequality}\label{sec:cut}
+
+Regard the two labeled sides as disjoint, and let
+\(\omega=(\mu+\mu^{\mathsf T})/2\), with marginal \(\pi\).
+For a vertex subset \(S\), set \(z=(\alpha(S)+\beta(S))/2\), extending
+each marginal by zero to the other side, and write
+\(e=\mu(S,S^c)+\mu(S^c,S)\). By \eqref{eq:rect},
+\[
+ e\ge1-z^{3/2}-(1-z)^{3/2},\qquad \pi(S)\le z^{3/2}+e/2 .
+\]
+For \(0<z\le1/2\), the first right-hand side is at least
+\((2^{3/2}-2)z^{3/2}\), by the monotonic decrease of
+\([1-(1-z)^{3/2}]/z^{3/2}\) and its value at \(1/2\).
+The same bound holds at \(z=0\). It follows that
+\(e\ge(2-\sqrt2)\pi(S)\); for \(z\ge1/2\), use \(S^c\). Hence
+\[
+ \omega(S,S^c)\ge(1-1/\sqrt2)\min\{\pi(S),\pi(S^c)\}.
+\]
+For any real-valued vertex function \(F\) and a \(\pi\)-median \(m_F\),
+integrate over the cuts \(S=\{F>t\}\). The integral of the smaller
+side mass is \(\mathbb E_\pi|F-m_F|\). The integral of the directed
+cut mass is \(\tfrac12\mathbb E_\mu|F(x)-F(y)|\), by symmetry
+of \(\omega\). Thus
+\[
+ \mathbb E_\pi|F-m_F|
+ \le (1+1/\sqrt2)\mathbb E_\mu|F(x)-F(y)|.
+\]
+
+\subsection{A weighted valuation moment}
+
+For each prime \(p\le142\), let \(k_p\) be a median of \(\nu_p\) and put
+\(B(x)=\sum_{p\le142}|\nu_p(x)-k_p|\log p\).
+For \(0<\tau_p<1/q\), \eqref{eq:valuation} and
+Section~\ref{sec:kernel} give
+\[
+ \mathbb E_\mu e^{\tau_p|\nu_p(x)-\nu_p(y)|\log p}
+ \le \mathcal N(p^{-1/q+\tau_p}).
+\]
+By Jensen's inequality the expected edge distance
+\(\mathbb E_\mu|\nu_p(x)-\nu_p(y)|\log p\) is at most
+\(\log\mathcal N(p^{-1/q+\tau_p})/\tau_p\).
+The 34 choices in Table~\ref{tab:small} give a sum less than
+\(99.984727\). Multiplying by the factor in
+Section~\ref{sec:cut} gives \(\mathbb E_\pi B<\overline D:=170.685\).
+
+Retain vertices with \(B(x)\le1375\). Markov's inequality bounds
+the discarded \(\pi\)-mass by \(\overline D/1375\). The weight of
+edges retained at both ends is thus at least the fraction
+\[
+ \bar t=1-2\overline D/1375=\frac{103363}{137500}.
+\]
+Both sides remain nonempty. If the area changes from \(m\) to \(m'\),
+the score is multiplied by at least
+\(\bar t^q(m'/m)^{1+\sigma-q}\ge\bar t^q\).
+For the fourth-power score the corresponding factor is at least
+\(\bar t^4\).
+
+\subsection{Stripping and restabilization}
+
+Write \(x=s_xx_{\mathrm r}\), where all prime divisors of \(s_x\)
+are at most \(142\) and \(x_{\mathrm r}\) is \(142\)-rough.
+With \(d_s=\gcd(s_x,s_y)\) one has
+\[
+ \gcd(x,y)=d_s\gcd(x_{\mathrm r},y_{\mathrm r}),\qquad
+ \max(ax,by)\ge d_s\max(ax_{\mathrm r},by_{\mathrm r}).
+\]
+Thus replacing each vertex by its rough part at fixed scales does
+not decrease the weights. For two vertices on the same side,
+comparison of the reduced numerators in \(H\) gives
+\[
+ H(x,y)\le H(x_{\mathrm r},y_{\mathrm r})
+   \exp\left(\sum_{p\le142}|\nu_p(x)-\nu_p(y)|\log p\right).
+\]
+For retained vertices the exponent is at most
+\(B(x)+B(y)\le2750\). If the original same-side heights exceed
+\(e^{6880}\), the rough heights exceed \(e^{4130}\). This also gives
+injectivity of stripping on each side. The rough graph can be
+stabilized again by Section~\ref{sec:stable}, preserving roughness,
+separation, and the lower bound for its score.
+
+\section{Counting rough rationals and bounding a block}
+
+\subsection{Rational height}\label{sec:rational}
+
+For a rough graph, use the centers from Section~\ref{sec:large} and
+put \(N=\prod_p p^{k_p}\). For a vertex \(x\) write \(x/N=a_x/b_x\)
+in lowest terms, and set \(x'=a_xb_x\). On a retained edge \((x,y)\),
+\(k_p\) lies between \(\nu_p(x)\) and \(\nu_p(y)\) for every prime.
+Consequently
+\[
+ x'y'=\frac{xy}{\gcd(x,y)^2},
+\]
+since the exponent on the left is
+\(|\nu_p(x)-k_p|+|\nu_p(y)-k_p|=|\nu_p(x)-\nu_p(y)|\).
+Define the height of a pair of fractions \(a/b,c/d\) to be \(H(ad,bc)\).
+Dividing both arguments by \(N\) leaves their relative height unchanged.
+
+\begin{lemma}\label{lem:rc}
+Let \(R>0\), \(\ell\ge4096\), and let \(S\subset[R,2R)\) be a finite
+\(e^\ell\)-separated set of positive rationals with \(142\)-rough
+numerators and denominators in lowest terms. For every \(T>0\),
+\[
+ \#\{a/b\in S:ab\le T\}\le 1+\frac{17}{25}\frac T\ell,
+\]
+where the fractions in the count are in lowest terms.
+\end{lemma}
+
+\subsection{Counting numerators at a fixed denominator}
+
+We first reduce Lemma~\ref{lem:rc} to a pair of sieve estimates.
+Put \(P=e^\ell\). If \(\sqrt2 T\le P\), any two fractions in the
+count have \(ad,bc<\sqrt2 T\), since \((ad)(bc)\le T^2\) and
+\(1/2<ad/(bc)<2\). Separation thus allows at most one.
+We may assume \(R\ge1/\sqrt2\). Indeed, if \(S\ne\varnothing\) and
+\(R<1/\sqrt2\), take reciprocals and use the least reciprocal as the
+new lower endpoint \(R'\). Then \(R'>1/(2R)>1/\sqrt2\), and all
+reciprocals lie in \([R',2R')\). Roughness, the numerator-denominator
+product, and the relative height are invariant under reciprocation.
+
+Fix a denominator \(b\le B:=\sqrt{T/R}\). The numerators \(x\) lie in
+\([Rb,U_b]\), where \(U_b=\min(2Rb,T/b)\). They are \(P\)-separated.
+If \(U_b\le P\), there is at most one. More generally take positive
+integers \(X,Z\) with \(Z^2\le X\) and \(XZ\le P\), and factor each
+numerator as \(x=sr\), with \(s\) supported on primes at most \(X\)
+and \(r\) \(X\)-rough, meaning that it has no prime divisor at most \(X\).
+
+If \(r>U_b/X\), then \(s<X\); the same \(r\) cannot occur for two
+numerators, since their height would be less than \(X\).
+When \(s=1\) we have \(r\in[Rb,U_b]\), and when \(s>1\) we have
+\(s\ge143\) and \(r\le U_b/143\).
+If \(r\le U_b/X\), choose a divisor \(d\mid x\) with
+\(1\le d\le X\) and \((x/d)Z\le U_b\).
+When \(s\le Z\), take \(d=1\), since \(sZ\le X\).
+Otherwise, if \(s\) has a prime factor greater than \(Z\), take that
+factor. If it does not, multiply its prime factors, with multiplicity,
+until the product first exceeds \(Z\); the product is at most
+\(Z^2\le X\). In both cases \(d>Z\) suffices.
+Assign to \(x\) the \(Z\) integers \((x/d)j\), \(1\le j\le Z\).
+A collision between the images of \(x,y\) would express \(x/y\) as
+a ratio of positive integers at most \(XZ\), contradicting separation.
+Hence the number of numerators at denominator \(b\) is at most
+\[
+ N_X[Rb,U_b]+N_X[1,U_b/143]+U_b/Z,
+\]
+where \(N_X[I]\) counts the positive \(X\)-rough integers in \(I\).
+An empty interval contributes zero.
+
+\subsection{A finite Selberg sieve}
+
+For an integer \(X\ge2\) and \(0<U\le A\), we use
+\[
+ N_X[U,A]\le\frac{A-U}{\log(X+1)}+\frac{16X^2}{\log(X+1)^2}.
+\]
+To see this, put
+\(G=\sum_{r\le X,\ r\ {\rm squarefree}}1/\varphi(r)\).
+With \(\mu_{\mathrm M}\) denoting the M\"obius function, set
+\[
+ w_d=\frac dG\sum_{\substack{r\le X,\ d\mid r\\ r\ {\rm squarefree}}}
+         \frac{\mu_{\mathrm M}(r/d)\mu_{\mathrm M}(r)}{\varphi(r)}.
+\]
+Then \(w_1=1\), and the square of \(\sum_{d\mid m}w_d\) equals \(1\)
+for \(X\)-rough \(m\). Sum the square over the entire interval.
+The count of multiples of any least common multiple differs from
+\((A-U)/[d,e]\) by at most \(1\). The main quadratic form is
+\[
+ \sum_{d,e}\frac{w_dw_e}{[d,e]}
+ =\sum_r\varphi(r)\left(\sum_{r\mid d}\frac{w_d}{d}\right)^2
+ =1/G.
+\]
+The first identity uses \(\sum_{r\mid(d,e)}\varphi(r)=(d,e)\).
+Finite M\"obius inversion evaluates the inner sum as
+\(\mu_{\mathrm M}(r)/(G\varphi(r))\) for squarefree \(r\le X\) and
+as zero otherwise.
+
+Grouping \(\sum_{m\le X}1/m\) by the squarefree kernel
+\(\prod_{p\mid m}p\) shows \(G\ge\log(X+1)\): the contribution of
+kernel \(r\) is at most \(\prod_{p\mid r}(p-1)^{-1}=1/\varphi(r)\).
+For the error, the terms in the formula for \(w_d\) have a common
+sign for fixed \(d\), so
+\[
+ \sum_d|w_d|=\frac1G\sum_{\substack{r\le X\\r\ {\rm squarefree}}}
+        \prod_{p\mid r}\left(1+\frac2{p-1}\right)
+ \le \frac XG\prod_{p\le X}\left(1+\frac2{p(p-1)}\right)
+ \le \frac{4X}G.
+\]
+For the first inequality, expand the product after removing the
+squarefree restriction and bound the number of multiples of \(d\)
+by \(X/d\). For the last inequality, the factor at \(2\) is \(2\);
+for odd primes \(p=2k+1\), use
+\(2/(p(p-1))\le 2/[3k(k+1)]\) and \(e^{2/3}<2\).
+The error is at most \((\sum_d|w_d|)^2\), as required.
+
+\subsection{Sieve parameters and summation over denominators}
+
+Use \(X=\lfloor e^{\alpha\ell}\rfloor\) and
+\(Z=\lfloor e^{\ell/10}\rfloor\). The choices
+\(\alpha=1/5,4/5,9/10\) satisfy the required packing conditions,
+and \(1/Z\le2e^{-\ell/10}\), \(\log(X+1)>\alpha\ell\).
+
+\paragraph{The case \(B\ge128\).}
+Use \(\alpha=1/5\). Write \(U(x)=\min(2Rx,T/x)\) and
+\(G_1(x)=U(x)-Rx\). Both functions are unimodal on \((0,B]\),
+with maximum at \(B/\sqrt2\). Rough denominators lie in the
+classes \(1,5\bmod6\). On a progression of mesh \(6\), the
+sum of either function is at most its integral divided by \(6\)
+plus its maximum. Indeed, remove the largest sampled term and
+compare each other term to the integral over the mesh interval
+toward that term. The two classes contribute an integral divided
+by \(3\) plus two maxima. The relevant integrals and maxima are
+\[
+ \int_0^B U=\frac{T(1+\log2)}2,\qquad
+ \int_0^B G_1=\frac{T\log2}2,\qquad
+ \max U=\frac{\sqrt2 T}{B},\qquad
+ \max G_1=\frac T{\sqrt2 B}.
+\]
+The same comparison on the integer grid gives
+\(\sum_b U_b\le\int_0^B U+\max U<3T/2\).
+The sieve error per denominator is at most
+\(32e^{2\ell/5}/(\ell/5)^2\). Since there are at most \(B\)
+denominators and \(B/T\le\sqrt2e^{-\ell/2}\), the normalized
+sieve error, after multiplying by \(\ell/T\), is at most
+\((1200/\ell)e^{-\ell/10}\). The normalized packing error is at
+most \(3\ell e^{-\ell/10}\).
+The normalized main term is at most
+\[
+ 5\left[\frac{\log2}{6}+\frac2{\sqrt2 B}
+    +\frac1{143}\left(\frac{1+\log2}{6}+\frac{2\sqrt2}{B}\right)\right].
+\]
+Using \(B\ge128\), \(\log2<0.7\), \(1/\sqrt2\le3/4\),
+\(\sqrt2\le3/2\), and \(\ell\ge4096\), the sum of the three
+bounds is less than \(0.673<17/25\).
+
+\paragraph{The case \(B<128\).}
+Only \(1\) can occur as a rough denominator.
+Write \(A=\min(2R,T)\). If \(A\le e^\ell\), the count is at most
+one. If \(A>e^{1.7\ell}\), use \(\alpha=4/5\) and \(A-R\le A/2\).
+The sieve and packing bounds give at most
+\[
+ \frac A\ell\left[\frac{1/2+1/143}{4/5}
+       +(50/\ell+2\ell)e^{-\ell/10}\right]<0.635\,A/\ell.
+\]
+If \(e^\ell<A\le e^{1.7\ell}\), choose \(\alpha=9/10\), so
+\(A<X^2\) and each \(X\)-rough integer at most \(A\) is \(1\) or
+prime. For \(\vartheta(x)=\sum_{p\le x}\log p\) we use
+\begin{equation}
+ 0.92x\le\vartheta(x)\le1.107x\qquad (\log x\ge1000).
+ \label{eq:chebyshev}
+\end{equation}
+The first rough interval has count at most
+\((\vartheta(A)-\vartheta(R-1))/(\ell-1)\), using \(R-1\) to
+retain the left endpoint. The second has count at most
+\(1+\vartheta(A/143)/(0.9\ell-1)\).
+With \(R\ge A/2\), the combined count including the packing term is
+less than
+\[
+ 1+\frac{0.647 A+0.92}{\ell-1}
+       +\frac{1.107 A}{143(0.9\ell-1)}
+       +2Ae^{-\ell/10}
+ <1+0.657\,A/\ell.
+\]
+Since \(A\le T\), all cases give Lemma~\ref{lem:rc}.
+\hfill\(\square\)
+
+\paragraph{Proof of \eqref{eq:chebyshev}.}
+Write \(F(x)=\log(\lfloor x\rfloor!)\) and
+\(J(x)=F(x)-F(x/2)-F(x/3)-F(x/5)+F(x/30)\).
+The prime-power expansion of the factorial gives the coefficient
+\(j(\lfloor x/p^k\rfloor)\) of the contribution from \(p^k\), where
+\(j(n)=n-\lfloor n/2\rfloor-\lfloor n/3\rfloor-\lfloor n/5\rfloor+
+\lfloor n/30\rfloor\). Checking residues modulo \(30\) gives
+\(j\in\{0,1\}\), with \(j(n)=1\) for \(1\le n<6\). Thus
+\(J(x)\le\psi(x)\le J(x)+\psi(x/6)\), where \(\psi\) sums over prime
+powers. Integral comparison for \(F\) gives
+\[
+ |J(x)-C_0x|\le5+10\log x\quad(x\ge30),\qquad
+ C_0=\frac{\log2}{2}+\frac{\log3}{3}+\frac{\log5}{5}-\frac{\log30}{30}.
+\]
+For instance, \(|F(x)-(x\log x-x)|\le1+2\log x\) for \(x\ge1\),
+by comparison with the integral of \(\log\) and replacement of
+\(\lfloor x\rfloor\) by \(x\).
+The upper recurrence gives
+\(\psi(x)\le(6/5)C_0x+200(1+\log(x+1))^2\)
+by strong induction on \(\lfloor x\rfloor\). For \(x<30\) the
+error term alone suffices. For \(x\ge30\), the difference of the
+error terms at \(x\) and \(x/6\) exceeds \(5+10\log x\).
+The prime-power contribution \(\psi(x)-\vartheta(x)\) is at most
+\(\sqrt{x}\log x\), since each prime at most \(\sqrt{x}\) contributes
+at most \(\log x\). These estimates at \(\log x\ge1000\) and rational
+enclosures for \(C_0\) give \eqref{eq:chebyshev}.
+
+\subsection{A truncated double sum}
+
+Let \(x'_1,\ldots,x'_a\) and \(y'_1,\ldots,y'_b\) be nonempty
+lists of positive numbers with counting functions at most \(1+\kappa T\) for
+every \(T>0\). Then for \(c>0\),
+\[
+ \sum_{i,j}\min(1,c/\sqrt{x_i'y_j'})
+ \le a+b+ab\,\Psi\left(\frac{c\kappa}{\sqrt{ab}}\right),
+ \qquad
+ \Psi(t)=
+ \begin{cases}
+ 4t-3t^2+2t^2\log t,&0<t\le1,\\
+ 1,&t\ge1.
+ \end{cases}
+\]
+Order each list and remove its first entry. Each remaining \(i\)-th
+entry is at least \(i/\kappa\). The removed row and column cost at
+most \(a+b\); each remaining summand is bounded by the integral of
+the corresponding decreasing function on its unit cell.
+Rescaling the rectangle gives
+\(\Psi(t)=\int_{[0,1]^2}\min(1,t/\sqrt{uv})\,du\,dv\).
+For \(t\le1\), integrating first in \(v\) and splitting at \(u=t^2\)
+gives contributions \(t^2\) and \(4t(1-t)+2t^2\log t\).
+If both counting functions are at most \(\kappa T\), the same
+argument needs no deletion and the term \(a+b\) may be omitted.
+The lists may contain repeated values, counted with their multiplicities.
+
+Set \(\varepsilon=1/1000\), \(t_0=19/100\), and \(r_*=27/50\).
+For \(t>0\) and \(0\le\rho\le1\), the condition
+\(r_*(1-\varepsilon)\rho\le\Psi(t)\) implies
+\(\rho^4/t^2\le1/t_0^2\). For \(t\ge t_0\) this follows from
+\(\rho\le1\). For \(0<t\le t_0\), we have
+\(\log t\le-\log5<-8/5\), so \(\Psi(t)\le F(t)\), where
+\(F(t)=4t-(31/5)t^2\).
+Writing \(u=\sqrt{t/t_0}\in(0,1]\), we obtain
+\[
+ uF(t_0)-F(t)
+ =u(1-u)\left(4t_0-\frac{31}{5}t_0^2(1+u+u^2)\right)\ge0 .
+\]
+Here \(1+u+u^2\le3\). Since \(F(t_0)=0.53618<r_*(1-\varepsilon)\),
+we get \(\rho\le u\).
+
+\subsection{A block estimate at fixed cutoff}
+
+Consider a graph whose sides lie in \([A,2A)\) and \([B,2B)\),
+each consisting of distinct \(142\)-rough integers, with side sizes
+\(a,b\le n\). At cutoff \(D>0\), give an edge weight
+\(\min(1,\gcd(x,y)/D)\), and let \(\rho\) be the sum of edge weights
+divided by \(ab\). Put \(Q_0=AB/D^2\) and
+\[
+ J_{\mathrm{ph}}=\rho^q\frac{ab}{Q_0}(ab/n^2)^\sigma .
+\]
+Upon restricting to valuation layers \(i,j\) at \(p\) and dividing
+by \(p^i,p^j\), replace \(A,B,D\) by
+\(A/p^i,B/p^j,D/p^{\min(i,j)}\). The retained weights are unchanged
+and \(Q_0\) is multiplied by \(p^{-|i-j|}\). Thus the stabilization
+argument applies to \(J_{\mathrm{ph}}\) as well as, separately, to
+\(\rho^4 ab/Q_0\), yielding \eqref{eq:rect} and \eqref{eq:valuation}.
+
+In a stable graph of positive weight, retain the edges specified in
+Section~\ref{sec:large}, of mass at least \(r_*\rho ab\).
+For their common normalization \(N\), the identity of
+Section~\ref{sec:rational} and \(xy<4AB\) bound the retained
+weight by \(\min(1,2\sqrt{Q_0}/\sqrt{x'y'})\). Summing this upper
+bound over the entire labeled rectangle is permitted.
+
+\paragraph{A fourth-power bound without separation.}
+For reduced positive fractions in \([R,2R)\) with
+numerator-denominator product at most \(T\), the numerator is at
+most \(\sqrt{2RT}\) and the denominator at most \(\sqrt{T/R}\).
+There are at most \(\sqrt2 T\) such integer pairs.
+In the stable graph for the fourth-power score, apply the
+double-sum bound without deletion at \(\kappa=\sqrt2\). It gives
+\(r_*\rho\le\Psi(2\sqrt{2Q_0/(ab)})\) and hence
+\(\rho^4 ab/Q_0\le8/t_0^2\).
+Since stabilization does not decrease the score, this holds
+for every original block.
+
+\paragraph{The \(q\)-power score with separation.}
+Assume both sides are \(e^\ell\)-separated and \(\ell\ge4096\).
+In the stable graph for \(J_{\mathrm{ph}}\) use
+Lemma~\ref{lem:rc} with \(\kappa=(17/25)/\ell\).
+If \(\min(\rho a,\rho b)\ge2/(r_*\varepsilon)\), then
+\(a+b\le r_*\varepsilon\rho ab\). Subtracting this term from
+the double-sum bound yields
+\(r_*(1-\varepsilon)\rho\le\Psi(2\kappa\sqrt{Q_0/(ab)})\).
+Thus \(\rho^4 ab/Q_0\le4\kappa^2/t_0^2\), which also bounds
+\(J_{\mathrm{ph}}\).
+If \(\rho a<2/(r_*\varepsilon)\), then
+\(\rho^4ab/n^2\le2/(r_*\varepsilon n)\) by \(b\le n\)
+and \(\rho^3\le1\), and the case of small \(\rho b\) is symmetric.
+As \(q=4(1+\sigma)\), the score equals the fourth-power score
+times \((\rho^4ab/n^2)^\sigma\). Use the fourth-power bound in
+this case. Combining the two bounds, and including zero weight,
+gives for the original block
+\begin{equation}
+ J_{\mathrm{ph}}\le C_{\mathrm{ph}}(\ell,n):=
+ \frac4{t_0^2}\left(\frac{17}{25\ell}\right)^2
+ +\frac8{t_0^2}\left(\frac2{r_*\varepsilon n}\right)^\sigma .
+ \label{eq:block}
+\end{equation}
+
+\section{Global estimate and proof of the theorem}
+
+\subsection{Dyadic decomposition}
+
+In the rough graph of Section~\ref{sec:small}, partition \(ax\)
+and \(by\) using the common grid \([h2^i,h2^{i+1})\), \(i\ge0\),
+with \(h=\min(a,b)\). Both scaled speeds are at least \(h\).
+Put \(A_i=h2^i/a\), \(B_j=h2^j/b\), and
+\(D_{ij}=\max(aA_i,bB_j)\). On this block the original weight
+is bounded by the fixed-cutoff weight at \(D_{ij}\), and
+\[
+ \frac{A_i B_j}{D_{ij}^2}
+ =\frac1{ab}\exp\bigl(-|\log(aA_i)-\log(bB_j)|\bigr).
+\]
+Write \(m_i,n_j\) for the respective block sizes and \(m_L,m_R\)
+for the full side sizes. Taking a \(q\)-th root in \eqref{eq:block}
+bounds the block's total weight by
+\[
+ C_{\mathrm{ph}}(\ell,n)^{1/q}(ab)^{-1/q}n^{2\sigma/q}
+ (m_i n_j)^{3/4}(2^{-1/q})^{|i-j|},
+\]
+because \(1-(1+\sigma)/q=3/4\).
+The sequences \((m_i/m_L)^{3/4}\) and \((n_j/m_R)^{3/4}\)
+have unit \(\ell^{4/3}\) norms. Applying Section~\ref{sec:kernel}
+to the sum, and returning to the definition of \(J\), gives
+\[
+ J\le \overline B^{\,q} C_{\mathrm{ph}}(\ell,n),
+ \qquad \mathcal N(2^{-1/q})\le\overline B:=2.137859 .
+\]
+
+\subsection{The bound for separated sets}
+
+Suppose \(V\) is \(e^{6880}\)-separated. If \(n<e^{6880}/40\),
+then every ordered pair contributes a summand less than \(1/20\)
+in \(W(V)\), so \(W(V)<1/20\). Otherwise, the initial score, the
+retention of at least the fraction \(\bar t^q\) of the score,
+and the resulting separation parameter \(\ell=4130\) give
+\[
+ \frac{\bar t^q W(V)^q}{4}
+   \le\overline B^{\,q} C_{\mathrm{ph}}(4130,n).
+\]
+Since \(C_{\mathrm{ph}}(4130,n)\) is decreasing in \(n\), use
+\(n\ge e^{6880}/40\). The certificates give
+\[
+ C_{\mathrm{ph}}(4130,e^{6880}/40)<\overline C
+       :=\frac{3004}{10^9},
+ \qquad
+ 4\overline C\,\overline B^{\,q}<(0.1699\bar t)^q .
+\]
+Raising the second comparison to the fiftieth power reduces it
+to a rational inequality. It follows that \(W(V)<0.1699<17/100\).
+
+\subsection{Increasing the forbidden radius}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Apply \eqref{eq:delete} with \(P=e^{6880}\) and \(\delta=17/100\),
+and combine it with \eqref{eq:spill} to obtain
+\[
+ (1+e^{6880})g(V)\ge \frac3{35}-\frac{17}{200}=\frac1{1400}.
+\]
+Since \(\sum_{j=0}^{20}8^j/j!>2800\), we have \(e^8>2800\) and
+\(1400(1+e^{6880})<e^{6888}\). Thus \(g(V)>e^{-6888}\).
+
+Set \(c=e^{-6888}\) and increase the radius from \(r_0\) to
+\((1+c)/(2n)\). For each speed the forbidden measure increases
+by \(c/n\), so the total increase in the measure of the union
+is at most \(c\). Its complement still has positive measure.
+Any point in the complement, represented in \([0,1)\), lies outside
+every closed forbidden set and satisfies the strict inequalities
+of the theorem.
+\end{proof}
+
+\appendix
+\section{Numerical certificates and formalization}\label{sec:cert}
+
+\subsection{Rational data}
+
+For each row of Table~\ref{tab:bootstrap}, the rational numbers \(u,v\)
+are upper bounds on \(\sqrt S,(1-S)^{3/2}\), respectively, so that
+\((1-v)/S-u\) is a lower bound on \(b(S)\). The output \(T\) is an
+upper bound on the next value of \(z\).
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Rational endpoint certificates for the six iterations.}
+\label{tab:bootstrap}
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+Input \(S\) & Output \(T\) & Upper bound \(u\) & Upper bound \(v\)\\
+\midrule
+357/1000 & 171/500 & 5974947699/10000000000 & 1031208431/2000000000 \\
+171/500 & 39/125 & 5848076607/10000000000 & 1067502341/2000000000 \\
+39/125 & 131/500 & 2792848009/5000000000 & 5706668661/10000000000 \\
+131/500 & 201/1000 & 5118593557/10000000000 & 6339931167/10000000000 \\
+201/1000 & 3/20 & 896660471/2000000000 & 3571002657/5000000000 \\
+3/20 & 121/1000 & 3872983347/10000000000 & 7836612789/10000000000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:small} gives the tilting parameters and certified
+upper bounds on \(\log\mathcal N(p^{-1/q+\tau_p})/\tau_p\).
+
+\begingroup\small
+\begin{longtable}{@{}rrr@{}}
+\caption{Tilts and weighted valuation distances at small primes.}
+\label{tab:small}\\
+\toprule
+Prime \(p\) & Tilt \(\tau_p\) & Rational upper bound\\
+\midrule
+\endfirsthead
+\toprule
+Prime \(p\) & Tilt \(\tau_p\) & Rational upper bound\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+2 & 37 / 201 & 7670990696489 / 1000000000000 \\
+3 & 347 / 2010 & 640388639331 / 100000000000 \\
+5 & 107 / 670 & 662523832733 / 125000000000 \\
+7 & 61 / 402 & 2365565222337 / 500000000000 \\
+11 & 142 / 1005 & 4090203987259 / 1000000000000 \\
+13 & 277 / 2010 & 155231431817 / 40000000000 \\
+17 & 133 / 1005 & 3569839071111 / 1000000000000 \\
+19 & 131 / 1005 & 1724576903557 / 500000000000 \\
+23 & 17 / 134 & 3252068305893 / 1000000000000 \\
+29 & 41 / 335 & 151444678617 / 50000000000 \\
+31 & 122 / 1005 & 2967702979251 / 1000000000000 \\
+37 & 119 / 1005 & 2811502620707 / 1000000000000 \\
+41 & 39 / 335 & 681198415611 / 250000000000 \\
+43 & 233 / 2010 & 671373512687 / 250000000000 \\
+47 & 23 / 201 & 1306830035577 / 500000000000 \\
+53 & 113 / 1005 & 314968774063 / 125000000000 \\
+59 & 223 / 2010 & 2438837267921 / 1000000000000 \\
+61 & 37 / 335 & 603558459043 / 250000000000 \\
+67 & 22 / 201 & 117317759673 / 50000000000 \\
+71 & 109 / 1005 & 230537391869 / 100000000000 \\
+73 & 217 / 2010 & 285750766663 / 125000000000 \\
+79 & 43 / 402 & 223184591259 / 100000000000 \\
+83 & 107 / 1005 & 2198656928103 / 1000000000000 \\
+89 & 106 / 1005 & 2152619194079 / 1000000000000 \\
+97 & 7 / 67 & 1048611830883 / 500000000000 \\
+101 & 209 / 2010 & 258966201167 / 125000000000 \\
+103 & 104 / 1005 & 1029736157291 / 500000000000 \\
+107 & 69 / 670 & 2035878906713 / 1000000000000 \\
+109 & 69 / 670 & 2024512845143 / 1000000000000 \\
+113 & 103 / 1005 & 2002582458967 / 1000000000000 \\
+127 & 203 / 2010 & 483303801639 / 250000000000 \\
+131 & 101 / 1005 & 957616588461 / 500000000000 \\
+137 & 1 / 10 & 188956832491 / 100000000000 \\
+139 & 1 / 10 & 734896491 / 390625000 \\
+\end{longtable}
+\endgroup
+
+\subsection{Verification and source locations}
+
+The rational power tests reduce to integer powers. For example,
+for positive integers \(a,b,n\), the inequality
+\(a/b\ge n^{-100/67}\) is equivalent to \(a^{67}n^{100}\ge b^{67}\).
+Logarithms are enclosed by truncating
+\[
+ \log x=2\sum_{j\ge0}\frac{v^{2j+1}}{2j+1},
+ \qquad v=\frac{x-1}{x+1},
+\]
+and bounding the remainder by a geometric series. The large-prime
+interval certificates and sieve tables are supplied with the Lean
+material~\cite{LeanCode}. Module names in Table~\ref{tab:lean}
+refer to files under \texttt{LonelyRunnerNew/}.
+The main theorem is the declaration \texttt{LonelyRunnerNew.lonely\_runner\_gap}
+in \texttt{SpilloverInputProved.lean}.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}
+                       >{\raggedright\arraybackslash}p{0.70\linewidth}@{}}
+\caption{Proof steps and corresponding Lean modules.}\label{tab:lean}\\
+\toprule
+Step & Module or declaration\\
+\midrule
+\endfirsthead
+\toprule
+Step & Module or declaration\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Covering and deletion &
+\texttt{TwoSpeedIntersection}, \texttt{PeriodicLevelDilation},
+\texttt{SpilloverInputProved}, \texttt{ForestInputProved}\\
+Stabilization and kernel &
+\texttt{InitialTaggedState}, \texttt{ValuationDistribution},
+\texttt{GreenKernel}, \texttt{KernelInputProved}\\
+Large-prime exceptions &
+\texttt{FixedScaleNumerics}, \texttt{BootstrapChain},
+\texttt{LCNumericChecker}, \texttt{LCFiniteBudgets},
+\texttt{LCQuantitativeRetention}\\
+Removing small factors &
+\texttt{SmallPrimeRowsProved}, \texttt{CoreCut},
+\texttt{JointCore}, \texttt{OriginalSeparatedPeeling}\\
+Sieve and block bound &
+\texttt{FiniteIntervalSieve}, \texttt{ChebyshevExplicit},
+\texttt{RationalCountProved}, \texttt{SaturatedTerminal}, \texttt{RoughBlockProved}\\
+Global bound and theorem &
+\texttt{DyadicPhysicalPartition}, \texttt{DyadicKernelCertificate},
+\texttt{DyadicRoughAssembly}, \texttt{NumericEndgame},
+\texttt{SpilloverInputProved}\\
+\end{longtable}
+
+\enlargethispage{2\baselineskip}
+\begin{thebibliography}{9}
+\bibitem{HuJing}
+X. Hu and Y. Jing,
+\emph{Near optimal gap in the Lonely Runner Conjecture},
+\href{https://arxiv.org/abs/2610.23790v1}{arXiv:2610.23790v1}, 2026.
+
+\bibitem{GreenWalker}
+B. Green and A. Walker,
+\emph{Extremal problems for GCDs},
+Combin. Probab. Comput. \textbf{30} (2021), 922--929.
+\href{https://arxiv.org/abs/2012.02078}{arXiv:2012.02078}.
+
+% Add the GitHub permalink to the checked source commit before publication.
+\bibitem{LeanCode}
+\emph{LonelyRunner\_New}, Lean formalization and rational certificates,
+source manifest identifier
+\texttt{67008acd\allowbreak a1805ce8\allowbreak a67e8557\allowbreak e793b7c9\allowbreak 1e6d0166\allowbreak 34d72da0\allowbreak 4dacc50a\allowbreak ce443a9a}.
+\end{thebibliography}
+\end{document}

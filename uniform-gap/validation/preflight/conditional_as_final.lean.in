@@ -1,0 +1,4 @@
+import LonelyRunnerNew.OuterAssembly
+import LonelyRunnerValidation.Policy
+
+#assert_frozen_target LonelyRunnerNew.main_of_separated_control

@@ -21,7 +21,7 @@ are retained. Only a navigation section is added to the repository root README.
 | Source/frozen hashes | PASS: 234 source inputs and 16 frozen files match. |
 | Git exact-byte handling | PASS: -text checked; committed source/frozen bytes checked in a clean worktree. |
 | Clean Lean build | FAILED OR INCOMPLETE: see private execution receipts; no build success is asserted. |
-| Final types and axioms | NOT COMPLETED: no fresh final type/axiom success asserted. |
+| Final types and axioms | Cached pinned-project print command exited 0 and reported only propext, Classical.choice and Quot.sound for all four declarations. Clean-publication-build validation remains incomplete. |
 | Paper statement review | Quantifier scope, one common time, positive speeds, n >= 2, strict inequality, exponent -6888 and denominator 2n checked against the frozen target. This is agent/script review, not independent human semantic review. |
 | Appendix rows | PASS: all six bootstrap rows and the prime/tau/distance columns of all 34 small-prime rows match Lean as exact fractions. |
 | Revised manuscript rebuild | PASS: pdfLaTeX pass exits [0, 0]; normalized PDF text matches the supplied PDF: True. Supplied TeX/PDF bytes retained. |
@@ -65,3 +65,9 @@ commit is described as a currently accessible GitHub permalink. The supplied pap
 AUDIT.md remain byte-identical; final link insertion and paper recompilation await that step.
 Formal Comparator positives and all four negative rejection diagnostics: still required.
 These open conditions prevent push/PR/release. Kernel success does not replace them.
+
+The print helper audit/PrintFinalTypes.lean was executed against the existing artifacts
+of the original hash-matching pinned project. This records actual final types/axioms,
+not a successful source-clean publication rebuild. Root lake build exited 1 after
+the 768 MiB free-memory/commit guard stopped its owned process tree. The requested
+FinalSolution build in that clean worktree was not reached and has no exit code.

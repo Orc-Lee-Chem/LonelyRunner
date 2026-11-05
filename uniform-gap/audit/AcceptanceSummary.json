@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-05",
+  "publication_state": "DRAFT_RESEARCH_BRANCH_FINAL_ACCEPTANCE_PENDING",
+  "source_checkpoint_commit": "c1bee1c802624725dfeefef8dc9fb22b5ee886f7",
+  "source_version_sha256": "67008acda1805ce8a67e8557e793b7c91e6d016634d72da04dacc50ace443a9a",
+  "source_and_frozen_checks": {
+    "status": "PASS",
+    "source_inputs": 234,
+    "frozen_files": 16,
+    "source_unchanged": true
+  },
+  "paper_correspondence": {
+    "status": "PASS_WITH_STATED_SCOPE",
+    "scope": "Agent/script statement and appendix correspondence; not independent human review of all arguments",
+    "bootstrap_rows": 6,
+    "small_prime_rows": 34,
+    "small_prime_fields": [
+      "prime",
+      "tau",
+      "edgeUpper"
+    ],
+    "tex_sha256": "f6fdcd920c63060da037c50bcd1cf754ddca1c2bb14907abc9427e5345f01ea1",
+    "pdf_sha256": "001c90b1aa62a524d063524065b9ec57c2e94beb23a07ede44c83bad54c93bfc",
+    "supplied_bytes_preserved": true,
+    "validation_pdflatex_exit_codes": [
+      0,
+      0
+    ],
+    "normalized_pdf_text_equal": true
+  },
+  "historical_source_rebuild_and_fresh_replay": {
+    "status": "PASS_RECORDED_NOT_RERUN_FOR_THIS_DRAFT",
+    "rebuilt_project_modules": 228,
+    "leanchecker_exit_code": 0,
+    "external_locked_library_cache_reused": true,
+    "whole_mathlib_source_rebuild": false,
+    "result_receipt_sha256": "c7d97f03f9f03a4adc30cfa2fb4141da758a9304246a5d51cb27c1cd15d659ae",
+    "fresh_receipt_sha256": "1dfe321c0cd4158dd7c7af9b991b46e1dd6c32bdf5a30d566cdabcf00d06005a"
+  },
+  "historical_nanoda": {
+    "status": "PASS_RECORDED_NOT_RERUN_FOR_THIS_DRAFT",
+    "exit_code": 0,
+    "checked_declarations": 60675,
+    "tool_commit": "8de7e0c4ed3052745a7f8725164efd9e76d84c56",
+    "export_sha256": "7446f910cc05d34af2df4ef8e01fe1ae6734f4d2909abcd5bf5d7799ac6ed221",
+    "targets": [
+      "LonelyRunnerAcceptance.explicit_gap",
+      "LonelyRunnerAcceptance.uniform_gap"
+    ],
+    "permitted_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "scope": "Standalone independent kernel check; not Comparator challenge comparison"
+  },
+  "cached_final_type_axiom_check": {
+    "status": "PASS_EXISTING_PINNED_ARTIFACTS",
+    "exit_code": 0,
+    "targets": [
+      "LonelyRunnerNew.lonely_runner_gap",
+      "LonelyRunnerNew.frozen_target_proved",
+      "LonelyRunnerAcceptance.explicit_gap",
+      "LonelyRunnerAcceptance.uniform_gap"
+    ],
+    "observed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "new_clean_build_validation": false
+  },
+  "publication_candidate_clean_rebuild": {
+    "status": "RESOURCE_BLOCKED_INCOMPLETE",
+    "exit_code": 1,
+    "active_module": "LonelyRunnerNew.LCMiddlePrimeData7",
+    "explicit_compiler_j1": true,
+    "reason": "Wrapper stopped its owned process tree after available commit headroom stayed below 1.5 GiB",
+    "lean_native_oom_observed": false,
+    "lean_compilation_error_observed": false,
+    "finalsolution_build": "NOT_RUN_AFTER_BLOCK",
+    "fresh_type_axiom_check": "NOT_RUN_AFTER_BLOCK"
+  },
+  "formal_comparator": {
+    "status": "NOT_RUN",
+    "positive_targets": {
+      "LonelyRunnerAcceptance.explicit_gap": "NOT_RUN",
+      "LonelyRunnerAcceptance.uniform_gap": "NOT_RUN"
+    },
+    "negatives": {
+      "weak_target": {
+        "status": "NOT_RUN",
+        "actual_rejection": null
+      },
+      "changed_definition": {
+        "status": "NOT_RUN",
+        "actual_rejection": null
+      },
+      "sorry_dependency": {
+        "status": "NOT_RUN",
+        "actual_rejection": null
+      },
+      "conditional_theorem": {
+        "status": "NOT_RUN",
+        "actual_rejection": null
+      }
+    },
+    "independent_reference_preparation": "Hash-matched separate readonly reference tree prepared; Linux enforcement still untested",
+    "linux_isolation": "UNAVAILABLE_ON_CURRENT_HOST",
+    "linux_tool_compatibility": "NOT_RUN",
+    "actual_theorems_compared": []
+  },
+  "pending": [
+    "Publication-candidate clean rebuild and new-output type/axiom check",
+    "Linux isolation and tool compatibility",
+    "Both formal Comparator positives and all four semantic negative controls",
+    "Final acceptance",
+    "New manuscript author/affiliation confirmation; current author field intentionally empty",
+    "New code and manuscript license confirmation"
+  ],
+  "publication_authorization": "User explicitly authorized research-branch push and draft PR while these checks remain pending; no merge/release",
+  "redaction": "Summary only. No raw logs, host paths, credentials, caches, or build objects included."
+}

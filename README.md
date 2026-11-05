@@ -114,7 +114,7 @@ manuscript and code. Lean kernel checking applies to the formal
 statements in the released source; it does not by itself certify
 every statement in the manuscript.
 
-## Separate uniform-gap development (local publication preparation)
+## Separate uniform-gap development (draft research branch)
 
 The independent [`uniform-gap/`](uniform-gap/) project states a fixed
 `c = exp(-6888)` and a strict gain `c/(2n)` for every finite set of distinct

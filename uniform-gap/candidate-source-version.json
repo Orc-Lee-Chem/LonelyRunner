@@ -1,0 +1,556 @@
+{
+  "status": "EXPERIMENTAL_SOURCE_REFACTOR_REQUIRES_NEW_BUILD",
+  "prior_source_version_sha256": "67008acda1805ce8a67e8557e793b7c91e6d016634d72da04dacc50ace443a9a",
+  "source_version_sha256": "befdb0a4d53dd27f1a62e01f7e9c6ad5be3ae91569fde001bd3cca2040cb4c78",
+  "digest_algorithm": "SHA256 of source_files encoded as UTF-8 canonical JSON, sorted keys and separators comma/colon",
+  "source_files": {
+    "LonelyRunnerNew/ActualRationalCount.lean": "00871f4ae4609f76dc0dece6480a4e149ea3b63ca7ab867df7668aba6dcc085e",
+    "LonelyRunnerNew/AsymmetricBudgets.lean": "4ae56cea28a576c7045844a445cce9f7ae8e9dc7aca1acd46b156d38e775629f",
+    "LonelyRunnerNew/AsymmetricFactors.lean": "f2974376a5873651e155ee38c3fc3109a0574a545b6b91f32a6df74cca146137",
+    "LonelyRunnerNew/AsymmetricPacking.lean": "a77c3b5aa7af1f16c2c6aa3eb592b92c4a8fa7a2323c6daaf175f3f60a639ba1",
+    "LonelyRunnerNew/AsymmetricParameters.lean": "af4db20cf00dd1ef136259771d0a6ae9580074db2355faca9ed4a4b90297e02e",
+    "LonelyRunnerNew/AsymmetricRows.lean": "430fa41453cb03fd972915739e83db662f572d2bcbddecfa284a367badac7d35",
+    "LonelyRunnerNew/BohrExcessIntegrals.lean": "5a2d50c317580fc44b1cc6623d2b9441ade717e7f85ddacb59026e3c1e4c7176",
+    "LonelyRunnerNew/BohrPairMoments.lean": "867c5fa2a9dc62a5fb1052c007c80610e16f3686bbce01cf7081ee505432d4b4",
+    "LonelyRunnerNew/BohrPrototypes.lean": "ec99be54f713b4c3d08557e541437f63d439ccaa23e35dbf431f3a6bed09f809",
+    "LonelyRunnerNew/BootstrapChain.lean": "2f63a3b9950a408816238382bb3ad4a5b37cbfd75fa3a793ac8b1f04f6dfe65e",
+    "LonelyRunnerNew/BootstrapDistribution.lean": "3d7aafe03c78370ef2b3a9d12ee585b0bb5d2d1484b22192c39fa36d1d814cd9",
+    "LonelyRunnerNew/BootstrapEndpoint.lean": "a0dad8b221787d26c3ec37eb66649446498459305e2a06d225094cb46f044bee",
+    "LonelyRunnerNew/BootstrapGeometry.lean": "7fb2f3a46e7afa51ef75250b049f61bebfc149ec284566d29f04bdcdff7af465",
+    "LonelyRunnerNew/BootstrapInterval.lean": "44e906c4e81a8a62fd3bd51eb7710c111dcc02fcc8650a05412e7712fcd0aad3",
+    "LonelyRunnerNew/CenterRationalAdapter.lean": "0a89da78b263e50f281ac6db1e0717448d96f154e3f2db87abfe93d758f86ae5",
+    "LonelyRunnerNew/CertificateData.lean": "dbe5664aac5ca34e18e113c22e434629a6943234ab7e9dec5b2b921e793a7d98",
+    "LonelyRunnerNew/Certificates.lean": "a3f12034782230edf50bf1272fa3bc06a8370b54739e4f8cc1429ae125ea822c",
+    "LonelyRunnerNew/ChebyshevConstants.lean": "766f28f45c2067b7bf12f260a2db193cc3424620fc22c1bfab179d9ca6bcb7ab",
+    "LonelyRunnerNew/ChebyshevExplicit.lean": "e1cb6c74c71e3b3c9e612fea77a274e9322b56413785642fffff654c68569212",
+    "LonelyRunnerNew/ChebyshevFactorial.lean": "d6adcbe8c8ddb37e00ea2ef00bb916fb696a17ec55ee36613d947227fd0d60f5",
+    "LonelyRunnerNew/ChebyshevPsi.lean": "e16dcf8bf8194d40e0ae6398e39f07b3cbdc744353e9dac523b0238775df0476",
+    "LonelyRunnerNew/ChebyshevThirty.lean": "7ee8b01709c60d0aed5c50723abefad2220a5f0f369e75d11c4d0377d5b2a875",
+    "LonelyRunnerNew/CommonPrimeCenter.lean": "da05031bd6dd8d9a5f732e376f8599d1e7d04c7b6e0fdce74ac23b84e7ef268b",
+    "LonelyRunnerNew/CoprimeGridCount.lean": "e19af257126952f6f8b99674787af26e66041123c3bd0930c712e83df1df5833",
+    "LonelyRunnerNew/CoreCut.lean": "ff9adeb9b5814ff869c2cd78f7aeabf06c667932054a6d0e1e2392e7a8c8dc2a",
+    "LonelyRunnerNew/CoreCutScalar.lean": "8de27511bc904921db4429081e7b6fa12c9326f79475055d68c0d7f0e81200e4",
+    "LonelyRunnerNew/CoreMarginals.lean": "854f22e8d3d4bd5f3109b3369b9e17b68336ab4bb89362d2c761a2a9bfc82f5e",
+    "LonelyRunnerNew/CoreMarkov.lean": "0e14c64898d65a2aaba7fb21e2b58809762ce4eba207ef027476a1815a7bb1a6",
+    "LonelyRunnerNew/CorePeelingBounds.lean": "5cea32a67d698a7b1840e3f37bf888844726fe2d29aa5375252410f275064d77",
+    "LonelyRunnerNew/CoreProbability.lean": "ceec477cc16b6aae29f46057d308682173f00aeb7ef109969b6ddc1596501a94",
+    "LonelyRunnerNew/CoreScore.lean": "21d2bca53774d44d5d941afc9cbd77c2c37deea0c0089b461cd3761026f35771",
+    "LonelyRunnerNew/CoreSmallPrimeCenters.lean": "df2210fc661d8590606bc8a6525969d96678961d5122fae0802909e5dc34890d",
+    "LonelyRunnerNew/Definitions.lean": "1d6fd81f887ca2b815ad3e15a93ce11934c2547731ecc199cd65765bbdf6cc3d",
+    "LonelyRunnerNew/DyadicGraphSelection.lean": "25ed29c331b6cebc6730a5e8699297746faf93714c84e70d3562f2e70d5e55f8",
+    "LonelyRunnerNew/DyadicKernelCertificate.lean": "c950739d73d020a688ce2e53066ec1b3de271e11b6a92caf6b21c48618ee82de",
+    "LonelyRunnerNew/DyadicKernelSelection.lean": "7e4c581523bf5af888611dc85cd5825207fa8aa251aacb71c42fcb2998b42967",
+    "LonelyRunnerNew/DyadicPhysicalPartition.lean": "7b95d30f483d50e3fd7d3072e4aabc8c323a511540692d9dc93bbcc6ca381dae",
+    "LonelyRunnerNew/DyadicRetainedChoice.lean": "a42470420dc38a9db1616c993dbf9c35b0bdbff12ebd95c36f79c862c4067391",
+    "LonelyRunnerNew/DyadicRoughAssembly.lean": "a7952b20db0371f1232cb1510fb1901142eb07faf114c3d902a4903bd2d752c3",
+    "LonelyRunnerNew/DyadicScaleAlgebra.lean": "75b93ffce1553833540d86a12d4ce9b4387d8d88103b213d3978860bc2e019aa",
+    "LonelyRunnerNew/DyadicUniformSelection.lean": "209ed1b13d83b9e6c16f68e86f69a1762cb62162f838869de697ac373c9d9f58",
+    "LonelyRunnerNew/FiniteCoarea.lean": "2b4736ee2511dc248cb83d9f10eec2840d193187f6e39966e86fdefd705ce8bc",
+    "LonelyRunnerNew/FiniteDeletion.lean": "da4305403afa6232d16b6209a0f7aaef3d28daab43962fffe5831b9a5710877f",
+    "LonelyRunnerNew/FiniteIntervalSieve.lean": "75c52824865e8e77d54cf60a19fdee8e09e2c07e3042467c59345affb970074f",
+    "LonelyRunnerNew/FiniteMedian.lean": "b2e31e3fdac0ea9d028610506c72af4a42348ba1abe3e81ae013328c8942c3c2",
+    "LonelyRunnerNew/FixedScaleCenter.lean": "04406d331615da90338209655c6289f26b4af21a66419c9c05c4fb0c8c5bd0fb",
+    "LonelyRunnerNew/FixedScaleNumerics.lean": "80615d0d0e9743e764d9d1d4245834ddce289a0200bab8720090a3f354964f12",
+    "LonelyRunnerNew/ForbiddenCommonCenter.lean": "fa986740d9ea30058fa138d1cc00bc9aa75a1a8bee1b8b2b920a27bc4aebba4a",
+    "LonelyRunnerNew/ForbiddenExcess.lean": "5fef39aae31c38dd4c5c5ef5339f4f38d866b6ff41356bb4c68ee8be9686ba71",
+    "LonelyRunnerNew/ForestDeletion.lean": "91e459c3abdbe33839694cdda0177c510d48c724be3c6d2d684df66366886d30",
+    "LonelyRunnerNew/ForestInputProved.lean": "cf128acf524d8e0f01f601bab43d45d1cf32b69f8a43d429075b1e4158847ee1",
+    "LonelyRunnerNew/Foundation.lean": "20f2429ee602e075bd94ee0c3ed654ef3cad8fc75d979a7d54243e5282e44076",
+    "LonelyRunnerNew/FrozenRootRows.lean": "c70f3c61d5d88be277d545f39fe6057968fd1e2c5f31afe05bd2eb9637c43e1f",
+    "LonelyRunnerNew/GeometricTransfer.lean": "915473a806b983e06ca9b91c031ccf90c5c06bf1df95645dcacafdac34c94682",
+    "LonelyRunnerNew/GreenBilinear.lean": "c1d8614c85f75fc55e2ac4a68e6d6a8fb1e20115be9aa65661b4fc17bde21932",
+    "LonelyRunnerNew/GreenDecay.lean": "fc1434e318726830f53fb2fba028e78288648e1727145aa73042710f2ab82d1a",
+    "LonelyRunnerNew/GreenEnergy.lean": "b2d890586de33c5a96050ce38755d03632bd17a5274ecd1c9b580c87dba09e0f",
+    "LonelyRunnerNew/GreenEnergyIdentity.lean": "1081ab6f06075a7d78684a8c33135e37a9d6e3501db64e8fd48b005e1f7e61d6",
+    "LonelyRunnerNew/GreenEquation.lean": "c5cbfcc8c7a37a9cacdc7e05c859fb7fb9279097ef4bad913dfd0640c6d03fae",
+    "LonelyRunnerNew/GreenKernel.lean": "ddb9b1f54b6611ee36ac2d4502a56e609c0d4512a51ed3fbbdf5570b91a21535",
+    "LonelyRunnerNew/GreenPotential.lean": "0f3f28d2679b974822cc29a0938ad512f7375a6f9fee00c09d948623ae77c69b",
+    "LonelyRunnerNew/GreenVariation.lean": "c25a66962c8f08d76d34fe8e3bb1f0c19d700ec28e1600688f914cfd0fed27ed",
+    "LonelyRunnerNew/InitialState.lean": "2e52e824332b9cfc2f892a876fc1bb1a230b764f20376d1cb8e5c8e129d720fd",
+    "LonelyRunnerNew/InitialTaggedState.lean": "2556e01234563e517112e4e9c3db708c3b583d6182df74b530c501cc9747403a",
+    "LonelyRunnerNew/Inputs.lean": "2da8ecdd2bf9a9b6f164a6d1ad873504f6b9190d9cb74867d384bd07628688fc",
+    "LonelyRunnerNew/IntervalComponentCover.lean": "86c18b010f7c468765b0f6ac0e43dc056617a05c577f8cb8e2ad8e00aa4f8fc4",
+    "LonelyRunnerNew/IntervalCoverageColoring.lean": "37bb6974795efbf3158778275cdf57a3fa0154d933876eecd880340a576c3190",
+    "LonelyRunnerNew/IntervalLevelDilation.lean": "43bdea72e725f4fe999cab69c14248326e3f550f3f84b47f34d93c05b6602a2a",
+    "LonelyRunnerNew/IntervalMultiplicity.lean": "58c5ba5be18446592e3b7398498c464b7bc63f38d6db88743544c7747505f4ed",
+    "LonelyRunnerNew/IntervalUnionContraction.lean": "90e95fd352853962bbdabc3788c24577dd9fe3e6fe053b4c4812e2dec834ac60",
+    "LonelyRunnerNew/IntervalUnionDilation.lean": "31926552af367969893a758616ec56a31ccbcbb86741243000f1e7d316ea73e4",
+    "LonelyRunnerNew/JointCore.lean": "8f4d525840d3a6946b90e37613cb0064b3a13689ede59ef9dde183e0060e8f38",
+    "LonelyRunnerNew/KernelCells.lean": "d9ca523be7aabfb26dfd9cd25d3816fb26ce499a3aaad444b8079c99bf0c4b76",
+    "LonelyRunnerNew/KernelInputProved.lean": "1c4facf9b92d049abb015e6044f5c1018eb522b528e389ae7da299dd48a092d9",
+    "LonelyRunnerNew/KernelScaleAdapter.lean": "abb787422645fcba2b7a5b26cfea104d1591dc421783a3e2d302eda68d186878",
+    "LonelyRunnerNew/KernelStepFunctions.lean": "97a67d17e9698a3dc5e77395ffe8f0e2afb45e8ffa42a25f24492d7f430e2674",
+    "LonelyRunnerNew/LabelRankCounting.lean": "6185cd1c4a8dc20641e5ff5b1ed5340b00e30270e854b1a00a5389d9e2a8692f",
+    "LonelyRunnerNew/LargePrimeTails.lean": "ed29dc93d5d3a0d2190af881251ab79ed71a72e7e0285f28bff23b2c9e994376",
+    "LonelyRunnerNew/LCActualEndpoint.lean": "7204c39a0a52fe47b5cc01e7067d75ad44262e43138ace53b5a561f32893b680",
+    "LonelyRunnerNew/LCDirectionalTails.lean": "d99b5a4cbf099c322eca9acdbbb99e4afdc13fd0700c5dd363f0b76fca9e17e3",
+    "LonelyRunnerNew/LCDirectionGeometry.lean": "32fe0cd1b817d00da347a979a62fe103932d92823cc77d13b4330aaf61262f04",
+    "LonelyRunnerNew/LCDirectionInterval.lean": "687c6bed1d3a687954db65388537fbd61c81f4b1390fc1b58450cc29393db836",
+    "LonelyRunnerNew/LCFiniteBudgets.lean": "e979c7598df0edc8d3d88307e52072cfeff80583f93d8f252173ce07b49b0c83",
+    "LonelyRunnerNew/LCFiniteSieve.lean": "c24839a56d49d26b8602b14f0432f1d29d54a8fa8e5cffa648b63b797f607aad",
+    "LonelyRunnerNew/LCFiniteSmallBudget.lean": "a6d122146b9d63bc221921b24165a188663264c89b27757d84d608ea4fbd8f45",
+    "LonelyRunnerNew/LCFiniteSupport.lean": "af55bd0f603473023b72b3c6e264a3783ab5958f5b5511a240e1ef6ae3adeded",
+    "LonelyRunnerNew/LCMiddlePrimeData0.lean": "5d2ecd19ce4d961d6f448c45cc70d4c6ec4e6d212aa941d8a8f3b90de18a37f2",
+    "LonelyRunnerNew/LCMiddlePrimeData1.lean": "7322b6e673eb3e4886c13d68c42df6834fd19de2ade9c735070549b16a665590",
+    "LonelyRunnerNew/LCMiddlePrimeData2.lean": "a4c4ffa16b40d3408024a380dc9b9596b576c051ed29123c92e5cef9068a28d8",
+    "LonelyRunnerNew/LCMiddlePrimeData3.lean": "d245263eff4d80fb0372000d29996c39728b62bd08d10c09e48c075871278da7",
+    "LonelyRunnerNew/LCMiddlePrimeData4.lean": "d9e1dce69883cd011a6c339b4ecbeae5580e9adb6360f91bed75ab1949537dcd",
+    "LonelyRunnerNew/LCMiddlePrimeData5.lean": "15dd760dacbf3533f0e5b0c900a2a185ba630a3213f9789978c878f14e0cd620",
+    "LonelyRunnerNew/LCMiddlePrimeData6.lean": "73e843985e3fa63ecd93e6de7742959e1edbde156ab6e0994673070bf577a958",
+    "LonelyRunnerNew/LCMiddlePrimeData7.lean": "67bd501399266c4bb8900a6ed6bf974cb0c613d8ab45bdfce5f72320d0ecba78",
+    "LonelyRunnerNew/LCNormalizedDirection.lean": "b8c76555849d3d08811e5de85238a8c3f0b36c247518db0aa328096c74b080e5",
+    "LonelyRunnerNew/LCNumericActualTail.lean": "0e08cee6cf429f4c58ee920504222e32ed46ed1c8ee43d63ab611873ae86a1f3",
+    "LonelyRunnerNew/LCNumericAssembly.lean": "7a13f3d4aa1d0a087d1d69dc132a400cd9aca227ad3015c30618efe33b39693c",
+    "LonelyRunnerNew/LCNumericBoxes.lean": "5672297067e335ff5b9acc78bcd9005f60f56b77cc8082d2f95f02c1c118afc0",
+    "LonelyRunnerNew/LCNumericCell.lean": "d15e46a7961a5d7a4b05c54f0745d1a4514c1f94885e8ce2c56f87167ba37568",
+    "LonelyRunnerNew/LCNumericChecker.lean": "640c3cb4442189e00e26b4623ff57fb01c6f2160b759adf7090cffd37fb15629",
+    "LonelyRunnerNew/LCNumericData0.lean": "e9aa3172cec53d835dedbddc24c5d79ff7afabc59bfb59a8909b9ca55ef5cb15",
+    "LonelyRunnerNew/LCNumericData1.lean": "e4d036e71c95003bf62e2e1d27b92b887c11e46f4128a6f4a46d8148ab5984b6",
+    "LonelyRunnerNew/LCNumericData2.lean": "be4fa5a2f1df7a507ccc1ed75d63e84d63f2d2a7346e067d3c98804e9e2185a9",
+    "LonelyRunnerNew/LCNumericData3.lean": "0463ec2ca47d53c6f44a6c9fe1e08518de41c7e7b977ddc48cff555ae83126c6",
+    "LonelyRunnerNew/LCNumericData4.lean": "ee92a361b671986c266456f0745dd2378813197226e7837157e5c340b2fa7d94",
+    "LonelyRunnerNew/LCNumericData5.lean": "07c8d9ee4806717ba80a6be55b73c3d9a15c49d3d3c0a2760f3ccd2895795f2e",
+    "LonelyRunnerNew/LCNumericData6.lean": "06b877b3cc9d07003734ced9341ecb726b0e92c56119ea25371a78f6aefbafff",
+    "LonelyRunnerNew/LCNumericData7.lean": "6589dd514f65115697d274687925d829378afb7e7c96512f649de48c0cba1c34",
+    "LonelyRunnerNew/LCNumericDataIndex.lean": "ed279bb176abbe5474a2f2ea997797e989cc8ecb8d52d6dd28bab720e4d4a7eb",
+    "LonelyRunnerNew/LCNumericFirstBand.lean": "ea201c0d202af5b798dc1364b5bf13750bd480ca16051c4ee19c5d0a5b640a3e",
+    "LonelyRunnerNew/LCNumericFirstFast.lean": "670527efe3b57d2ef34a49229f400db0dfbb7945fb5522b0892f3652fd0dd074",
+    "LonelyRunnerNew/LCNumericFirstRaw.lean": "47e94cfe112fa542682cf2b8b5f91df965d4f8a72a527afb8eb920203ca71fc3",
+    "LonelyRunnerNew/LCNumericIntegerCheck.lean": "abf9b962067e26008e85cf4e82c64633617dac4fcf8e8f7564ea9ebd28734531",
+    "LonelyRunnerNew/LCNumericIntervals.lean": "7810c093e9c8d5168a6d5a4d0985cd24e6f6b372290cb8768f017ce023070204",
+    "LonelyRunnerNew/LCNumericMiddleIndex.lean": "4f2f4bcad15ae6165e3ee13da7d913a1ff97150d530af104c2fcf4e3e59c7e65",
+    "LonelyRunnerNew/LCNumericRawCheck.lean": "dabd92b1f443ac9b73007d6279751c99f6184f46170442aaf6fc9d10b2e42fc9",
+    "LonelyRunnerNew/LCNumericSmallIndex.lean": "b4c6b9b7750c7a42763abf1e0a0070163410d53a88310a8ad3ae5d4d8e9a7cff",
+    "LonelyRunnerNew/LCNumericTailData.lean": "62cd00ad1ac9349911b0feffbcaf593f432d11d58f21b2535c4383e5aaf0ea09",
+    "LonelyRunnerNew/LCPrimeTail.lean": "df1e7f77d2c1becd1eab9d6387683634eab5f88d9541334d5d9a057c5eb1dc23",
+    "LonelyRunnerNew/LCQuantitativeRetention.lean": "fe942746271cc5fe42494993b47acd05ca2de1de5ac3d3f246c379741dd62466",
+    "LonelyRunnerNew/LCSelectedCenters.lean": "32022a8358b62263f9ce30316d158ab2a524851e88c3bfd591ec3160fd0d8b86",
+    "LonelyRunnerNew/LCSmallPrimeData.lean": "f39f9715af51db5dacedb141514cde152e22d49055c536392b0b7bd534a9e453",
+    "LonelyRunnerNew/LCWheelNumerics.lean": "e56069e212a9c1a2395f5d6ab9d411529c017093e3b684aefd0b9da64a4b240f",
+    "LonelyRunnerNew/MultiplicityMoments.lean": "6684ba0015c6e0a62326ab824e9333c4ea2f737e365a5bb51ba73c9af3537e56",
+    "LonelyRunnerNew/NumericEndgame.lean": "136d468829065bd4434f0cb026b614adb084dcd5459487331a6ab0b7b6b5fe2c",
+    "LonelyRunnerNew/OriginalJointCore.lean": "35e35438857ac931b8bbed615fe5aea765bd7d01777aefc82c435708fe697273",
+    "LonelyRunnerNew/OriginalRoughLC.lean": "9f3ae695e34c09205fbd55bf2e631520039a77ae166fb1b128e9bca2f0a335ed",
+    "LonelyRunnerNew/OriginalSeparatedPeeling.lean": "f58738b3dbccb7930bcb1bbcb7e133f6ae3e46d326366f538f40fcdf16010234",
+    "LonelyRunnerNew/OuterAssembly.lean": "7de3ffe19ab189152258fc2429a326c6ae9f2f87fdd3210f22c1a4e4fb68f5f5",
+    "LonelyRunnerNew/PairGridIntegral.lean": "d4da6e6893ccf2c1c9715cc9099cd0e45bf953a1d7428cad657b2f362684a8c9",
+    "LonelyRunnerNew/PairMeasureReduction.lean": "3095ebdf049cafa7e0143a75b0b13f053675008272e31af79aaf544e61282ef8",
+    "LonelyRunnerNew/PeelingArithmetic.lean": "03f3fd1e009cf6c18c7b1ee832cc34d0c142b10c81571417f628b666fbdf1648",
+    "LonelyRunnerNew/PeelingExponential.lean": "aeccfd94791e85b281944d3c1c7eda40e5bab79631eb6e8556f84fbab8e0615b",
+    "LonelyRunnerNew/PeelingHeightWeight.lean": "0d1fa97ee9023e323129753141b8f2f510199c3e9204eb3fcf60cb99a7e56c34",
+    "LonelyRunnerNew/PeriodicArcCopies.lean": "d3fe7c6fc2bccaa07f52e65efcdb4293bd582694518ece12971be633a107f7a1",
+    "LonelyRunnerNew/PeriodicArcGeometry.lean": "49c95e34b7152b3dab4897924faa669e6e14336bfb84b4b671e6ebe3b56382c0",
+    "LonelyRunnerNew/PeriodicArcIntegralBounds.lean": "666ef628c046ba9d3681f5d9556ed36055fa5769f8ad5f89735181acd228c72a",
+    "LonelyRunnerNew/PeriodicLevelDilation.lean": "c9ee942d443a7e67d12ae96f5d8cfa25bc9c55ac5a49f1cfa4669582b1d35e3f",
+    "LonelyRunnerNew/PhysicalBlockTransport.lean": "b64510799b456023de519062766c169fbf722ce618c8b39ef1bed68d451e073b",
+    "LonelyRunnerNew/PhysicalConcentration.lean": "5f4c9f375ba022ecb92f469925c51a0a9e923c21daa04cb2b1ed728fa46a936e",
+    "LonelyRunnerNew/PhysicalCounting.lean": "afcbfd6b75f51ac13fe3513d9b395324bbcd1ada7eb75e8e06421380b5af5cf9",
+    "LonelyRunnerNew/PhysicalDescent.lean": "402e475cd307e2e4b2f1801c81c509d0606d337e5f2892e95ffbe7b9fcd2c279",
+    "LonelyRunnerNew/PhysicalFourthBound.lean": "cbacfe39be4ac1e71b2738b203c62e491aaff95a6098022a9d9bedd39babe331",
+    "LonelyRunnerNew/PhysicalLC.lean": "67f459b2e3917fb7878a46a5f9addcbea306cac31cbb12264f83ed33117cc407",
+    "LonelyRunnerNew/PhysicalOrdinaryBound.lean": "dc7a29a7edd9774ca35fc429eaa18fc4e5fef528e6074417ca1585fff11f6ace",
+    "LonelyRunnerNew/PhysicalReachability.lean": "e2b77936db13fc1529e9025f6c4f66a5253e40ff17c279a7475ac67754443dcb",
+    "LonelyRunnerNew/PhysicalSaturatedWeight.lean": "16516b9972a728af375495f8b1358c9224d7d97ed8d06fbbd4414f2ce7019b8d",
+    "LonelyRunnerNew/PhysicalScoreAlgebra.lean": "39a3246ffd7c570c10aca98a82f07502d664c32928bccfd973e67db82469ed3f",
+    "LonelyRunnerNew/PhysicalStates.lean": "38f8ad3e9199f5c56776e48c348ec8f15fb739e695f4281f66ec7c837de4b6fe",
+    "LonelyRunnerNew/PrimeTransport.lean": "87356185ac880566d528dce7f1bcc7bb15394276f3139cdaef94330d04202f2d",
+    "LonelyRunnerNew/RadiusExpansion.lean": "f246b6ca847737503bd3b2c3f744f2b2f5be90141b5580d0aabb5444521f60ff",
+    "LonelyRunnerNew/RationalAnalysis.lean": "3b03dca3cdecf4476f4d72f4c480f6de2ba2e4d3cb74121c480084ff0ef384bd",
+    "LonelyRunnerNew/RationalCountProved.lean": "d804663198280935aab2dca8078b6b469a4637a0beb7028ac74741b086d0cfbe",
+    "LonelyRunnerNew/RationalUniversalCount.lean": "dd03f9ecc8213f87f5f5f9a9eae72e96521b780e14677a8f6157c3a4e93560e6",
+    "LonelyRunnerNew/RCDenominatorSums.lean": "0a338a7612edcfa8a9c1a4dfb9c115fdec0ebd16631131fc28947017d6db5d40",
+    "LonelyRunnerNew/RCLargeRows.lean": "adfc4f87036899242526862b36f0ebed5a2e01262952bc182f55202e2045f054",
+    "LonelyRunnerNew/RCLargeScalar.lean": "fa5c955bd71e5e825267bf76b378f7e0f645ed012c20d2c7752f48f022111796",
+    "LonelyRunnerNew/RCLargeSingleRow.lean": "9d79ffb183f50b6c9c9844ab5df63bdf9081c342f9a1b71e35e7ea41e4add52f",
+    "LonelyRunnerNew/RCPhysicalRows.lean": "8c032fa9656b80245b73b7266475fab53811bd54fd53aa6698deb42708232fbf",
+    "LonelyRunnerNew/RCRangeReduction.lean": "3a66c8431c9bd79ea37e47496c3f9a3e40c4e02fad0bb7a34427e2ba036f62ca",
+    "LonelyRunnerNew/RCRowIntegrals.lean": "2ebb31dd9f19c60eb949b15b4da0cf5f203454a7671bcc9a9964b20fde497f24",
+    "LonelyRunnerNew/RCRowKernels.lean": "efe313ee15333dfd63810b74e1477658e633ab80d02409952cf6112df3eb0bc6",
+    "LonelyRunnerNew/RCSelbergRows.lean": "d4c72a84cf0d37b730ee9797ad01d3c69107390492337e6f0f05de40fea428b3",
+    "LonelyRunnerNew/RoughBlockProved.lean": "8d8fab6d930a236efd4812ee4a13560ee1f5248d43d60fddfbb56ad24d52e360",
+    "LonelyRunnerNew/RoughImageSeparation.lean": "ec15d411b77cd4043e80a14723acc9c44317ea2827a510580747825c2de1a549",
+    "LonelyRunnerNew/RoughImageState.lean": "185b86fa87966b53af4223d017c3c7162337a3ef1813ff3ffc3079892b278174",
+    "LonelyRunnerNew/RoughModerateRow.lean": "42ee3791aa95ff573e4ed8b6124ba2eac5375ec075db14976755c7377d03f186",
+    "LonelyRunnerNew/RoughPrimeIntervals.lean": "de0a419a595f369567752f84fdf645624f6cbefd9f852225c8892839f17a4eef",
+    "LonelyRunnerNew/RoughPrimeRetention.lean": "30f5d36f3b7d1ce83ada4c2d9473ba24a76149ee104dd562f7e24b5f9521ebc6",
+    "LonelyRunnerNew/RoughRationalRows.lean": "9b777c6e07e2b5dff6d16e361ce214b2525b7c06a4d6b3b54a8b52d253226385",
+    "LonelyRunnerNew/RoughRationalSmall.lean": "a6408be230574cf915484125addf7815072347a606f0abe7be8086c56b8d8ec0",
+    "LonelyRunnerNew/RoughReciprocal.lean": "a75d44e202874f10fa3aaaa08a7c35eb56a3d9e93f804b1897e1e9d5641a5e27",
+    "LonelyRunnerNew/RoughRestabilization.lean": "7fd9eafbb4573997ed8b0f0ce02df04625db26fa32deb581af7f18504dd1f94d",
+    "LonelyRunnerNew/RoughRowBoundary.lean": "720e40d7b60f71d301f39df258b919d7a77910e64045c07f5a1f5bd86906b309",
+    "LonelyRunnerNew/RoughRowGlobal.lean": "239bb67332838215d2eb0b0b5c4ef256a29e5fd03b397a5eac711421a5fb04fb",
+    "LonelyRunnerNew/RoughRowPacking.lean": "1d80ae34d6bcb8764f7a183ffb73100953427da795d49317af2e4ff7f8e8030f",
+    "LonelyRunnerNew/RoughRowReduction.lean": "22bb8b542884b78da76fe3358131b13903e0d1f9a94286bed024c6a2556f10e8",
+    "LonelyRunnerNew/RoughStepInvariants.lean": "ec4adb176cc56d8b5f5b25b8ad1620cae3e39c67460aefa92441b92d5f0d0b90",
+    "LonelyRunnerNew/SaturatedGrid.lean": "07319499c3829d793a3f6ffd91f1995f9ee999709bbbe8a0c77b802ee6e323b3",
+    "LonelyRunnerNew/SaturatedIntegral.lean": "0a9f76c577090bc620c4a4765ef1219f20fc840399233030f3c03978720c0d90",
+    "LonelyRunnerNew/SaturatedPlusSum.lean": "3ae13a0c0c2a2ded6211ce07c0b7cf17610eae3b5d3e81c55f4a2f9ab6efbd03",
+    "LonelyRunnerNew/SaturatedPsiIntegral.lean": "1244c21b20dd65e1b17d35decca6c38bc78390871588f507472f6c322104ddb9",
+    "LonelyRunnerNew/SaturatedRankSum.lean": "4dafccd334ee2713ac266e5d6dd9b887872c7ee2e5fc098f153fcffd385b06e4",
+    "LonelyRunnerNew/SaturatedTerminal.lean": "6d531804025ee4d18b7803c9d91415ab944db2ba5389db86ba59057c7a9dbf8c",
+    "LonelyRunnerNew/SelbergEuler.lean": "2b9bcd2f93d87c1d63851d1f1f27c7cdf2bd39a70efa2c28f7fa6167d6618e0d",
+    "LonelyRunnerNew/SelbergEulerSum.lean": "59f6ba2458ad340ad924a46508137da8eacb6aef6ca6d997be7afc677856d262",
+    "LonelyRunnerNew/SelbergHarmonic.lean": "b4df3d4e0ed92ae01d11e24b38d02be1266a79353df4896564753763a7ac8502",
+    "LonelyRunnerNew/SelbergInterval.lean": "31b28d5137613f6fcd262cd582c4907010f16a7a9c7e44c2b411d8695072e9e5",
+    "LonelyRunnerNew/SelbergQuadratic.lean": "9ebfcb959501663dec45192c20e57867f579d14610d803b3048a69ac6be59c29",
+    "LonelyRunnerNew/SelbergWeightNorm.lean": "106138b2fda51e6e393909ce8c7d24da47e120829b746a603441460768dd541a",
+    "LonelyRunnerNew/SelbergWeights.lean": "3690784ba49c05822aa6f1cd7140b3362d697f4874174df056b0a5992b1dd0e7",
+    "LonelyRunnerNew/SeparatedCorePeeling.lean": "6f9a29a96e5800b85d3ba64e02dea8d28bb7c66f688d6ca594cb948c9c681685",
+    "LonelyRunnerNew/SeparatedEstimates.lean": "aea1dc71fdfcec63cb462a3a628e248c7cdbcc6f663becbf63570a7b6667944b",
+    "LonelyRunnerNew/SingleSpeedMeasure.lean": "f59b17c43a5eec1c56cf91510f8d38bf0eaf0b4779015108329cb2c278dd9cfb",
+    "LonelyRunnerNew/SmallPrimeActual.lean": "4499a2425461c4922e2f001d0a0bc9e29d14248ee27b45ffa2cee71113d4f620",
+    "LonelyRunnerNew/SmallPrimeAnalytic.lean": "2918df4dec99a8a78972ca5ba592ced22bb2f74f96b4e944e3dec85cf1eeb27a",
+    "LonelyRunnerNew/SmallPrimeEdgeMean.lean": "bc21c566c3d517b0ec32d03e0f3714dcd5a9cac7da06a70f0cf14f0d5e77ede9",
+    "LonelyRunnerNew/SmallPrimeMoments.lean": "35729b87cd4b1812ddfd641844c6c018e5c512d880f97c7d5c11d4b3b1092bd3",
+    "LonelyRunnerNew/SmallPrimeRowData0.lean": "9c0ee2872c9b69e40e5fd0c31f75a5ed678af16c53fcdfabf80eaa9fcf27036b",
+    "LonelyRunnerNew/SmallPrimeRowData1.lean": "753a3fb65828e7ddec08ec1916f151af49dd97e921282efbd3d39e4f43ec1061",
+    "LonelyRunnerNew/SmallPrimeRowData2.lean": "cde8447bac2fd16dd2b3ba76c740469da311e12ae946c1f127c3c5d637866e2f",
+    "LonelyRunnerNew/SmallPrimeRowData3.lean": "c2c9606802be255d7b29ddaa818c59bfcd6f22c28ec31b2819f8b2340c04e40e",
+    "LonelyRunnerNew/SmallPrimeRowData4.lean": "204831868f9c8dd2f51c19bd4c7e9a7695ed9d35ca853ed0eff11418e9254025",
+    "LonelyRunnerNew/SmallPrimeRowData5.lean": "db0cad553943fc080b767b444330de4e9ca274326c23080ffe651b392e960be3",
+    "LonelyRunnerNew/SmallPrimeRowData6.lean": "00d38946860697e8c56599018adb6cf0b6222efe54d9e1a0dfa17a9d9a0267f7",
+    "LonelyRunnerNew/SmallPrimeRowsProved.lean": "2292e53934f9e0533d0723bf176a2461e640df4477038b33cbb49129c1cdcfcc",
+    "LonelyRunnerNew/SpecificationAdapter.lean": "f291e1b9898b504c31a632811393f2e6692a2fc05c70f28cf611b0a25fd300fc",
+    "LonelyRunnerNew/SpilloverEndpointAssembly.lean": "1a4d9d0ade85bdc724e8535135aad1e1d89dfd64e1affdeeafc764f478a4a476",
+    "LonelyRunnerNew/SpilloverInputProved.lean": "348038e5dea7de3a53a3f3c143508e85d784b32d2bd847d6719809ce136162bd",
+    "LonelyRunnerNew/StableConcentration.lean": "7ef2f06d20153b78646e235db7432ee19c4ad2378d14687fcb7ddab062a1e77e",
+    "LonelyRunnerNew/StableDescent.lean": "03ac8fe1ebd9ea18c448d9006c4b52db56ca58f7c49940296f86c7b5a5f67415",
+    "LonelyRunnerNew/TaggedStates.lean": "2008ea7c314fc40cefc41116f1e08952e5f9c1fb8cdc035a08f0db874a7988c8",
+    "LonelyRunnerNew/Targets.lean": "f2361c4b01cbc320b6ad6350c10ba95935f459f11013a86ea1f93c5b2ed81f1c",
+    "LonelyRunnerNew/TargetSemantics.lean": "eae5bca95fc9381af86d8dce3d0d6916ec1aea63fbbf419b3263c5381b73c156",
+    "LonelyRunnerNew/TwoSpeedIntersection.lean": "1faf5a456e3b05fe10c5d68feac192ce712c497a1ec8cf8f6011a98ab39646a2",
+    "LonelyRunnerNew/UnimodalGrid.lean": "53033081344398669aa5b4183f2e5ca00fbd95872f83c5569ea76f5e32b502dd",
+    "LonelyRunnerNew/UnimodalProgression.lean": "b79401d156e4dec69c9afbbee0b6715a88814d08f903ae6752b186011ebbae89",
+    "LonelyRunnerNew/UniversalDescent.lean": "c50578fb7bb22b4960587cb1e3aa2a578cb9b97e0b0d89fbf2616a74a58e025e",
+    "LonelyRunnerNew/ValuationDistribution.lean": "c7bdd233476d9cdb60ce6a6f053f9c6b539a16f8d362ffd088f3d130168ed20a",
+    "LonelyRunnerNew/ValuationKernelSteps.lean": "ea1ca79b2b4fa08783d3285093525e0b3d0bd4b7ea1a0ce2ffd2e9b28b7c1d9b",
+    "LonelyRunnerNew/ValuationLayers.lean": "04aa8c7948908fbdebd6c3291f342aa39a8f401b1b6bf7debd863acc1d09611f",
+    "LonelyRunnerNew/WeightedBootstrap.lean": "b3c8495677b4c8ca280f54b9c0d6301a0b4b3c4ca1732d8a18f3925677fa0ac6",
+    "LonelyRunnerNew/WeightedDirections.lean": "463d6350788cdf66ee9447a7507e5b7c4475032b2ac99ce3f8a729b1eeb324f4",
+    "LonelyRunnerNew/WeightedDistribution.lean": "4c49257be006e5bd3d0b09b6395d472666fb6946c24e54e6da06c6be2dffeb3b",
+    "LonelyRunnerNew/WeightedPrimeSupport.lean": "e502fab610f9d72a1066e1868e164b4ced3b1b8b92e359a4db41ea75de6503b9",
+    "LonelyRunnerNew/WeightedRetention.lean": "ae17e94d85f2b311053d0db61b0a9b3a797fe7b0b3c6f23b9f1bcb720e448b79",
+    "LonelyRunnerNew/WSubsetComparison.lean": "278e7ad80eb875b61a4e6d5b99b889b369e78a6430ece053ec24f19373f2687c",
+    "LonelyRunnerSpec/SemanticChecks.lean": "54c40c9efa3e296a1a5a3f916d02ad1c58371cb377ad0cd4099266b6f5288c53",
+    "LonelyRunnerSpec/V1.lean": "0c729c14ff965221eef3a8b09b713ef84ad54bee24dee02541c908752c71493d",
+    "LonelyRunnerNew.lean": "fdb21e5c0213997a202736fe6d5a506375e220c43bfd931852def8230623b73f",
+    "LonelyRunnerValidation/FinalSolution.lean": "874d91bce939bb5529385960336dc606c87da2559d6b97af2ae2d873ce015280",
+    "lean-toolchain": "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+    "lake-manifest.json": "df12f9e2450a9576ce381febd15f689a44f3600de4cc0ef3fb586e874d6ec5aa",
+    "lakefile.toml": "d77d69a90c2a4bbc85750aab1926cd86abb867857fae4121cc219014bd165137",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part00.lean": "5298c8f936b02de1beab68bb4d5869d391a74acdb89dea594d7e56eb0bb4e451",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part01.lean": "1405b95c8107c3947c56622f8665967e7806c99a8b93934aa65f93a25bce2dcf",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part02.lean": "82c5a14d9216bacc1aeb676aaf3d95e9a25901c6f19e4ae54b319a45d5e7733a",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part03.lean": "9c3eaa2a0e9d2556176e9af7aa91bca79ccedeceff2f58d4c257b37866915274",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part04.lean": "b3757a7d64cd1ba128d658a5cf74facf92ff43516a683f771ddd23a34e6e38c3",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part05.lean": "de852d3f9ff6bd3186610cf3c311235c738e736d63a5a54cac01f1c02bac150b",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part06.lean": "2b113a1fff6e472a07d6859c57b9d5b73629bf9bfb4f3cdcdd99afb111cec56a",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part07.lean": "a2c537303d493014c432ac90b061ea3eb5f4d15d138b107fb6596707533fb93a",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part08.lean": "677e6b9125e439fc2e0bebf9623f94e0e1518e758685402749432db266ad676c",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part09.lean": "92c8aeb90caf32c504ac4b01a20e11b11ef48c583be4cfb36aac745f1c3a3615",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part10.lean": "b8eef7b6ccd18e1c0821870ea81a47330a9ec48bf140d4f59812ad42b4e2c922",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part11.lean": "5785bf9b885ae29e11d9756e84432f27c5a645a9e5d61abee43a4bf37275055d",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part12.lean": "419b799c922738f58221e720299973e7130bc2733c008b964c3ab5644dc60ef7",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part13.lean": "7cc985f0c759843a28f624140e2a0a7fba49f4d668d5f368b691b6e076c83f17",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part14.lean": "8253533ad4d56ca2f06901d95b5ad6c6e198e6c54256a62f979673daac222e2f",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part15.lean": "4ede418d0c630088aa217db225cc3f7c4588444c3ebba9fef9465087ed6baf4d",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part16.lean": "91940048e50532f4d0bc99b9ba3df19330083185411dee63c1a7f386e84f8bea",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part17.lean": "7aa11f37339f2f0213b45124981d8f3b0f0ecb79c8418ce19701279a5a7ba113",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part18.lean": "a911620c3549a60b40974ec7a8ce88cd10d594abfa1b747aed3d6a246dccef74",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part19.lean": "7e14cc8da02b114a557eb296eb31f0bffac267ce3808131936f43f3058d39686",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part20.lean": "e1c1505e71f0b7931defc9b697fd039a390f7568b52811ffeb15921beb1a5c3d",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part21.lean": "dbd0be20bb8944227aff3c7a68b223c1af57ecf9cac5c756f5b8396523fcada7",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part22.lean": "ed8199ca4cb02e29db8dce52d40bc3aec75d81d0290032e307b6cf2c36876498",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part23.lean": "aa9e42542dff8d1f39ce18a3b076d4668ffda7a3bc13cf1063c7df3589da79e7",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part24.lean": "a8c4c975d1830b3cd12e6e1c1dd4ca795003e01aea401578391f864e048c594c",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part25.lean": "a1582726ab2925f59ed2e08888279f5050d53e3c494ee1af4c5da106b1004e0c",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part26.lean": "7dac2cf0cdeb96eafcec46d982b31b36462304e8b3251370ad6cbb1b69318147",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part27.lean": "3a93816228284e15163951e26bcdf436c6f86d1cd21ffe94ecee0cc59b645a43",
+    "LonelyRunnerNew/LCMiddlePrimeData7Part28.lean": "52c6a3ff3fb551c9a6b31aea0376c5d26b7e5801389f502bcaedafec8d6c3552"
+  },
+  "frozen_files": {
+    "LonelyRunnerSpec/V1.lean": "0c729c14ff965221eef3a8b09b713ef84ad54bee24dee02541c908752c71493d",
+    "SEMANTIC_SPEC.md": "ec6b1b3517c3949d5b279d61ddf1ef96154ca15b533fe9f1a2cff2ce4033d56e",
+    "LonelyRunnerValidation/Policy.lean": "de064dbe1b0e2788466535dc1b06e6fb2aa19bcc6a98924dd51e82cf5158cf6d",
+    "validation/comparator/Challenge.lean.in": "fe5f8d83cde21480a41d3ab0abc7fbdeca336234dc7688b27032451845e893e0",
+    "validation/comparator/Solution.lean.in": "874d91bce939bb5529385960336dc606c87da2559d6b97af2ae2d873ce015280",
+    "validation/comparator/config.json": "96e3d11ae5853c22aecc9414ec64bb78cf3e820dc02db8f6a89c73790dbd9b89",
+    "validation/comparator/lakefile.toml.in": "db432d8933caec66158c567a42cc4b134b8313fd20ed473a4efd92c07b7c3a4e",
+    "validation/comparator/lake-manifest.json": "52ff797cd437e5f78a7f7ac1360fa11baee8742bef7633a79b12a6c1fdc22042",
+    "validation/comparator/lean-toolchain": "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+    "validation/axiom-whitelist.json": "f8ff22c6f276e3bf0fd181c2c9cc09cd311bfccd4cdcd6d1e6112cb9642116c1",
+    "validation/run_preflight.py": "0a4e304a808eb9307597b1302180f12e9c093e5efa4b1b9b8fc06709edc7bc91",
+    "validation/record_command.py": "1a55202864a04cd4b8228a5fda17ee8b1530465f93f48bd7320b9c2ab78365f0",
+    "validation/tools-lock.json": "9e111a5ee2e40cd11d58caea0c6db5b9ba6460e18a710958949e10e3dc50a0a5",
+    "lakefile.toml": "d77d69a90c2a4bbc85750aab1926cd86abb867857fae4121cc219014bd165137",
+    "lake-manifest.json": "df12f9e2450a9576ce381febd15f689a44f3600de4cc0ef3fb586e874d6ec5aa",
+    "lean-toolchain": "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b"
+  },
+  "changed_existing_files": [
+    "LonelyRunnerNew/LCMiddlePrimeData7.lean"
+  ],
+  "added_modules": [
+    "LonelyRunnerNew.LCMiddlePrimeData7Part00",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part01",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part02",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part03",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part04",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part05",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part06",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part07",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part08",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part09",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part10",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part11",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part12",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part13",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part14",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part15",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part16",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part17",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part18",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part19",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part20",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part21",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part22",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part23",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part24",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part25",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part26",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part27",
+    "LonelyRunnerNew.LCMiddlePrimeData7Part28"
+  ],
+  "row_body_sha256": [
+    {
+      "row": 406,
+      "sha256": "c0bdae9b8f064023f3bbe07aa514f3a77c5dc3172a78fbcd810d455a49e13700"
+    },
+    {
+      "row": 407,
+      "sha256": "95795d8aa8301bb76744e1fdca385bf1b91d11d84b540652b3fe0f1e431fd641"
+    },
+    {
+      "row": 408,
+      "sha256": "86f6f5c925fb0a5b86cb4e40748e96b6c558a5dadb86292042412edfe47d492d"
+    },
+    {
+      "row": 409,
+      "sha256": "aed8ac8b900ee6e2a95e0b658a4cde50c1a7a527c6220dc82c1329df74529b67"
+    },
+    {
+      "row": 410,
+      "sha256": "39dd23832fcabe1706738cf041149fe69855b24d9bb77834b03b1343d301637f"
+    },
+    {
+      "row": 411,
+      "sha256": "2715910c084ed7e6c58d0f74485894b4396ce71d2a46f37ff111a752621f95f0"
+    },
+    {
+      "row": 412,
+      "sha256": "8e13342797f59a363f971698d80e959be4f1822601810f057ea9d0ad2450fac1"
+    },
+    {
+      "row": 413,
+      "sha256": "32998ce48939c65e0543c4aa513102c1e45c264fc00e9c28bc3dd9c9e6e9691b"
+    },
+    {
+      "row": 414,
+      "sha256": "a3ae7eff04be45acc2680f3d076847890fe9dc0e2f7546dc87667065a5980abe"
+    },
+    {
+      "row": 415,
+      "sha256": "e654bd398e64cc76b5c503bac56b65b04257981f4c7768aad448b7b3873315d6"
+    },
+    {
+      "row": 416,
+      "sha256": "a2bf7f753afe3c2206452f7d35bec85b97360ff83f1c52a49edbd79b0eb25622"
+    },
+    {
+      "row": 417,
+      "sha256": "80b0b2ec05f0e6af03351c1f8976a2944716c058f205774906124e9e2b16f84a"
+    },
+    {
+      "row": 418,
+      "sha256": "2eac6af69508f61aa9eba3cc89d5928ebc10c8f0f5cee43f6ef5c9e5b61a2e1a"
+    },
+    {
+      "row": 419,
+      "sha256": "072e7690da55df256736e06420660b6efc752e472f47548288be7dc30b9a6dea"
+    },
+    {
+      "row": 420,
+      "sha256": "6b39f53d2c1558bec0e2db6b583aff91a60703d4b1e139d4dd937aa453d389af"
+    },
+    {
+      "row": 421,
+      "sha256": "31a3398c266ae72d1e8aef82dadbff8a4c9ba761756dd83c067bc5e31291d90f"
+    },
+    {
+      "row": 422,
+      "sha256": "061668ef94ba089b92c61d1399209ee423bb6c35fb910fcad0455206e5ca0210"
+    },
+    {
+      "row": 423,
+      "sha256": "4638adaf3e894b57d025c5288c8343e645ae1198edb3a84fff4fed2614b09e20"
+    },
+    {
+      "row": 424,
+      "sha256": "abbd7f5f87e817d7daafde364d53d1dc386e6e10eb916b7d174bde13934a98e7"
+    },
+    {
+      "row": 425,
+      "sha256": "80b9b2425f61d6d5a014c591dce0043622180527f920ca402ca45a1c571282c0"
+    },
+    {
+      "row": 426,
+      "sha256": "93b58b6c059cf80e7119adcccb50aa6850aca9d7b9acfb1439a49c53fb2a64fe"
+    },
+    {
+      "row": 427,
+      "sha256": "ffef9dd17d18750278bb1e8acbf39d29868f51b8e569c93bfbebbb26dfedc458"
+    },
+    {
+      "row": 428,
+      "sha256": "88e586a7155543e87aa46e26ea90dbe8f081228c9f0f5915dff6385816214aab"
+    },
+    {
+      "row": 429,
+      "sha256": "5851be13bef478c9019f6ab3c5ce81a47aae2e5503325bfc64a3eceef36b2233"
+    },
+    {
+      "row": 430,
+      "sha256": "3cc3cdaa6a5db689e0b4cffe0ba289ea2e52fb2f4360ee112ccab14aed7db8e3"
+    },
+    {
+      "row": 431,
+      "sha256": "b6be1e7390e6f424fac3b63475ce69d614a2186fe162e7dff55bb7d4809e1559"
+    },
+    {
+      "row": 432,
+      "sha256": "e0e7e2819a01ce2c7d87a1ec2e2056983b7191b881fa9689e13393ea88762cfd"
+    },
+    {
+      "row": 433,
+      "sha256": "85d7a8c345844b327025591aaca6baf625c777fc2fd834e35e3bbe1e5db7b89d"
+    },
+    {
+      "row": 434,
+      "sha256": "0a2c03af64cb445b939f7d59ca5957bcf4f98d56860ccaaeec7381f0aeb9bd8e"
+    },
+    {
+      "row": 435,
+      "sha256": "44348159de9de2aaa26995818cc606333bd4b18502e2bcca30aea925e2c1f74b"
+    },
+    {
+      "row": 436,
+      "sha256": "dc2a2215621880a55f6583aab940f0b1f01df64d618fa969548277f51dd80707"
+    },
+    {
+      "row": 437,
+      "sha256": "a5c0b0bef0f3a2f63ccb582c87fdd12d8578ce6897fa6c056680b71d35a44fbe"
+    },
+    {
+      "row": 438,
+      "sha256": "83dddbd6c66be643f54ad9d26420d2604a6aaee36b5cafb87285f58a1b0ebf49"
+    },
+    {
+      "row": 439,
+      "sha256": "8f66b94d2ccad8ac8ae73815336adfcd636a5e5053e47476220c9bc1495e5a2f"
+    },
+    {
+      "row": 440,
+      "sha256": "77ddae24ee783e03ffc1a5a1ff1c5d935ecda7eba10fe0e67011065113a59bdb"
+    },
+    {
+      "row": 441,
+      "sha256": "711451eb2a627af920f4653fa34f284b0227a7498867450821675093f5a6ed33"
+    },
+    {
+      "row": 442,
+      "sha256": "4efff910ce5789f3ef454205bf8f5c0b0cf91e93e177dfa4e6b4135b48949e70"
+    },
+    {
+      "row": 443,
+      "sha256": "8dd9a19aec690cfcf09c22c2c246aec19bd1f7bc22c5cc261bcb4ddfa044064f"
+    },
+    {
+      "row": 444,
+      "sha256": "535714e79b093c862a75ba7d52b78690998758384513ab38e759ef411145c7eb"
+    },
+    {
+      "row": 445,
+      "sha256": "822c330c4b978f326e36df256d2c588e94e7b16099885986b9a07ab6469f2c4c"
+    },
+    {
+      "row": 446,
+      "sha256": "f9d9309a9858c75731cd1aac1504afea813c9aaaa06bc009ed4644ebcd40f704"
+    },
+    {
+      "row": 447,
+      "sha256": "009c952de23df60f68157e076720a60b8bbf36d64c849c44cfdcd5038a6bf0e4"
+    },
+    {
+      "row": 448,
+      "sha256": "1aae118860b1cef254251f7f9905699e9d0968b0f48bb446aeece6d7b8ed0085"
+    },
+    {
+      "row": 449,
+      "sha256": "391e04d8346e7187cb29dc8ecb39a60af813e8a96d45e18b062808c934ee0743"
+    },
+    {
+      "row": 450,
+      "sha256": "a8b68d1c46d76a4d3b4ec63f1d733ce9e46e1699c08dc39b22236b3986303747"
+    },
+    {
+      "row": 451,
+      "sha256": "4bed39ca3a495090750cba8c6c356dbe1b7752092772a2c5db3bfa66d0949e51"
+    },
+    {
+      "row": 452,
+      "sha256": "612a69ab714f11506c1fd9e7e43de65a09c4863fafdfabf057e9cfb297462fe8"
+    },
+    {
+      "row": 453,
+      "sha256": "772296ac7b8a9d8a89c5b13ea2b87fa08440af388677b9917b397fa7e72ff9dc"
+    },
+    {
+      "row": 454,
+      "sha256": "8f7899411f604ae2221c0ec754ebcaff6a5859275ab4ebaf51f04ebc96fdab5e"
+    },
+    {
+      "row": 455,
+      "sha256": "2a41768439e84071d2de3e03d63cbcf95c9a2725a75ae81bdc93126f25dd0e52"
+    },
+    {
+      "row": 456,
+      "sha256": "79f0f3cd405e4f20ae6560cfa32b0df766ae0f0b1d28e0e3557185838828b5c8"
+    },
+    {
+      "row": 457,
+      "sha256": "db73c78aba87bf3d79192c7e0401ed113fc00bd306b01af7cae12becbcb341f5"
+    },
+    {
+      "row": 458,
+      "sha256": "34ba95bf0eb8010b20ccf31f800dbbbf36f8f5efb2a73dffdf48ba7b1c15b5db"
+    },
+    {
+      "row": 459,
+      "sha256": "40054bb44eae342d70d5553aca99cc28eadba2d4e2bf9f5b1636bd28ea223394"
+    },
+    {
+      "row": 460,
+      "sha256": "981c8dc7f5203034beca3e7bce4d4276f6d95d9e08fcc0452dbc22ac66de9c75"
+    },
+    {
+      "row": 461,
+      "sha256": "cd6a436e4088f9fc6f8abc196bb84f751dfac7bde6e04c00d421f2b7156900bd"
+    },
+    {
+      "row": 462,
+      "sha256": "1e7d82502dfb4a9e80aa20de3ca717fbcbdfaaedf04fe5edf9b1c594a1db203f"
+    }
+  ],
+  "rows": 57,
+  "parts": 29,
+  "preserved": "All original row definitions, theorem statements and proof bodies remain exact byte slices; only Lean module boundaries change."
+}

@@ -1,0 +1,7 @@
+{
+  "origin_zip_sha256": "68c5304afabf79dcb043ff7c9360dd94de3edb7a05d9565735f58128f5128947",
+  "sanitized_zip_sha256": "50e0a83e99154095e4cb42d0a43df9076a40dee3cc735a608ab8fc46e060f7b1",
+  "frozen_manifest_sha256": "58caccd663f20dc987be5b769f4fd348aeb2f81f28b2b1058645a5b923df91c7",
+  "retained_files": 16,
+  "scope": "Exact 16 frozen file bytes and exact original manifest; original provenance metadata excluded. This is not a new independently authored specification."
+}

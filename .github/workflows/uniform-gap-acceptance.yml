@@ -46,7 +46,7 @@ jobs:
           import hashlib,json,pathlib
           p=pathlib.Path("uniform-gap/ci/runner-files.sha256.json")
           raw=p.read_bytes()
-          assert hashlib.sha256(raw).hexdigest()=="bf1f4b46a33d1ab7f13938abed778b657025405a1c6f6796f0b6d1a588c7cf09"
+          assert hashlib.sha256(raw).hexdigest()=="de3eb7cdf8ee1f9a878e509ecbd66f42ff19b4073c3384cbad06797ec07781aa"
           d=json.loads(raw)
           for name,h in d["files"].items():
               assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==h,name

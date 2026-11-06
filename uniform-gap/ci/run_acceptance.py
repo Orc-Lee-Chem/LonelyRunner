@@ -211,6 +211,17 @@ class Context:
         mathlib=self.deps/".lake/packages/mathlib"
         actual=subprocess.check_output(["git","rev-parse","HEAD"],cwd=mathlib,text=True).strip()
         if actual!="d13f23b723b8a846827a245b89c10fc7d3f11612":raise Failed("Mathlib commit changed")
+        # Populate official Lake hash/extra-dependency traces while only trusted
+        # sources are running. Candidate sandboxes keep this entire cache readonly.
+        self.run("prepare-trusted-dependency-traces",["lake","build",*["+"+m for m in sorted(imports)]],cwd=self.deps,timeout=5400)
+        locked=json.loads(self.frozen["lake-manifest.json"])
+        for package in locked["packages"]:
+            directory=self.deps/".lake/packages"/package["name"]
+            revision=subprocess.check_output(["git","rev-parse","HEAD"],cwd=directory,text=True).strip()
+            dirty=subprocess.check_output(["git","diff","--name-only","HEAD"],cwd=directory,text=True).strip()
+            if revision!=package["rev"] or dirty:raise Failed("Trusted dependency source/lock changed: "+package["name"])
+        if (self.deps/"lake-manifest.json").read_bytes()!=self.frozen["lake-manifest.json"]:
+            raise Failed("Trusted dependency manifest changed")
         self.toolsrc.mkdir(parents=True,exist_ok=True)
         for name in PINS:self.clone(name)
         comp=self.toolsrc/"comparator";pkg=comp/".lake/packages";pkg.mkdir(parents=True,exist_ok=True)

@@ -1,15 +1,16 @@
 {
-  "schema_version": 1,
-  "as_of": "2026-11-05",
-  "publication_state": "DRAFT_RESEARCH_BRANCH_FINAL_ACCEPTANCE_PENDING",
-  "source_checkpoint_commit": "c1bee1c802624725dfeefef8dc9fb22b5ee886f7",
-  "source_version_sha256": "67008acda1805ce8a67e8557e793b7c91e6d016634d72da04dacc50ace443a9a",
+  "schema_version": 2,
+  "as_of": "2026-11-07",
+  "publication_state": "DRAFT_MACHINE_GATES_PASSED_HUMAN_REVIEW_PENDING",
+  "source_checkpoint_commit": "2d0f3ded605f4929e0313fa4edc362064c3a1bd6",
+  "source_version_sha256": "befdb0a4d53dd27f1a62e01f7e9c6ad5be3ae91569fde001bd3cca2040cb4c78",
   "source_and_frozen_checks": {
     "status": "PASS",
-    "source_inputs": 234,
+    "source_inputs": 263,
     "frozen_files": 16,
-    "source_unchanged": true
+    "math_lean_modules": 261
   },
+  "source_change_scope": "Only LCMiddlePrimeData7 split into 29 low-memory modules; 57 original proof/definition bodies reconstruct exactly. Other 233 inputs and all 16 frozen files unchanged; old pinned manifest retained.",
   "paper_correspondence": {
     "status": "PASS_WITH_STATED_SCOPE",
     "scope": "Agent/script statement and appendix correspondence; not independent human review of all arguments",
@@ -29,96 +30,286 @@
     ],
     "normalized_pdf_text_equal": true
   },
-  "historical_source_rebuild_and_fresh_replay": {
-    "status": "PASS_RECORDED_NOT_RERUN_FOR_THIS_DRAFT",
-    "rebuilt_project_modules": 228,
-    "leanchecker_exit_code": 0,
-    "external_locked_library_cache_reused": true,
-    "whole_mathlib_source_rebuild": false,
-    "result_receipt_sha256": "c7d97f03f9f03a4adc30cfa2fb4141da758a9304246a5d51cb27c1cd15d659ae",
-    "fresh_receipt_sha256": "1dfe321c0cd4158dd7c7af9b991b46e1dd6c32bdf5a30d566cdabcf00d06005a"
+  "actions": {
+    "url": "https://github.com/Orc-Lee-Chem/LonelyRunner/actions/runs/42260418491",
+    "run_id": 42260418491,
+    "conclusion": "success",
+    "tested_commit": "2d0f3ded605f4929e0313fa4edc362064c3a1bd6"
   },
-  "historical_nanoda": {
-    "status": "PASS_RECORDED_NOT_RERUN_FOR_THIS_DRAFT",
-    "exit_code": 0,
-    "checked_declarations": 60675,
-    "tool_commit": "8de7e0c4ed3052745a7f8725164efd9e76d84c56",
-    "export_sha256": "7446f910cc05d34af2df4ef8e01fe1ae6734f4d2909abcd5bf5d7799ac6ed221",
-    "targets": [
-      "LonelyRunnerAcceptance.explicit_gap",
-      "LonelyRunnerAcceptance.uniform_gap"
-    ],
+  "formal_comparator": {
+    "positive_targets": {
+      "LonelyRunnerAcceptance.explicit_gap": "PASS",
+      "LonelyRunnerAcceptance.uniform_gap": "PASS"
+    },
+    "negative_controls": {
+      "weak_target": {
+        "status": "EXPECTED_REJECTION",
+        "exit_code": 1,
+        "diagnostics": [
+          "uncaught exception: Challenge and solution theorem statement do not match: 'LonelyRunnerAcceptance.explicit_gap'"
+        ],
+        "raw_log_sha256": "5d1a1110a4912972b83556c60e5d38d9891b8b00ae55d7da66e4eed8211346aa"
+      },
+      "changed_definition": {
+        "status": "EXPECTED_REJECTION",
+        "exit_code": 1,
+        "diagnostics": [
+          "uncaught exception: Challenge and solution theorem statement do not match: 'LonelyRunnerAcceptance.explicit_gap'"
+        ],
+        "raw_log_sha256": "4d1317250dbca434cf8868cc4618e07663356bfcba5e38011157b5643d798e83"
+      },
+      "sorry_dependency": {
+        "status": "EXPECTED_REJECTION",
+        "exit_code": 1,
+        "diagnostics": [
+          "uncaught exception: Illegal axiom detected: 'sorryAx'"
+        ],
+        "raw_log_sha256": "c7144be79eebb5eb8a30f1d3abe335dd757d90770b8af4b1ddf567dfe4b5fd34"
+      },
+      "extra_condition": {
+        "status": "EXPECTED_REJECTION",
+        "exit_code": 1,
+        "diagnostics": [
+          "uncaught exception: Challenge and solution theorem statement do not match: 'LonelyRunnerAcceptance.explicit_gap'"
+        ],
+        "raw_log_sha256": "5d1a1110a4912972b83556c60e5d38d9891b8b00ae55d7da66e4eed8211346aa"
+      }
+    },
     "permitted_axioms": [
       "propext",
       "Classical.choice",
       "Quot.sound"
     ],
-    "scope": "Standalone independent kernel check; not Comparator challenge comparison"
+    "definition_holes": [],
+    "independent_reference_note": "Same 16 independently supplied frozen files and manifest faithfully migrated; no new independent human semantic review.",
+    "isolation": {
+      "status": "PASS",
+      "protected_write_denied": true,
+      "af_unix_denied": true
+    }
   },
-  "cached_final_type_axiom_check": {
-    "status": "PASS_EXISTING_PINNED_ARTIFACTS",
+  "nanoda": {
+    "status": "PASS",
+    "checked_declarations": 60665,
+    "library_commit": "8de7e0c4ed3052745a7f8725164efd9e76d84c56",
+    "entrypoint_note": "The real check count is emitted by a separate CLI copied from the pinned upstream main.rs with only print_success_message=true and pp_to_stdout=true. Pinned nanoda_lib source and dependency versions are unchanged. Both stock and diagnostic binary hashes are recorded. The acceptance classifier is unchanged.",
+    "binary_hashes": {
+      "comparator": "bd683bbe03c69a0bb32ec6583b608808385b8eea8a2ba5f0da4c0971b7cea904",
+      "lean4export": "8c5d64ba68f4d3a68b3bcb7e1c5f188e35ae573b29470b8d4530a62324c9ddd1",
+      "nanoda": "f92f742cfb725c5605cd5ecf194fd3083f2d2d6adbc54fd0b8fb4117cb52a40a",
+      "nanoda_diagnostic_cli": "47a5c941c12b59b2490d753876dc8f45e8c65fa9d78843ca0d72a1a36099cc2c",
+      "landrun": "a924366fdc21461a5ffb3039f33d25d27c43ad97311fb12c634ca6255f59e756"
+    },
+    "log_sha256": "6dbea58209f54238eede94771db7d5a926546da73ab2d643449e27e70ea080fd",
+    "export_sha256": "c2490a10b8b0dfc536336c1b2a3cd46bac643ea7618806468448c1efe0f87764",
+    "export_bytes": 460979186,
+    "retained_export_gzip_sha256": "b2a1afbefcb710ddb09fa42ff5624a52889a78518a862e463c2c79325117044f"
+  },
+  "clean_source_build": {
+    "status": "PASS",
+    "source_modules": 261,
+    "scope": "All 261 source and validation modules via operator-generated AllSource, then the original default target; documented temporary acceptance configuration"
+  },
+  "fresh": {
+    "status": "PASS",
     "exit_code": 0,
-    "targets": [
-      "LonelyRunnerNew.lonely_runner_gap",
-      "LonelyRunnerNew.frozen_target_proved",
-      "LonelyRunnerAcceptance.explicit_gap",
-      "LonelyRunnerAcceptance.uniform_gap"
-    ],
-    "observed_axioms": [
-      "propext",
-      "Classical.choice",
-      "Quot.sound"
-    ],
-    "new_clean_build_validation": false
+    "termination": null,
+    "validated_olean_files_unchanged": true
   },
-  "publication_candidate_clean_rebuild": {
-    "status": "RESOURCE_BLOCKED_INCOMPLETE",
-    "exit_code": 1,
-    "active_module": "LonelyRunnerNew.LCMiddlePrimeData7",
-    "explicit_compiler_j1": true,
-    "reason": "Wrapper stopped its owned process tree after available commit headroom stayed below 1.5 GiB",
-    "lean_native_oom_observed": false,
-    "lean_compilation_error_observed": false,
-    "finalsolution_build": "NOT_RUN_AFTER_BLOCK",
-    "fresh_type_axiom_check": "NOT_RUN_AFTER_BLOCK"
-  },
-  "formal_comparator": {
-    "status": "NOT_RUN",
-    "positive_targets": {
-      "LonelyRunnerAcceptance.explicit_gap": "NOT_RUN",
-      "LonelyRunnerAcceptance.uniform_gap": "NOT_RUN"
+  "final_types_and_axioms": {
+    "status": "PASS",
+    "axioms": {
+      "LonelyRunnerNew.lonely_runner_gap": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "LonelyRunnerNew.frozen_target_proved": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "LonelyRunnerAcceptance.explicit_gap": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "LonelyRunnerAcceptance.uniform_gap": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
     },
-    "negatives": {
-      "weak_target": {
-        "status": "NOT_RUN",
-        "actual_rejection": null
-      },
-      "changed_definition": {
-        "status": "NOT_RUN",
-        "actual_rejection": null
-      },
-      "sorry_dependency": {
-        "status": "NOT_RUN",
-        "actual_rejection": null
-      },
-      "conditional_theorem": {
-        "status": "NOT_RUN",
-        "actual_rejection": null
-      }
-    },
-    "independent_reference_preparation": "Hash-matched separate readonly reference tree prepared; Linux enforcement still untested",
-    "linux_isolation": "UNAVAILABLE_ON_CURRENT_HOST",
-    "linux_tool_compatibility": "NOT_RUN",
-    "actual_theorems_compared": []
+    "raw_output": "print-final-types command log; pp.all=true and explicit @ declarations"
   },
-  "pending": [
-    "Publication-candidate clean rebuild and new-output type/axiom check",
-    "Linux isolation and tool compatibility",
-    "Both formal Comparator positives and all four semantic negative controls",
-    "Final acceptance",
-    "New manuscript author/affiliation confirmation; current author field intentionally empty",
-    "New code and manuscript license confirmation"
+  "runtime_configuration": "Only the documented temporary execution TOML adds -j1, -M12288, -DElab.async=false and Challenge/Solution/AllSource libraries. Frozen inputs remain unchanged; runtime comparison enables nanoda while preserving both theorem names, empty definition holes and the three-axiom whitelist.",
+  "earlier_failed_runs": [
+    {
+      "run_id": 42173298542,
+      "url": "https://github.com/Orc-Lee-Chem/LonelyRunner/actions/runs/42173298542",
+      "head_sha": "1cfaf6e5123a60a701db3e8b8f37565e2b646863",
+      "conclusion": "failure",
+      "diagnosis": "Trusted dependency trace files were not prewarmed; building Challenge failed on readonly cache .hash access before comparison. Fixed by trusted cache preparation, without relaxing sandbox writes."
+    },
+    {
+      "run_id": 42174160139,
+      "url": "https://github.com/Orc-Lee-Chem/LonelyRunner/actions/runs/42174160139",
+      "head_sha": "0d45226243eaf26c16a8bf64c03be57b654aa258",
+      "conclusion": "failure",
+      "diagnosis": "Source modules Data5/Data6 exceeded the 6144 MiB Lean interpreter cap (memory_exception, exit 134); fixed execution resource cap to 12288 MiB and provisioned ephemeral VM swap. All proof input bytes unchanged."
+    },
+    {
+      "run_id": 42180024571,
+      "url": "https://github.com/Orc-Lee-Chem/LonelyRunner/actions/runs/42180024571",
+      "head_sha": "a14d171fcdc625f8da19e419cffbb8f787f7a4a2",
+      "conclusion": "failure",
+      "diagnosis": "Official Comparator exited 0 and accepted both targets with both kernels, but the strict CI protocol rejected missing nanoda declaration-count output. Default nanoda print_success_message=false. Fixed a separate diagnostic CLI to set that flag using the unchanged pinned checker library and locked dependencies; classifier unchanged."
+    },
+    {
+      "run_id": 42191222135,
+      "url": "https://github.com/Orc-Lee-Chem/LonelyRunner/actions/runs/42191222135",
+      "head_sha": "cd2fdec250fc5f32560070d9a197117804fb78a5",
+      "conclusion": "failure",
+      "diagnosis": "Official Comparator and both kernels again accepted both targets (exit 0), but the strict protocol rejected the real diagnostic: Checked 60665 declarations with no typechecker errors, 1 pretty printer errors: Unable to print axioms. Upstream print_axioms defaults true while no output destination is configured. The diagnostic CLI now also enables pp_to_stdout, preserving rather than suppressing axiom printing. Four negatives and fresh were not run."
+    },
+    {
+      "run_id": 42246767708,
+      "url": "https://github.com/Orc-Lee-Chem/LonelyRunner/actions/runs/42246767708",
+      "head_sha": "bc84b12dcc958bf512db396ecdbf992d4027fcdf",
+      "conclusion": "failure",
+      "diagnosis": "Both official targets and both kernels passed, with 60665 declarations, and all four semantic negatives were correctly rejected. Direct AllSource sandbox failed before compiling code (0.115s): missing git execution permission caused Lake to attempt a readonly mathlib replacement. AllSource was attempted and failed; default build/fresh/types were not run. Fixed the operator sandbox to match official safeLakeBuild git execution permissions without expanding writes, and added short git/reference preflights. This run did not retain the actual export checksum."
+    }
   ],
-  "publication_authorization": "User explicitly authorized research-branch push and draft PR while these checks remain pending; no merge/release",
-  "redaction": "Summary only. No raw logs, host paths, credentials, caches, or build objects included."
+  "machine_acceptance_completed": true,
+  "final_acceptance_completed": false,
+  "pending": [
+    "Independent human semantic/manuscript review",
+    "Author and new code/manuscript license confirmation"
+  ],
+  "publication_authorization": "Research branch and draft PR only; no merge, tag or release",
+  "previous_publication_summary_20261105": {
+    "schema_version": 1,
+    "as_of": "2026-11-05",
+    "publication_state": "DRAFT_RESEARCH_BRANCH_FINAL_ACCEPTANCE_PENDING",
+    "source_checkpoint_commit": "c1bee1c802624725dfeefef8dc9fb22b5ee886f7",
+    "source_version_sha256": "67008acda1805ce8a67e8557e793b7c91e6d016634d72da04dacc50ace443a9a",
+    "source_and_frozen_checks": {
+      "status": "PASS",
+      "source_inputs": 234,
+      "frozen_files": 16,
+      "source_unchanged": true
+    },
+    "paper_correspondence": {
+      "status": "PASS_WITH_STATED_SCOPE",
+      "scope": "Agent/script statement and appendix correspondence; not independent human review of all arguments",
+      "bootstrap_rows": 6,
+      "small_prime_rows": 34,
+      "small_prime_fields": [
+        "prime",
+        "tau",
+        "edgeUpper"
+      ],
+      "tex_sha256": "f6fdcd920c63060da037c50bcd1cf754ddca1c2bb14907abc9427e5345f01ea1",
+      "pdf_sha256": "001c90b1aa62a524d063524065b9ec57c2e94beb23a07ede44c83bad54c93bfc",
+      "supplied_bytes_preserved": true,
+      "validation_pdflatex_exit_codes": [
+        0,
+        0
+      ],
+      "normalized_pdf_text_equal": true
+    },
+    "historical_source_rebuild_and_fresh_replay": {
+      "status": "PASS_RECORDED_NOT_RERUN_FOR_THIS_DRAFT",
+      "rebuilt_project_modules": 228,
+      "leanchecker_exit_code": 0,
+      "external_locked_library_cache_reused": true,
+      "whole_mathlib_source_rebuild": false,
+      "result_receipt_sha256": "c7d97f03f9f03a4adc30cfa2fb4141da758a9304246a5d51cb27c1cd15d659ae",
+      "fresh_receipt_sha256": "1dfe321c0cd4158dd7c7af9b991b46e1dd6c32bdf5a30d566cdabcf00d06005a"
+    },
+    "historical_nanoda": {
+      "status": "PASS_RECORDED_NOT_RERUN_FOR_THIS_DRAFT",
+      "exit_code": 0,
+      "checked_declarations": 60675,
+      "tool_commit": "8de7e0c4ed3052745a7f8725164efd9e76d84c56",
+      "export_sha256": "7446f910cc05d34af2df4ef8e01fe1ae6734f4d2909abcd5bf5d7799ac6ed221",
+      "targets": [
+        "LonelyRunnerAcceptance.explicit_gap",
+        "LonelyRunnerAcceptance.uniform_gap"
+      ],
+      "permitted_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "scope": "Standalone independent kernel check; not Comparator challenge comparison"
+    },
+    "cached_final_type_axiom_check": {
+      "status": "PASS_EXISTING_PINNED_ARTIFACTS",
+      "exit_code": 0,
+      "targets": [
+        "LonelyRunnerNew.lonely_runner_gap",
+        "LonelyRunnerNew.frozen_target_proved",
+        "LonelyRunnerAcceptance.explicit_gap",
+        "LonelyRunnerAcceptance.uniform_gap"
+      ],
+      "observed_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "new_clean_build_validation": false
+    },
+    "publication_candidate_clean_rebuild": {
+      "status": "RESOURCE_BLOCKED_INCOMPLETE",
+      "exit_code": 1,
+      "active_module": "LonelyRunnerNew.LCMiddlePrimeData7",
+      "explicit_compiler_j1": true,
+      "reason": "Wrapper stopped its owned process tree after available commit headroom stayed below 1.5 GiB",
+      "lean_native_oom_observed": false,
+      "lean_compilation_error_observed": false,
+      "finalsolution_build": "NOT_RUN_AFTER_BLOCK",
+      "fresh_type_axiom_check": "NOT_RUN_AFTER_BLOCK"
+    },
+    "formal_comparator": {
+      "status": "NOT_RUN",
+      "positive_targets": {
+        "LonelyRunnerAcceptance.explicit_gap": "NOT_RUN",
+        "LonelyRunnerAcceptance.uniform_gap": "NOT_RUN"
+      },
+      "negatives": {
+        "weak_target": {
+          "status": "NOT_RUN",
+          "actual_rejection": null
+        },
+        "changed_definition": {
+          "status": "NOT_RUN",
+          "actual_rejection": null
+        },
+        "sorry_dependency": {
+          "status": "NOT_RUN",
+          "actual_rejection": null
+        },
+        "conditional_theorem": {
+          "status": "NOT_RUN",
+          "actual_rejection": null
+        }
+      },
+      "independent_reference_preparation": "Hash-matched separate readonly reference tree prepared; Linux enforcement still untested",
+      "linux_isolation": "UNAVAILABLE_ON_CURRENT_HOST",
+      "linux_tool_compatibility": "NOT_RUN",
+      "actual_theorems_compared": []
+    },
+    "pending": [
+      "Publication-candidate clean rebuild and new-output type/axiom check",
+      "Linux isolation and tool compatibility",
+      "Both formal Comparator positives and all four semantic negative controls",
+      "Final acceptance",
+      "New manuscript author/affiliation confirmation; current author field intentionally empty",
+      "New code and manuscript license confirmation"
+    ],
+    "publication_authorization": "User explicitly authorized research-branch push and draft PR while these checks remain pending; no merge/release",
+    "redaction": "Summary only. No raw logs, host paths, credentials, caches, or build objects included."
+  },
+  "redaction": "Summary only. No credentials, private host paths, build caches, binaries or raw logs included."
 }

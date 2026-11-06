@@ -1,3 +1,72 @@
+# Linux machine acceptance: 2026-11-07
+
+**All requested machine gates passed; independent human review and publication
+conditions remain pending. The PR remains a draft.**
+
+Tested commit: `2d0f3ded605f4929e0313fa4edc362064c3a1bd6`.
+[Official GitHub Actions run](https://github.com/Orc-Lee-Chem/LonelyRunner/actions/runs/42260418491).
+Candidate source-map SHA-256: `befdb0a4d53dd27f1a62e01f7e9c6ad5be3ae91569fde001bd3cca2040cb4c78`.
+
+The candidate contains 263 source/build inputs and 261 Lean source/validation
+modules. Only `LCMiddlePrimeData7` was split into 29 modules, preserving all 57
+original definition/proof bodies for exact reconstruction. The other 233 inputs,
+all 16 independently supplied frozen files, the old pinned-source manifest,
+version locks and supplied revised manuscript remain unchanged.
+
+| Actual check | Result |
+| --- | --- |
+| Both official Comparator targets | PASS: `LonelyRunnerAcceptance.explicit_gap` and `LonelyRunnerAcceptance.uniform_gap` both entered comparison. |
+| Lean default kernel | PASS on the solution export used by Comparator. |
+| Independent nanoda kernel | PASS; 60665 declarations checked. |
+| Weakened target | Rejected after compilation/export for a theorem-statement mismatch. |
+| Changed definition | Rejected after compilation/export for the recorded semantic mismatch. |
+| Sorry dependency | Rejected after compilation/export: illegal axiom `sorryAx`. |
+| Extra premise | Rejected after compilation/export for a theorem-statement mismatch. |
+| Clean project build | PASS: all 261 project/validation modules, original default target and `LonelyRunnerValidation.FinalSolution`; locked external mathlib cache reused. |
+| Official `leanchecker --fresh -v LonelyRunnerValidation.FinalSolution` | PASS; exit 0, checked project `.olean` bytes unchanged. |
+| Full types / real `#print axioms` | PASS for all four final declarations; only `propext`, `Classical.choice`, `Quot.sound`. |
+| Linux isolation | Actual systemd user unit and Landrun launched; protected writes and AF_UNIX sockets were denied. |
+
+The pinned nanoda checker library is unchanged. A separate diagnostic CLI copies
+its upstream entrypoint and only enables `print_success_message=true` and `pp_to_stdout=true`, to emit
+the genuine declaration count after checking. The original stock binary and
+modified diagnostic entrypoint/binary hashes are recorded in Actions artifacts.
+The actual official nanoda input was retained as a gzip artifact and its raw
+SHA-256/byte count were recorded by an operator-side readonly process observer.
+Its parent chain was bound to the official Comparator for the exact case.
+The strict acceptance classifier, target list, empty definition-hole list and
+three-axiom whitelist were not relaxed.
+
+The execution tree adds explicit `-j1`, `-M12288`, `-DElab.async=false` resource
+arguments and acceptance libraries to a derived temporary Lake TOML. This is not
+claimed to be byte-identical to the frozen TOML. The runner provisions 16 GiB of
+ephemeral swap on the hosted Linux VM; no local Windows resource configuration
+was changed. Trusted external dependency traces were prepared before the
+candidate ran under readonly dependency permissions.
+
+Earlier failed runs and their original logs remain available and are listed in the
+structured summary. They exposed missing trusted cache traces, a 6144 MiB Lean
+interpreter limit, quiet default nanoda success output, and its missing axiom
+printing destination, and missing git execution permission in the direct build
+sandbox. Dependencies remained readonly. The
+third run already received official Comparator/kernel acceptance but failed the
+strict CI count-output contract; it is not silently relabeled as a passing run.
+
+See [AcceptanceSummary.json](AcceptanceSummary.json) for exact diagnostics,
+versions, hashes and previous status. Raw Actions logs remain in the run's
+artifacts and private result archive, not the proof repository.
+
+This machine result does not constitute a new independent human semantic or
+manuscript review. Author/affiliation and new code/manuscript license confirmation
+remain open. The author field and license files are unchanged. There is no
+merge, tag or release. The result is the fixed uniform improvement with
+`exp(-6888)`, not the full lonely-runner conjecture.
+
+---
+
+The previous report below is preserved as a historical 2026-11-05 snapshot;
+its NOT RUN and Windows-resource status is superseded by the Linux results above.
+
 # Redacted publication and acceptance summary
 
 Status as of 2026-11-05: **draft research branch; final acceptance pending**.

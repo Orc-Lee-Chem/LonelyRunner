@@ -55,7 +55,7 @@ def trusted_files(assets):
 def resource_config(base,acceptance=False):
     needle=b'version = "0.1.0"'
     if base.count(needle)!=1:raise Failed("Unexpected frozen project configuration")
-    addition=b'\nweakLeanArgs = ["-j1", "-M6144", "-DElab.async=false"]'
+    addition=b'\nweakLeanArgs = ["-j1", "-M12288", "-DElab.async=false"]'
     data=base.replace(needle,needle+addition,1)
     if acceptance:data+=b'\n[[lean_lib]]\nname = "Challenge"\n\n[[lean_lib]]\nname = "Solution"\n\n[[lean_lib]]\nname = "AllSource"\n'
     return data
@@ -226,7 +226,7 @@ class Context:
         for name in PINS:self.clone(name)
         comp=self.toolsrc/"comparator";pkg=comp/".lake/packages";pkg.mkdir(parents=True,exist_ok=True)
         (pkg/"lean4export").symlink_to(self.toolsrc/"exporter",target_is_directory=True)
-        config=(comp/"lakefile.toml").read_bytes().replace(b'version = "0.1.0"',b'version = "0.1.0"\nweakLeanArgs = ["-j1", "-M6144", "-DElab.async=false"]',1)
+        config=(comp/"lakefile.toml").read_bytes().replace(b'version = "0.1.0"',b'version = "0.1.0"\nweakLeanArgs = ["-j1", "-M12288", "-DElab.async=false"]',1)
         (comp/"lakefile.resource.toml").write_bytes(config)
         self.run("build-comparator",["lake","-f","lakefile.resource.toml","build","comparator","lean4export"],cwd=comp)
         goenv=self.env.copy();goenv["GOTOOLCHAIN"]="local"
@@ -244,6 +244,11 @@ class Context:
         renv=self.env.copy();renv["PATH"]=str(rustprefix/"bin")+os.pathsep+renv["PATH"];renv["CARGO_HOME"]=str(self.work/"tools/cargo-home")
         self.run("rust-version",[str(rustprefix/"bin/rustc"),"--version"],env=renv)
         self.run("build-nanoda",["cargo","build","--release","--locked","--bin","nanoda_bin","--jobs","1"],cwd=self.toolsrc/"nanoda",env=renv)
+        binaries={"comparator":self.toolsrc/"comparator/.lake/build/bin/comparator",
+                  "lean4export":self.toolsrc/"exporter/.lake/build/bin/lean4export",
+                  "nanoda":self.toolsrc/"nanoda/target/release/nanoda_bin",
+                  "landrun":self.work/"tools/landrun"}
+        write_json(self.logs/"TOOL_BINARY_HASHES.json",{name:{"path":str(path),"sha256":file_sha(path)} for name,path in binaries.items()})
         pins={}
         for name,(_,commit) in PINS.items():
             dirty=subprocess.check_output(["git","diff","--name-only","HEAD"],cwd=self.toolsrc/name,text=True).strip()

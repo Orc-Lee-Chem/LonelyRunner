@@ -35,7 +35,7 @@ Expected fingerprints are not accepted from a candidate's proposed policy.
 
 Frozen source files remain unchanged in the source snapshot. The temporary
 acceptance project derives its TOML from the frozen root configuration, adding
-resource arguments -j1 -M6144 -DElab.async=false and libraries for Challenge,
+resource arguments -j1 -M12288 -DElab.async=false and libraries for Challenge,
 Solution, and AllSource. AllSource imports all 261 source/validation modules.
 The derived execution configuration has its own recorded checksum; it is not
 described as an unchanged frozen configuration.
@@ -85,3 +85,5 @@ confirmation remain separate.
 Protocol: Comparator README at d03acab154d269c06e60e4de7e4cc85deebff94b.
 Runner specifications:
 https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+
+CI resource correction: run 42174160139 actually reported Lean interpreter memory_exception (exit 134) in LCMiddlePrimeData5 and Data6 at 6144 MiB. Only the execution memory ceiling is raised to 12288 MiB, and the ephemeral VM receives 16 GiB additional swap with raw memory records. Source fingerprint, frozen inputs, isolation, kernels, time limits and semantic rejection rules are unchanged. This is not a new successful acceptance claim.

@@ -46,7 +46,7 @@ jobs:
           import hashlib,json,pathlib
           p=pathlib.Path("uniform-gap/ci/runner-files.sha256.json")
           raw=p.read_bytes()
-          assert hashlib.sha256(raw).hexdigest()=="de3eb7cdf8ee1f9a878e509ecbd66f42ff19b4073c3384cbad06797ec07781aa"
+          assert hashlib.sha256(raw).hexdigest()=="f53c72f27953a1def9dddb3f9f7228cdba71e28ab6637f7b2802abb6bb7ed692"
           d=json.loads(raw)
           for name,h in d["files"].items():
               assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==h,name
@@ -56,6 +56,23 @@ jobs:
         run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage verify
       - name: Probe real VM isolation and prepare its user manager
         run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage probe --initialize-user-manager
+      - name: Provision ephemeral swap and record resource limits
+        run: |
+          mkdir -p "$LRC_WORK/logs"
+          exec > >(tee "$LRC_WORK/logs/CI_MEMORY_CONFIGURATION.log") 2>&1
+          free -b
+          df -h "$RUNNER_TEMP"
+          test "$(df -B1 --output=avail "$RUNNER_TEMP" | tail -n 1)" -gt $((32 * 1024 * 1024 * 1024))
+          swap_path="$RUNNER_TEMP/uniform-gap-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.swap"
+          test ! -e "$swap_path"
+          sudo dd if=/dev/zero of="$swap_path" bs=1M count=16384 status=none
+          sudo chmod 600 "$swap_path"
+          sudo mkswap "$swap_path"
+          sudo swapon "$swap_path"
+          free -b
+          swapon --show --bytes
+          ulimit -a
+          cat /proc/meminfo
       - name: Preserve preflight evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository

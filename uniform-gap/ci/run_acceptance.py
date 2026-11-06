@@ -6,7 +6,7 @@ an unprivileged systemd user unit that disallows AF_UNIX sockets.
 """
 from pathlib import Path
 import argparse,base64,ctypes,datetime,hashlib,io,json,os,platform,re,shutil
-import signal,subprocess,sys,tarfile,time,zipfile,importlib.util
+import signal,subprocess,sys,tarfile,time,zipfile,importlib.util,threading,gzip
 _control_spec=importlib.util.spec_from_file_location("lrc_reviewed_controls",Path(__file__).resolve().parent/"controls.py")
 _control_module=importlib.util.module_from_spec(_control_spec);_control_spec.loader.exec_module(_control_module)
 TARGETS=_control_module.TARGETS;NEGATIVES=_control_module.NEGATIVES
@@ -84,6 +84,81 @@ def inspect_source(project,frozen_hashes):
             raise Failed("Invalid candidate input path: "+name)
         if file_sha(path)!=expected:raise Failed("Candidate bytes changed: "+name)
     return manifest
+
+
+def observe_actual_kernel_export(kernel_path,comparator_path,landrun_path,case_config,archive_path,stop,captured,errors):
+    """Operator-only read observer; no checker/sandbox/config changes.
+
+    Bind the observed kernel to the official Comparator parent (through Landrun
+    only), then hash the actual readonly export using a held file descriptor.
+    The Comparator intentionally deletes its temporary files after checking.
+    """
+    proc=Path("/proc")
+    expected_kernel=str(Path(kernel_path).resolve())
+    expected_comparator=str(Path(comparator_path).resolve())
+    expected_landrun=str(Path(landrun_path).resolve())
+    expected_config=str(Path(case_config).resolve())
+    def argv(directory):
+        return [os.fsdecode(a) for a in (directory/"cmdline").read_bytes().split(b"\0") if a]
+    def parent(directory):
+        for line in (directory/"status").read_text().splitlines():
+            if line.startswith("PPid:"):return int(line.split()[1])
+        raise ValueError("Missing process parent")
+    while not stop.is_set():
+        for directory in proc.iterdir():
+            if not directory.name.isdigit():continue
+            official=False
+            try:
+                if os.readlink(directory/"exe")!=expected_kernel:continue
+                args=argv(directory)
+                if len(args)!=2:continue
+                lineage=[];ancestor=parent(directory);official=False
+                for _ in range(8):
+                    above=proc/str(ancestor)
+                    executable=os.readlink(above/"exe")
+                    lineage.append({"pid":ancestor,"executable":executable})
+                    if executable==expected_comparator:
+                        command=argv(above)
+                        official=len(command)==2 and str(Path(command[1]).resolve())==expected_config
+                        break
+                    if executable!=expected_landrun:break
+                    ancestor=parent(above)
+                if not official:continue
+                cfg_path=Path(args[1])
+                cfg_bytes=cfg_path.read_bytes();cfg=json.loads(cfg_bytes)
+                if set(cfg.get("permitted_axioms",[]))!={"propext","Classical.choice","Quot.sound"}:
+                    raise ValueError("Actual kernel axiom policy differs")
+                if cfg.get("unpermitted_axiom_hard_error") is not True or cfg.get("unsafe_permit_all_axioms",False):
+                    raise ValueError("Actual kernel axiom rejection policy differs")
+                export_path=Path(cfg["export_file_path"])
+                if not export_path.is_file():raise ValueError("Export is not a regular file")
+                digest=hashlib.sha256();read_bytes=0
+                archive=Path(archive_path);archive.parent.mkdir(parents=True,exist_ok=True)
+                partial=archive.with_name(archive.name+".part")
+                with export_path.open("rb") as source,partial.open("wb") as destination:
+                    before=os.fstat(source.fileno())
+                    with gzip.GzipFile(filename="",fileobj=destination,mode="wb",compresslevel=1,mtime=0) as retained:
+                        for block in iter(lambda:source.read(1024*1024),b""):
+                            digest.update(block);read_bytes+=len(block);retained.write(block)
+                    after=os.fstat(source.fileno())
+                identity=lambda st:(st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns)
+                if identity(before)!=identity(after) or read_bytes!=before.st_size or before.st_uid!=os.getuid():
+                    raise ValueError("Actual export changed while hashing or has an unexpected owner")
+                os.replace(partial,archive)
+                captured.append({"status":"PASS","observation":"Actual nanoda child of the official Comparator through Landrun only; export read through a held descriptor, without modifying it",
+                    "kernel_pid":int(directory.name),"kernel_executable":expected_kernel,"kernel_argv":args,
+                    "official_comparator_ancestry":lineage,"case_config":expected_config,
+                    "nanoda_config":cfg,"nanoda_config_sha256":sha(cfg_bytes),
+                    "export_path_during_check":str(export_path),"export_bytes":read_bytes,
+                    "export_sha256":digest.hexdigest(),"export_stable_while_hashed":True,
+                    "retained_export_log_name":archive.name,"retained_export_gzip_sha256":file_sha(archive),
+                    "same_export_note":"Pinned Comparator verifyMatch passes the same solutionExport string to runExternalKernel and parses it for runBuiltinKernel; the captured file is the actual nanoda input for that invocation."})
+                return
+            except (OSError,ValueError,KeyError,TypeError) as error:
+                if 'official' in locals() and official:
+                    errors.append(type(error).__name__+": "+str(error));del errors[:-5]
+                continue
+        stop.wait(0.2)
 
 class Context:
     def __init__(self,project,work,assets):
@@ -310,7 +385,9 @@ class Context:
         args=[str(self.work/"tools/landrun"),"--best-effort","--ro","/","--rw","/dev","-ldd","-add-exec"]
         for k in ["PATH","HOME","LEAN_PATH","LEAN_NUM_THREADS"]:args+=["--env",k]
         for p in writable:args+=["--rwx",str(p)]
-        args+=["--rox",str(self.prefix),"--rox",str(self.work/"tools/launch"),"--",*map(str,cmd)]
+        git=shutil.which("git",path=self.env["PATH"])
+        if not git:raise Blocked("git executable unavailable for the pinned Lake dependency URL checks")
+        args+=["--rox",str(self.prefix),"--rox",str(self.work/"tools/launch"),"--rox",str(Path(git).resolve()),"--",*map(str,cmd)]
         return self.unit(args,cwd,lean_path)
     def isolation_probe(self):
         self.require("tool_setup")
@@ -368,7 +445,27 @@ class Context:
             raise Blocked("Positive targets must pass before negative controls")
         case=self.case(kind)
         comparator=self.toolsrc/"comparator/.lake/build/bin/comparator"
-        result,text=self.run("comparator-"+kind,self.unit([comparator,case/"config.json"],case,self.lean_path(case)),cwd=case,timeout=10800,check=False)
+        if kind=="positive":
+            self.run("sandbox-git-remote-preflight",self.sandbox(["git","-C",str(self.deps/".lake/packages/mathlib"),"remote","get-url","origin"],case,(),self.lean_path(case)),cwd=case,timeout=120)
+            self.run("sandbox-reference-build-preflight",self.sandbox(["lake","build","Challenge"],case,[case/".lake"],self.lean_path(case)),cwd=case,timeout=300)
+        stop=threading.Event();captured=[];observer_errors=[];observer=None
+        if kind=="positive":
+            observer=threading.Thread(target=observe_actual_kernel_export,args=(
+                self.toolsrc/"nanoda/target/release/nanoda_verbose_cli",comparator,self.work/"tools/landrun",
+                case/"config.json",self.work/"kernel-exports/ACTUAL_NANODA_EXPORT.export.gz",stop,captured,observer_errors),daemon=True)
+            observer.start()
+        try:
+            result,text=self.run("comparator-"+kind,self.unit([comparator,case/"config.json"],case,self.lean_path(case)),cwd=case,timeout=10800,check=False)
+        finally:
+            stop.set()
+            if observer:observer.join(timeout=30)
+        if kind=="positive":
+            observed=captured[0] if captured and not observer.is_alive() else {
+                "status":"INCOMPLETE","reason":"Actual official nanoda input was not captured before temporary-file deletion",
+                "observer_errors":observer_errors,"observer_still_running":observer.is_alive()}
+            self.state["kernel_export"]=observed
+            write_json(self.logs/"ACTUAL_NANODA_EXPORT.json",observed)
+            self.save()
         outcome=classify(kind,result["exit_code"],text,result["termination"])
         outcome["command_receipt"]=self.state["commands"][-1]
         if kind=="positive":
@@ -378,6 +475,8 @@ class Context:
         self.save()
         expected="PASS" if kind=="positive" else "EXPECTED_REJECTION"
         if outcome["status"]!=expected:raise Failed(kind+" did not meet the required acceptance condition")
+        if kind=="positive" and self.state["kernel_export"]["status"]!="PASS":
+            raise Failed("Missing actual official kernel export hash evidence")
     def fresh(self):
         if any(v!="PASS" for v in self.state["positive_targets"].values()):raise Blocked("Positive comparison incomplete")
         case=self.work/"cases/positive"
@@ -400,13 +499,19 @@ class Context:
         self.save()
         if not passed:raise Failed("Full-environment fresh replay did not complete")
     def finalize(self):
+        retained=self.state.get("kernel_export",{})
+        if retained.get("status")=="PASS":
+            archive=self.work/"kernel-exports"/retained["retained_export_log_name"]
+            if file_sha(archive)!=retained["retained_export_gzip_sha256"]:
+                raise Failed("Retained actual kernel export archive changed")
+            shutil.copy2(archive,self.logs/archive.name)
         source_ok=self.state.get("source_check",{}).get("status")=="PASS"
         pos=all(v=="PASS" for v in self.state["positive_targets"].values())
         neg=all(v.get("status")=="EXPECTED_REJECTION" for v in self.state["negatives"].values())
         fresh=self.state["fresh"].get("status")=="PASS"
         build=self.state["source_build"].get("status")=="PASS"
         types=self.state.get("final_types",{}).get("status")=="PASS"
-        self.state["machine_acceptance_completed"]=source_ok and pos and neg and fresh and build and types
+        self.state["machine_acceptance_completed"]=source_ok and pos and neg and fresh and build and types and self.state.get("kernel_export",{}).get("status")=="PASS"
         self.state["final_acceptance_completed"]=False
         self.state["remaining"]=["Independent human semantic/manuscript review","Author and license confirmation"]
         if not self.state["machine_acceptance_completed"]:self.state["remaining"].insert(0,"Incomplete machine gates")

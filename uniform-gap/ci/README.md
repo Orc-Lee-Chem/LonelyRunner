@@ -96,3 +96,23 @@ error: print_axioms defaults true while no output destination is selected.
 The separate CLI now also enables pp_to_stdout, preserving axiom printing and
 all checking rules; it does not suppress or relabel the observed error.
 Run 42191222135 and its original logs are retained.
+
+Run 42246767708 passed both formal targets with both kernels (60665 checked
+declarations) and all four semantic negative controls. AllSource then failed
+before compiling a module: the operator's direct build sandbox omitted the git
+execution permission that the official Comparator already grants. Lake could
+not query its dependency origin and attempted to replace readonly mathlib.
+The direct build sandbox now permits the resolved git executable readonly,
+matching the upstream policy, and a short git/reference build preflight runs
+before the expensive positive. Dependency write permissions remain unchanged.
+
+The operator also observes the actual nanoda process through /proc, requiring
+its parent chain to lead directly through Landrun to the official Comparator
+for the exact case. It reads the actual configuration and holds the export
+file descriptor while hashing and retaining a gzip copy. Neither checker nor
+its input is modified. ACTUAL_NANODA_EXPORT.json binds the actual SHA-256 and
+byte count to the kernel invocation. Only the final phase artifact retains the
+compressed export, so later independent checks can verify the same bytes.
+Failure to capture this evidence prevents machine_acceptance_completed.
+Local observer unit tests exercise parent/config/policy rejection and exact
+binary retention; they are not official Comparator positive/negative results.

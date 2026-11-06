@@ -221,7 +221,7 @@ class Context:
         goenv=self.env.copy();goenv["GOTOOLCHAIN"]="local"
         goenv["GOMODCACHE"]=str(self.work/"tools/go-modules")
         self.run("go-version",["go","version"],env=goenv)
-        self.run("build-landrun",["go","build","-trimpath","-o",str(self.work/"tools/landrun"),"."],cwd=self.toolsrc/"landrun",env=goenv)
+        self.run("build-landrun",["go","build","-mod=readonly","-trimpath","-o",str(self.work/"tools/landrun"),"./cmd/landrun"],cwd=self.toolsrc/"landrun",env=goenv)
         ruststage=self.work/"tools/rust-components";ruststage.mkdir(exist_ok=True)
         rustprefix=self.work/"tools/rust-local";rustprefix.mkdir(exist_ok=True)
         for name,h in RUST.items():

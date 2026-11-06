@@ -253,7 +253,7 @@ class Context:
         original_main=(self.toolsrc/"nanoda/src/main.rs").read_bytes()
         option=b"    let cfg = Config::try_from(config_path)?;"
         if original_main.count(option)!=1:raise Failed("Unexpected pinned nanoda CLI source")
-        verbose_main=original_main.replace(option,b"    let mut cfg = Config::try_from(config_path)?;\n    cfg.print_success_message = true;",1)
+        verbose_main=original_main.replace(option,b"    let mut cfg = Config::try_from(config_path)?;\n    cfg.print_success_message = true;\n    cfg.pp_to_stdout = true;",1)
         (diagnostic/"src/main.rs").write_bytes(verbose_main)
         (diagnostic/"README.md").write_bytes((self.toolsrc/"nanoda/README.md").read_bytes())
         cargo='[package]\nname = "nanoda_verbose_cli"\nversion = "0.0.0"\nedition = "2021"\ndescription = "Diagnostic-only entrypoint to the unchanged pinned nanoda_lib"\nrepository = "https://github.com/ammkrn/nanoda_lib"\nlicense = "Apache-2.0"\n'
@@ -272,7 +272,7 @@ class Context:
             "library_commit":PINS["nanoda"][1],"library_source_changed":False,
             "original_cli_sha256":sha(original_main),"diagnostic_cli_sha256":sha(verbose_main),
             "diagnostic_lock_sha256":file_sha(diagnostic/"Cargo.lock"),
-            "only_cli_source_change":"let cfg becomes let mut cfg; set print_success_message=true before the unchanged check_all_declars flow",
+            "only_cli_source_change":"let cfg becomes let mut cfg; enable print_success_message and pp_to_stdout before the unchanged check_all_declars flow",
             "acceptance_rules_changed":False,"all_dependency_versions_match_original_lock":True})
         binaries={"comparator":self.toolsrc/"comparator/.lake/build/bin/comparator",
                   "lean4export":self.toolsrc/"exporter/.lake/build/bin/lean4export",

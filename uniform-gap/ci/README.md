@@ -87,3 +87,5 @@ Runner specifications:
 https://docs.github.com/en/actions/reference/runners/github-hosted-runners
 
 CI resource correction: run 42174160139 actually reported Lean interpreter memory_exception (exit 134) in LCMiddlePrimeData5 and Data6 at 6144 MiB. Only the execution memory ceiling is raised to 12288 MiB, and the ephemeral VM receives 16 GiB additional swap with raw memory records. Source fingerprint, frozen inputs, isolation, kernels, time limits and semantic rejection rules are unchanged. This is not a new successful acceptance claim.
+
+Nanoda diagnostic correction: official Comparator in run 42180024571 returned 0 after both targets and both kernels accepted, but the strict CI classifier rejected missing declaration-count output. The classifier is NOT relaxed. A separate CLI, derived byte-for-byte from the pinned nanoda main except enabling print_success_message, links the unchanged pinned nanoda_lib. It executes the same check_all_declars flow and prints the real count. The original CLI, generated diagnostic source, dependency-lock subset check and both binary hashes are recorded. No checker logic, axiom policy, source fingerprint or isolation is changed.

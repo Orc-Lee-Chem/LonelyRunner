@@ -244,9 +244,40 @@ class Context:
         renv=self.env.copy();renv["PATH"]=str(rustprefix/"bin")+os.pathsep+renv["PATH"];renv["CARGO_HOME"]=str(self.work/"tools/cargo-home")
         self.run("rust-version",[str(rustprefix/"bin/rustc"),"--version"],env=renv)
         self.run("build-nanoda",["cargo","build","--release","--locked","--bin","nanoda_bin","--jobs","1"],cwd=self.toolsrc/"nanoda",env=renv)
+        # The official integration uses silent defaults. Preserve the strict
+        # count-output gate by enabling only nanoda's diagnostic print option.
+        # The pinned library and its original CLI source remain unchanged.
+        import tomllib
+        diagnostic=self.work/"tools/nanoda-diagnostic"
+        (diagnostic/"src").mkdir(parents=True,exist_ok=True)
+        original_main=(self.toolsrc/"nanoda/src/main.rs").read_bytes()
+        option=b"    let cfg = Config::try_from(config_path)?;"
+        if original_main.count(option)!=1:raise Failed("Unexpected pinned nanoda CLI source")
+        verbose_main=original_main.replace(option,b"    let mut cfg = Config::try_from(config_path)?;\n    cfg.print_success_message = true;",1)
+        (diagnostic/"src/main.rs").write_bytes(verbose_main)
+        (diagnostic/"README.md").write_bytes((self.toolsrc/"nanoda/README.md").read_bytes())
+        cargo='[package]\nname = "nanoda_verbose_cli"\nversion = "0.0.0"\nedition = "2021"\ndescription = "Diagnostic-only entrypoint to the unchanged pinned nanoda_lib"\nrepository = "https://github.com/ammkrn/nanoda_lib"\nlicense = "Apache-2.0"\n'
+        cargo+='\n[dependencies]\nnanoda_lib = { path = '+json.dumps(str(self.toolsrc/"nanoda"))+' }\n\n[profile.release]\nopt-level = 3\noverflow-checks = true\nlto = true\n'
+        (diagnostic/"Cargo.toml").write_text(cargo)
+        self.run("lock-nanoda-diagnostic-cli",["cargo","generate-lockfile","--offline"],cwd=diagnostic,env=renv)
+        original_lock=tomllib.loads((self.toolsrc/"nanoda/Cargo.lock").read_text())
+        diagnostic_lock=tomllib.loads((diagnostic/"Cargo.lock").read_text())
+        identity=lambda x:(x["name"],x["version"],x.get("source"),x.get("checksum"))
+        permitted_packages={identity(x) for x in original_lock["package"]}
+        for package in diagnostic_lock["package"]:
+            if package["name"]!="nanoda_verbose_cli" and identity(package) not in permitted_packages:
+                raise Failed("Diagnostic CLI would change a pinned nanoda dependency: "+package["name"])
+        self.run("build-nanoda-diagnostic-cli",["cargo","build","--release","--locked","--offline","--jobs","1","--target-dir",str(self.toolsrc/"nanoda/target")],cwd=diagnostic,env=renv)
+        write_json(self.logs/"NANODA_DIAGNOSTIC_ENTRYPOINT.json",{
+            "library_commit":PINS["nanoda"][1],"library_source_changed":False,
+            "original_cli_sha256":sha(original_main),"diagnostic_cli_sha256":sha(verbose_main),
+            "diagnostic_lock_sha256":file_sha(diagnostic/"Cargo.lock"),
+            "only_cli_source_change":"let cfg becomes let mut cfg; set print_success_message=true before the unchanged check_all_declars flow",
+            "acceptance_rules_changed":False,"all_dependency_versions_match_original_lock":True})
         binaries={"comparator":self.toolsrc/"comparator/.lake/build/bin/comparator",
                   "lean4export":self.toolsrc/"exporter/.lake/build/bin/lean4export",
                   "nanoda":self.toolsrc/"nanoda/target/release/nanoda_bin",
+                  "nanoda_diagnostic_cli":self.toolsrc/"nanoda/target/release/nanoda_verbose_cli",
                   "landrun":self.work/"tools/landrun"}
         write_json(self.logs/"TOOL_BINARY_HASHES.json",{name:{"path":str(path),"sha256":file_sha(path)} for name,path in binaries.items()})
         pins={}
@@ -270,7 +301,7 @@ class Context:
         variables={"PATH":self.env["PATH"],"LEAN_PATH":lean_path,"LEAN_NUM_THREADS":"1",
           "COMPARATOR_LANDRUN":str(self.work/"tools/landrun"),
           "COMPARATOR_LEAN4EXPORT":str(self.toolsrc/"comparator/.lake/packages/lean4export/.lake/build/bin/lean4export"),
-          "COMPARATOR_NANODA":str(self.toolsrc/"nanoda/target/release/nanoda_bin")}
+          "COMPARATOR_NANODA":str(self.toolsrc/"nanoda/target/release/nanoda_verbose_cli")}
         args=["systemd-run","--user","--wait","--pipe","--quiet",
               "--property=RestrictAddressFamilies=~AF_UNIX","--working-directory="+str(cwd)]
         for k,v in variables.items():args.append("--setenv="+k+"="+v)

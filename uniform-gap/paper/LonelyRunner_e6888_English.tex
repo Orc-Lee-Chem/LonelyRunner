@@ -26,8 +26,8 @@ The covering argument of Hu and Jing reduces the problem to a weighted
 greatest-common-divisor sum on separated speed sets.
 We control the distribution of prime valuations using a one-dimensional
 Green kernel, and combine a sieve for rough rational numbers with a dyadic
-decomposition to bound the sum. The finite numerical inequalities are
-certified by rational computations in a Lean formalization.
+decomposition to bound the sum. The numerical certificates for the main theorem are checked by rational
+computations in Lean.
 \end{abstract}
 
 \section{Introduction}
@@ -54,6 +54,18 @@ If \(V\subset\mathbb Z_{>0}\) is finite and \(n=|V|\ge2\), there exists
  \qquad(v\in V,\ k\in\mathbb Z).
 \]
 \end{theorem}
+
+Appendix~\ref{sec:parameter-comparison} compares this value with the
+particular constant obtained from the parameter choices displayed in
+\cite[Theorem~7.2 and Section~8]{HuJing}. Writing that constant as
+\(c_{\mathrm{HJ}}\), we show
+\[
+ c_{\mathrm{HJ}}\le 2^{-80497},\qquad
+ \frac{e^{-6888}}{c_{\mathrm{HJ}}}>e^{48000}.
+\]
+This comparison concerns the displayed parameter choice. The effect of
+reoptimizing those parameters is a separate question. Both results give a
+constant relative improvement over \(1/(2n)\).
 
 The reduction uses the covering multiplicities of Hu and Jing and the
 valuation-layer approach to large common divisors of Green and
@@ -262,6 +274,11 @@ in the latter exponent, which is a stronger bound.
 
 \subsection{The continuous estimate}
 
+The energy estimate below is the \(p=4\) case, after scaling, of the
+classical sharp one-dimensional Gagliardo--Nirenberg--Sobolev inequality;
+see \cite[(1.7)--(1.9)]{DELL}. We give a direct proof for the finite step
+functions needed in the discrete reduction.
+
 Let \(f\) be a nonnegative step function supported on finitely many
 unit cells \([i,i+1)\), \(i\in\mathbb Z\). For \(a>0\), set
 \[
@@ -296,6 +313,8 @@ mixed energy therefore gives
  \le \frac{\sqrt3}{2\sqrt a}\|f\|_{4/3}\|g\|_{4/3}.
 \]
 The bound holds also when either function vanishes almost everywhere.
+The sharp continuous bound does not establish optimality of the
+subsequent discrete estimate.
 
 \subsection{Discretization and the diagonal term}
 
@@ -1083,6 +1102,50 @@ Global bound and theorem &
 \texttt{SpilloverInputProved}\\
 \end{longtable}
 \endgroup
+\subsection{Comparison with a displayed parameter choice}
+\label{sec:parameter-comparison}
+
+The comparison in this subsection is an elementary expository deduction;
+it has not been added to the Lean formalization.
+
+Let \(c_{\mathrm{HJ}}\) denote the particular admissible constant specified
+by the choices in \cite[Theorem~7.2 and Section~8]{HuJing}. Their notation
+in this subsection is kept separate from the parameters in our proof.
+Set \(C=64\), \(\varepsilon=1/64\), and let \(K_0\ge1\) be their
+large-GCD constant. With
+\[
+ L=(4K_0C^2)^{4/9}\ge64,\qquad
+ B_0=\sum_{j\in\mathbb Z}2^{-4|j|/9}\ge1,
+\]
+their dyadic cutoff satisfies
+\[
+ \eta=\min\{1/2,(\varepsilon/(2LB_0))^{18}\}
+       \le 2^{-234}.
+\]
+Their choice \(q_{\mathrm{HJ}}=5/2\) gives
+\[
+ f'=\frac{\varepsilon^{5/2}\eta^7}{4C^2}
+                  1000^{-\pi(p_0)}\le2^{-1667},\qquad
+ \theta=\frac{\eta}{4}(f'/K_0)^{24}\le2^{-40244}.
+\]
+Here \(p_0\) is their prime cutoff; only
+\(1000^{-\pi(p_0)}\le1\) is used. For
+\(n_0=\lceil2/\theta\rceil\), the small-cardinality term in their
+Theorem~7.2 and the final factor \(1/2\) in their Section~8 yield
+\[
+ c_{\mathrm{HJ}}\le\frac1{2Cn_0^2}
+       \le\frac{\theta^2}{8C}\le2^{-80497}.
+\]
+Finally,
+\(\log2>2(1/3+1/81)=56/81>69/100\), by the positive logarithmic
+series. Therefore
+\[
+ \log\frac{e^{-6888}}{c_{\mathrm{HJ}}}
+ \ge80497\log2-6888>48000,
+\]
+as asserted. The bounds use only the displayed parameter definitions;
+evaluating \(K_0\) or \(p_0\) is unnecessary for this comparison.
+
 \begin{thebibliography}{9}
 \bibitem{HuJing}
 X. Hu and Y. Jing,
@@ -1094,6 +1157,13 @@ B. Green and A. Walker,
 \emph{Extremal problems for GCDs},
 Combin. Probab. Comput. \textbf{30} (2021), 922--929.
 \href{https://arxiv.org/abs/2012.02078}{arXiv:2012.02078}.
+
+\bibitem{DELL}
+J. Dolbeault, M. J. Esteban, A. Laptev and M. Loss,
+\emph{One-dimensional Gagliardo--Nirenberg--Sobolev inequalities:
+remarks on duality and flows},
+J. London Math. Soc. (2) \textbf{90} (2014), 525--550.
+\href{https://doi.org/10.1112/jlms/jdu040}{doi:10.1112/jlms/jdu040}.
 
 \bibitem{LeanCode}
 \emph{LonelyRunner}, Lean formalization and rational certificates,

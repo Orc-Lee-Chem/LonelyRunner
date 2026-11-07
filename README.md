@@ -113,3 +113,14 @@ verification workflows. The author is responsible for the final
 manuscript and code. Lean kernel checking applies to the formal
 statements in the released source; it does not by itself certify
 every statement in the manuscript.
+
+## Separate uniform-gap development (draft research branch)
+
+The independent [`uniform-gap/`](uniform-gap/) project states a fixed
+`c = exp(-6888)` and a strict gain `c/(2n)` for every finite set of distinct
+positive integer speeds with `n >= 2`, using one common time. Its current
+publication/acceptance limitations are recorded in
+[`uniform-gap/audit/PublicationStatus.md`](uniform-gap/audit/PublicationStatus.md).
+The theorem above keeps its own quantifiers: for every `kappa > 0`, a threshold
+`N(kappa)` exists and its non-strict bound applies for `n >= N(kappa)`.
+The old Lake entry points, manuscript and dependency lock remain unchanged.

@@ -1,0 +1,7 @@
+import LonelyRunnerValidation.Policy
+
+namespace WeakTarget
+theorem submitted : True := True.intro
+end WeakTarget
+
+#assert_frozen_target WeakTarget.submitted

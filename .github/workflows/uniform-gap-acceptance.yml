@@ -1,0 +1,164 @@
+name: Uniform gap machine acceptance
+
+"on":
+  push:
+    branches: [publication/uniform-gap-e6888]
+    paths:
+      - "uniform-gap/**/*.lean"
+      - "uniform-gap/ci/**"
+      - "uniform-gap/validation/**"
+      - "uniform-gap/candidate-source-version.json"
+      - "uniform-gap/lakefile.toml"
+      - "uniform-gap/lake-manifest.json"
+      - "uniform-gap/lean-toolchain"
+      - ".github/workflows/uniform-gap-acceptance.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uniform-gap-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 345
+    env:
+      LRC_PROJECT: ${{ github.workspace }}/uniform-gap
+      PYTHONUTF8: "1"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Set isolated operator work directory
+        run: |
+          printf 'LRC_WORK=%s\n' "$RUNNER_TEMP/uniform-gap-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_ENV"
+      - name: Check out exact event commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, resolved from official repository
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify reviewed runner bytes before executing them
+        id: integrity
+        run: |
+          python3 -I - <<'PY'
+          import hashlib,json,pathlib
+          p=pathlib.Path("uniform-gap/ci/runner-files.sha256.json")
+          raw=p.read_bytes()
+          assert hashlib.sha256(raw).hexdigest()=="f945a17cff8f67016c2202092c18814a305687636af05f080761d2b462f95d02"
+          d=json.loads(raw)
+          for name,h in d["files"].items():
+              assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==h,name
+          print("Reviewed runner and frozen-reference payload hashes verified")
+          PY
+      - name: Verify all source and independently frozen input bytes
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage verify
+      - name: Probe real VM isolation and prepare its user manager
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage probe --initialize-user-manager
+      - name: Provision ephemeral swap and record resource limits
+        run: |
+          mkdir -p "$LRC_WORK/logs"
+          exec > >(tee "$LRC_WORK/logs/CI_MEMORY_CONFIGURATION.log") 2>&1
+          free -b
+          df -h "$RUNNER_TEMP"
+          test "$(df -B1 --output=avail "$RUNNER_TEMP" | tail -n 1)" -gt $((32 * 1024 * 1024 * 1024))
+          swap_path="$RUNNER_TEMP/uniform-gap-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.swap"
+          test ! -e "$swap_path"
+          sudo dd if=/dev/zero of="$swap_path" bs=1M count=16384 status=none
+          sudo chmod 600 "$swap_path"
+          sudo mkswap "$swap_path"
+          sudo swapon "$swap_path"
+          free -b
+          swapon --show --bytes
+          ulimit -a
+          cat /proc/meminfo
+      - name: Preserve preflight evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-preflight
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Build pinned tools and trusted external caches
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage setup
+      - name: Preserve setup evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-setup
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Official comparison of BOTH positive targets with Lean and nanoda
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage positive
+      - name: Preserve positive evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-positive
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Official semantic negative control - weak_target
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage weak_target
+      - name: Preserve weak_target evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-weak_target
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Official semantic negative control - changed_definition
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage changed_definition
+      - name: Preserve changed_definition evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-changed_definition
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Official semantic negative control - sorry_dependency
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage sorry_dependency
+      - name: Preserve sorry_dependency evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-sorry_dependency
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Official semantic negative control - extra_condition
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage extra_condition
+      - name: Preserve extra_condition evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-extra_condition
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Build all 261 source modules and run full-environment fresh replay
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage fresh
+      - name: Preserve fresh evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-fresh
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Produce truthful final machine-gate report
+        if: always() && steps.integrity.outcome == 'success'
+        run: python3 -I uniform-gap/ci/run_acceptance.py --project "$LRC_PROJECT" --work "$LRC_WORK" --stage finalize
+      - name: Preserve final evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, resolved from official repository
+        with:
+          name: uniform-gap-${{ github.run_id }}-${{ github.run_attempt }}-final
+          path: ${{ env.LRC_WORK }}/logs/
+          if-no-files-found: error
+          retention-days: 30

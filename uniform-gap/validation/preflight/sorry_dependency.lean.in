@@ -1,0 +1,8 @@
+import LonelyRunnerValidation.Policy
+
+namespace SorryDependency
+theorem submitted : LonelyRunnerSpec.V1.Statement := by
+  sorry
+end SorryDependency
+
+#assert_frozen_target SorryDependency.submitted

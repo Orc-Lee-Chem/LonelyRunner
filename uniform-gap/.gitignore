@@ -1,0 +1,7 @@
+.lake/
+logs/
+__pycache__/
+*.pyc
+paper/*.aux
+paper/*.log
+paper/*.out

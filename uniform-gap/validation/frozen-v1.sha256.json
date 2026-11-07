@@ -1,0 +1,18 @@
+{
+    "LonelyRunnerSpec/V1.lean":  "0c729c14ff965221eef3a8b09b713ef84ad54bee24dee02541c908752c71493d",
+    "SEMANTIC_SPEC.md":  "ec6b1b3517c3949d5b279d61ddf1ef96154ca15b533fe9f1a2cff2ce4033d56e",
+    "LonelyRunnerValidation/Policy.lean":  "de064dbe1b0e2788466535dc1b06e6fb2aa19bcc6a98924dd51e82cf5158cf6d",
+    "validation/comparator/Challenge.lean.in":  "fe5f8d83cde21480a41d3ab0abc7fbdeca336234dc7688b27032451845e893e0",
+    "validation/comparator/Solution.lean.in":  "874d91bce939bb5529385960336dc606c87da2559d6b97af2ae2d873ce015280",
+    "validation/comparator/config.json":  "96e3d11ae5853c22aecc9414ec64bb78cf3e820dc02db8f6a89c73790dbd9b89",
+    "validation/comparator/lakefile.toml.in":  "db432d8933caec66158c567a42cc4b134b8313fd20ed473a4efd92c07b7c3a4e",
+    "validation/comparator/lake-manifest.json":  "52ff797cd437e5f78a7f7ac1360fa11baee8742bef7633a79b12a6c1fdc22042",
+    "validation/comparator/lean-toolchain":  "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+    "validation/axiom-whitelist.json":  "f8ff22c6f276e3bf0fd181c2c9cc09cd311bfccd4cdcd6d1e6112cb9642116c1",
+    "validation/run_preflight.py":  "0a4e304a808eb9307597b1302180f12e9c093e5efa4b1b9b8fc06709edc7bc91",
+    "validation/record_command.py":  "1a55202864a04cd4b8228a5fda17ee8b1530465f93f48bd7320b9c2ab78365f0",
+    "validation/tools-lock.json":  "9e111a5ee2e40cd11d58caea0c6db5b9ba6460e18a710958949e10e3dc50a0a5",
+    "lakefile.toml":  "d77d69a90c2a4bbc85750aab1926cd86abb867857fae4121cc219014bd165137",
+    "lake-manifest.json":  "df12f9e2450a9576ce381febd15f689a44f3600de4cc0ef3fb586e874d6ec5aa",
+    "lean-toolchain":  "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b"
+}

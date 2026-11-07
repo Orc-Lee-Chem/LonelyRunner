@@ -1,0 +1,16 @@
+import LonelyRunnerValidation.Policy
+
+namespace ChangedDefinition
+def positive (_V : Finset ℕ) : Prop := False
+
+theorem submitted :
+    ∀ V : Finset ℕ, positive V → 2 ≤ V.card →
+      ∃ t : ℝ, 0 ≤ t ∧ t < 1 ∧
+        ∀ v ∈ V, ∀ k : ℤ,
+          |(v : ℝ) * t - (k : ℝ)| >
+            (1 + Real.exp (-6888 : ℝ)) / (2 * (V.card : ℝ)) := by
+  intro V h
+  exact False.elim h
+end ChangedDefinition
+
+#assert_frozen_target ChangedDefinition.submitted

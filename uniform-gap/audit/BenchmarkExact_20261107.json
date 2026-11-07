@@ -1,0 +1,11 @@
+{
+  "status": "PASS_EXACT_BOOKKEEPING",
+  "scope": "Checks integer exponents and a rational logarithmic lower bound. The analytic implication and published parameter transcription are proved in the accompanying note, not certified by this script or by the existing Lean theorem.",
+  "eta_exponent": 234,
+  "fprime_exponent": 1667,
+  "theta_exponent": 40244,
+  "c_HJ_binary_upper_exponent": 80497,
+  "log2_lower_bound": "56/81",
+  "log_improvement_lower_bound": "3949904/81",
+  "claimed_lower_bound": 48000
+}

@@ -42,7 +42,9 @@ The lonely runner conjecture predicts that \(\mathrm{ML}(V)\ge 1/(n+1)\)
 when \(|V|=n\), corresponding to \(n\) moving runners and one stationary
 runner. Hu and Jing~\cite{HuJing} proved that there is an absolute
 constant \(c>0\) for which \(\mathrm{ML}(V)>(1+c)/(2n)\) for every
-\(n\ge2\). We establish an explicit value of \(c\).
+\(n\ge2\). Their argument gives explicit constants, without attempting
+optimization. Here we give the value \(c=e^{-6888}\), together with
+a self-contained proof of the estimates used below.
 
 \begin{theorem}\label{thm:main}
 If \(V\subset\mathbb Z_{>0}\) is finite and \(n=|V|\ge2\), there exists
@@ -75,7 +77,7 @@ contribute a total overlap \(2r/H(u,v)\). Set
 \]
 
 \begin{lemma}\label{lem:pair}
-For \(0\le r<1/2\),
+For positive integers \(u,v\) and \(0\le r<1/2\),
 \[
  \max\{0,4r^2-4r/H(u,v)\}\le Q_r(u,v)\le4r^2.
 \]
@@ -342,7 +344,7 @@ Appendix~\ref{sec:cert} yield
  C(\lambda_0)<0.68365,\quad 0<d(\lambda_0)<0.39442 .
 \]
 At \(D=401/500\), the rational upper bound on the right is
-\(1-629/25000000\), so \(D>401/500\). Let
+\(1-629/25000000\), so \(D\ge401/500\). Let
 \(m_*=\max_i(\alpha_i+\beta_i)/2\). Termwise,
 \((\alpha_i\beta_i)^{3/4}\le\sqrt{m_*}\sqrt{\alpha_i\beta_i}\).
 Cauchy--Schwarz gives \(\sum_i\sqrt{\alpha_i\beta_i}\le1\), hence
@@ -498,7 +500,8 @@ The same bound holds at \(z=0\). It follows that
 \[
  \omega(S,S^c)\ge(1-1/\sqrt2)\min\{\pi(S),\pi(S^c)\}.
 \]
-For any real-valued vertex function \(F\) and a \(\pi\)-median \(m_F\),
+For any nonnegative integer-valued vertex function \(F\) and a
+\(\pi\)-median \(m_F\),
 integrate over the cuts \(S=\{F>t\}\). The integral of the smaller
 side mass is \(\mathbb E_\pi|F-m_F|\). The integral of the directed
 cut mass is \(\tfrac12\mathbb E_\mu|F(x)-F(y)|\), by symmetry
@@ -1044,6 +1047,7 @@ refer to files under \texttt{LonelyRunnerNew/}.
 The main theorem is the declaration \texttt{LonelyRunnerNew.lonely\_runner\_gap}
 in \texttt{SpilloverInputProved.lean}.
 
+\begingroup\small
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}
                        >{\raggedright\arraybackslash}p{0.70\linewidth}@{}}
 \caption{Proof steps and corresponding Lean modules.}\label{tab:lean}\\
@@ -1078,8 +1082,7 @@ Global bound and theorem &
 \texttt{DyadicRoughAssembly}, \texttt{NumericEndgame},
 \texttt{SpilloverInputProved}\\
 \end{longtable}
-
-\enlargethispage{2\baselineskip}
+\endgroup
 \begin{thebibliography}{9}
 \bibitem{HuJing}
 X. Hu and Y. Jing,
@@ -1092,10 +1095,11 @@ B. Green and A. Walker,
 Combin. Probab. Comput. \textbf{30} (2021), 922--929.
 \href{https://arxiv.org/abs/2012.02078}{arXiv:2012.02078}.
 
-% Add the GitHub permalink to the checked source commit before publication.
 \bibitem{LeanCode}
-\emph{LonelyRunner\_New}, Lean formalization and rational certificates,
-source manifest identifier
-\texttt{67008acd\allowbreak a1805ce8\allowbreak a67e8557\allowbreak e793b7c9\allowbreak 1e6d0166\allowbreak 34d72da0\allowbreak 4dacc50a\allowbreak ce443a9a}.
+\emph{LonelyRunner}, Lean formalization and rational certificates,
+\texttt{uniform-gap/}, source snapshot at commit
+\href{https://github.com/Orc-Lee-Chem/LonelyRunner/tree/2d0f3ded605f4929e0313fa4edc362064c3a1bd6/uniform-gap}{\texttt{2d0f3ded605f}},
+using Lean 4.34.1. The accompanying
+\texttt{candidate-source-version.json} records the per-file hashes.
 \end{thebibliography}
 \end{document}
